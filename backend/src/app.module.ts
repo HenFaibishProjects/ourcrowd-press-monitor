@@ -1,3 +1,5 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { databaseOptions } from './database/database.config';
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { existsSync } from 'node:fs';
@@ -20,6 +22,7 @@ if (runtimeConfig.isProduction && !existsSync(join(frontendPath, 'index.html')))
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(databaseOptions()),
     ...(runtimeConfig.isProduction
       ? [ServeStaticModule.forRoot({
           rootPath: frontendPath,

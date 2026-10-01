@@ -4,3 +4,9 @@ dist/
 .env
 *.tsbuildinfo
 *.log
+
+# Local SQLite state
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*

@@ -1,1 +1,1 @@
-Reserved for genuinely shared utilities, filters, or DTO helpers when needed. No generic base classes or infrastructure abstractions are introduced yet.
+Shared, concrete helpers: global DTO validation, company ID validation, date parsing and UTC date calculations. No generic base classes or repository framework.
