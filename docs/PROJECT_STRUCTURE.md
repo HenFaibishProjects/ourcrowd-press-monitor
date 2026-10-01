@@ -4,6 +4,7 @@ Generated build output and dependencies are excluded below. All files are explai
 
 ```text
 ourcrowd-press-monitor/
+  .env.example
   .gitignore
   .nvmrc
   README.md
@@ -16,11 +17,16 @@ ourcrowd-press-monitor/
   backend/src/common/company-id.dto.ts
   backend/src/common/dates.ts
   backend/src/common/validation.ts
+  backend/src/companies/companies-import.module.ts
+  backend/src/companies/companies.cli.ts
   backend/src/companies/companies.controller.ts
   backend/src/companies/companies.module.ts
   backend/src/companies/companies.repository.ts
   backend/src/companies/companies.service.ts
+  backend/src/companies/company-seed.service.ts
+  backend/src/companies/company-seed.ts
   backend/src/companies/company.entity.ts
+  backend/src/config/environment.ts
   backend/src/config/runtime.config.ts
   backend/src/dashboard/dashboard-query.dto.ts
   backend/src/dashboard/dashboard-response.dto.ts
@@ -45,9 +51,15 @@ ourcrowd-press-monitor/
   backend/src/mentions/sentiment.enum.ts
   backend/src/news/news.module.ts
   backend/src/scheduler/scheduler.module.ts
+  backend/src/sentiment/ollama-sentiment.classifier.ts
+  backend/src/sentiment/ollama.config.ts
+  backend/src/sentiment/sentiment-classifier.ts
+  backend/src/sentiment/sentiment.cli.ts
   backend/src/sentiment/sentiment.module.ts
+  backend/test/company-import.test.ts
   backend/test/dates.test.ts
   backend/test/persistence-api.test.ts
+  backend/test/sentiment.test.ts
   backend/tsconfig.build.json
   backend/tsconfig.json
   data/README.md
@@ -98,7 +110,7 @@ ourcrowd-press-monitor/
 
 | File | Purpose |
 | --- | --- |
-| `.gitignore` | Excludes installed dependencies, builds, caches, local environment files, and logs. |
+| `.gitignore` | Excludes dependencies, builds, caches, local .env, SQLite state and logs; .env.example is committed. |
 | `.nvmrc` | Pins the recommended Node runtime. |
 | `README.md` | Setup, migration/database commands, REST contracts, validation/date semantics, seed preparation and tests. |
 | `backend/nest-cli.json` | Nest CLI source and clean-build settings. |
@@ -108,7 +120,7 @@ ourcrowd-press-monitor/
 | `backend/src/collection/collection.module.ts` | Empty CollectionModule feature boundary, registered in AppModule; no providers or controllers. |
 | `backend/src/common/README.md` | Explains the concrete shared validation/date/ID utilities. |
 | `backend/src/companies/companies.module.ts` | Registers the Company repository, service and REST controller; exports CompaniesService. |
-| `backend/src/config/runtime.config.ts` | Validates PORT and reads NODE_ENV; no secrets or integration configuration. |
+| `backend/src/config/runtime.config.ts` | Lazily validates PORT and reads NODE_ENV after environment loading. |
 | `backend/src/dashboard/dashboard.module.ts` | Registers aggregate read repository, derivation service and dashboard REST controller. |
 | `backend/src/health/health.controller.ts` | GET /api/health returns actual process liveness; no business data. |
 | `backend/src/health/health.module.ts` | Registers the infrastructure health controller. |
@@ -116,7 +128,7 @@ ourcrowd-press-monitor/
 | `backend/src/mentions/mentions.module.ts` | Registers mention persistence, services and the nested REST controller; imports CompaniesModule. |
 | `backend/src/news/news.module.ts` | Empty NewsModule feature boundary, registered in AppModule; no providers or controllers. |
 | `backend/src/scheduler/scheduler.module.ts` | Empty SchedulerModule feature boundary, registered in AppModule; no providers or controllers. |
-| `backend/src/sentiment/sentiment.module.ts` | Empty SentimentModule feature boundary, registered in AppModule; no providers or controllers. |
+| `backend/src/sentiment/sentiment.module.ts` | Registers the local adapter and SentimentClassifier token; no HTTP controller or automatic processing. |
 | `backend/tsconfig.build.json` | Build-specific TypeScript exclusions. |
 | `backend/tsconfig.json` | Strict TypeScript, decorator metadata, CommonJS output, and source maps. |
 | `docs/ARCHITECTURE.md` | Current persistence/API architecture, SQLite schema/trade-offs, derived data, future diagrams, runtime modes and deferred integrations. |
@@ -138,7 +150,7 @@ ourcrowd-press-monitor/
 | `frontend/tsconfig.app.json` | Application-specific compiler inputs and output settings. |
 | `frontend/tsconfig.json` | Strict frontend TypeScript and Angular template checks. |
 | `package-lock.json` | Locks the resolved dependency tree for reproducible npm ci installs. |
-| `package.json` | Defines workspaces and root dev/build/start/typecheck/test/db:init scripts. |
+| `package.json` | Defines workspaces and root dev/build/start/typecheck/test/db/companies/sentiment scripts. |
 
 ## Added persistence/API files
 
@@ -148,7 +160,7 @@ ourcrowd-press-monitor/
 | `backend/src/common/dates.ts` | Strict calendar/timestamp validation, UTC date bounds, SQLite datetime conversion and elapsed-day calculation. |
 | `backend/src/common/validation.ts` | Reusable global ValidationPipe configuration, also used by HTTP tests. |
 | `backend/src/companies/company.entity.ts` | Company fields, optional domain/sector, required-name constraint and timestamps. |
-| `backend/src/companies/companies.repository.ts` | TypeORM company list/detail reads. |
+| `backend/src/companies/companies.repository.ts` | TypeORM company reads and conservative transactional seed import. |
 | `backend/src/companies/companies.service.ts` | Company access and standard missing-company handling. |
 | `backend/src/companies/companies.controller.ts` | Read-only company list/detail REST endpoints. |
 | `backend/src/mentions/sentiment.enum.ts` | Exactly POSITIVE, NEUTRAL and NEGATIVE stored classifications. |
@@ -165,10 +177,27 @@ ourcrowd-press-monitor/
 | `backend/src/dashboard/dashboard.service.ts` | Derives response timestamps and elapsed days at request time. |
 | `backend/src/dashboard/dashboard.controller.ts` | Read-only GET dashboard endpoint. |
 | `backend/src/database/database.config.ts` | SQLite path resolution, directory creation, registered entities/migrations and disabled synchronization. |
-| `backend/src/database/initialize.ts` | Standalone initialization command using the same migration configuration as startup. |
+| `backend/src/database/initialize.ts` | Standalone initialization command after standard environment loading, using the same migrations as startup. |
 | `backend/src/database/migrations/1790856000000-initial-schema.ts` | Initial companies/mentions schema, FK/check/unique constraints, index and reverse migration. |
 | `backend/test/dates.test.ts` | Quarter/calendar/day-calculation unit tests. |
 | `backend/test/persistence-api.test.ts` | In-memory migrated SQLite and HTTP tests for empty state, validation, 404s, uniqueness and aggregation. |
-| `data/README.md` | Documents future company seed format; no data or importer. |
+| `data/README.md` | Documents required real dataset, importer matching/update behavior and absence of fake data. |
 
 `database/migrations` owns versioned schema changes. `backend/test` uses isolated in-memory databases. `data` holds the documented future input location and ignored local SQLite state. Frontend source files are unchanged.
+
+## Added seed and local classification files
+
+| File | Purpose |
+| --- | --- |
+| `.env.example` | Non-secret SQLite and local Ollama configuration defaults. |
+| `backend/src/config/environment.ts` | Shared standard Nest ConfigModule .env loading for all entry points. |
+| `backend/src/companies/company-seed.ts` | Seed input/report contracts, exact identity normalization and full JSON structure validation. |
+| `backend/src/companies/company-seed.service.ts` | Reads the seed file, reports missing/invalid input and delegates transactional import. |
+| `backend/src/companies/companies-import.module.ts` | CLI-only environment/database/companies context; no HTTP or Ollama. |
+| `backend/src/companies/companies.cli.ts` | Root companies command entry point, count reporting and nonzero errors. |
+| `backend/src/sentiment/sentiment-classifier.ts` | Domain-only classifier input/interface and injection token. |
+| `backend/src/sentiment/ollama.config.ts` | Validates loopback URL, local model name and bounded timeout configuration. |
+| `backend/src/sentiment/ollama-sentiment.classifier.ts` | Company-focused prompt, schema-bound local HTTP request, strict output validation and standard errors. |
+| `backend/src/sentiment/sentiment.cli.ts` | Real manual classification with model/sentiment output and no database context. |
+| `backend/test/company-import.test.ts` | Isolated importer tests for idempotence, updates, validation, ambiguity and rollback. |
+| `backend/test/sentiment.test.ts` | Mocked HTTP tests for valid values, malformed output, configuration/input errors, HTTP/connection failures and timeout. |

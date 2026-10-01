@@ -16,7 +16,11 @@
     "start": "npm run start:prod --workspace backend",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspace backend",
-    "db:init": "npm run db:init --workspace backend"
+    "db:init": "npm run db:init --workspace backend",
+    "companies": "npm run companies --workspace backend",
+    "sentiment": "npm run sentiment --workspace backend --",
+    "sentiment:test": "npm run sentiment --",
+    "db": "npm run db:init"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

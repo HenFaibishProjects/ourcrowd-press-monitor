@@ -1,8 +1,10 @@
 import 'reflect-metadata';
+import { environmentModule } from '../config/environment';
 import { DataSource } from 'typeorm';
 import { databaseOptions } from './database.config';
 
 async function initialize(): Promise<void> {
+  await environmentModule;
   const database = new DataSource(databaseOptions());
   try {
     await database.initialize();

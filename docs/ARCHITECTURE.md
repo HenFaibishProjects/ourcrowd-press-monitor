@@ -8,20 +8,20 @@ One NestJS application owns the REST API and all feature modules. Features colla
 
 | Feature | Responsibility / current status |
 | --- | --- |
-| Companies | Company entity, feature repository/service, list and detail REST endpoints. Future import/update of the OurCrowd source-of-truth list. |
+| Companies | Company entity, feature repository/service, list and detail REST endpoints. Transactional source-of-truth seed import CLI with conservative exact identity matching. |
 | Mentions | Mention entity, feature repository/service, read filters, existence check and internal persistence. Database uniqueness is authoritative. No external writes. |
 | Dashboard | Specialized aggregate read repository, request-time derivation service and quarter-filtered REST endpoint. |
 | News | Empty module; future NewsProvider with a real provider implementation. |
-| Sentiment | Empty module; future SentimentClassifier / Ollama adapter. The Sentiment enum is stored domain data, not inference. |
+| Sentiment | SENTIMENT_CLASSIFIER contract/token, local Ollama adapter, strict response validation and isolated manual CLI. No automatic inference or database writes. |
 | Collection | Empty module; future fetch/relevance/deduplicate/classify/persist orchestration. |
 | Scheduler | Empty module; no scheduled jobs. |
 | Alerts | Empty module; no delivery. |
 | database | SQLite options, explicit versioned migration, standalone initialization command. |
 | common | Concrete shared date, ID and DTO validation helpers. |
-| config | PORT validation and production mode selection. |
+| config | Standard Nest ConfigModule .env loading shared by HTTP/CLI entry points, lazy runtime settings and feature-local Ollama configuration validation. |
 | health | Process-liveness endpoint, not a dependency readiness check. |
 
-Controllers validate HTTP DTOs. Feature services handle existence, range semantics, and meaningful domain errors. Feature repositories contain TypeORM queries. CompaniesService and MentionsService are exported for future collection use; DashboardRepository is a dedicated read projection with an aggregate query, not an orchestration service. There are no generic repository base classes or framework abstractions.
+The repository-root .env is loaded with @nestjs/config; existing process environment takes precedence. TypeORM/static serving factories run after configuration loading, so database/runtime settings also work in CLI contexts. Controllers validate HTTP DTOs. Feature services handle existence, range semantics, and meaningful domain errors. Feature repositories contain TypeORM queries. CompaniesService and MentionsService are exported for future collection use; DashboardRepository is a dedicated read projection with an aggregate query, not an orchestration service. There are no generic repository base classes or framework abstractions.
 
 ## SQLite persistence
 
@@ -77,7 +77,7 @@ flowchart TD
         Dashboard --> Storage
     end
     News -.-> NewsAPI[External news API]
-    Sentiment -.-> Ollama[Ollama endpoint]
+    Sentiment --> Ollama[External local Ollama process]
     Companies --> Storage[SQLite / TypeORM repositories]
     Mentions --> Storage
     Alerts -.-> Channel[Future alert channel]
@@ -105,24 +105,48 @@ flowchart TD
 | Integration | Boundary | Outstanding decisions |
 | --- | --- | --- |
 | News API | NewsProvider in NewsModule | Provider, credentials, rate limits, article identity and relevance policy. |
-| Ollama | SentimentClassifier in SentimentModule | Model, hardware/endpoint, timeouts and response validation. |
-| Storage | Companies/Mentions repositories | Actual company list and importer matching/update policy; no domain dependency on mandatory domains. |
+| Ollama | Implemented local SentimentClassifier adapter | Real local smoke test and quality evaluation; selected model remains configurable. |
+| Storage | Companies/Mentions repositories | Add the actual company list and run the implemented conservative importer; domains remain optional. |
 | Scheduler | SchedulerModule calls CollectionModule | Timezone, run time, overlap prevention and failure behavior. |
 | Alert channel | AlertsModule | Console initially, delivery payload/failure handling, future external channels. |
 
-## Seed preparation
+## Company seed import
 
-`data/README.md` documents the future `data/companies.json` format: required non-blank name, optional nullable domain and sector. Neither the actual list nor an importer is present. Dataset matching/update rules will be chosen with the real OurCrowd list; domain must not be assumed available. Application databases remain empty. Test fixtures exist only in isolated in-memory test databases.
+The developer adds the real dataset to `data/companies.json` and runs `npm run companies`. No data file is committed yet. CompanySeedService reads/parses/validates the complete file, then CompaniesRepository performs one transactional import. A CLI-only module loads configuration and SQLite, without the HTTP application or Ollama.
+
+Names must be non-blank; optional domain/sector strings are trimmed and blank strings map to null. Domains are plain hostnames and normalized to lowercase. Source duplicates are rejected by exact normalized domain or case-insensitive trimmed name. Prefer a unique domain match, then a unique name; reject conflicting or ambiguous matches, non-empty domain reassignment by name, and two source rows targeting one existing company. Original identities are retained during the transaction so renamed aliases cannot be imported twice. A domain match may rename the display name. Omitted optional values preserve existing fields; explicit null/blank clears them. Counts report inserted/updated/unchanged. No deletion or fuzzy matching occurs. Any failure rolls back all writes. This is a single-import-at-a-time take-home workflow, without a concurrent importer framework.
+
+## Local sentiment classification
+
+```mermaid
+flowchart TD
+    subgraph App[NestJS application]
+        Collection[Collection pipeline: future] -.-> Contract[SentimentClassifier]
+        Contract --> Adapter[OllamaSentimentClassifier]
+    end
+    subgraph Local[External local Ollama process]
+        Endpoint[localhost:11434] --> Model[Selected local model]
+    end
+    Adapter -->|POST /api/generate| Endpoint
+```
+
+Ollama is an external local process, not an application microservice. The adapter is an in-process provider behind the SENTIMENT_CLASSIFIER token. Its contract takes companyName/title/optional description and returns exactly the existing domain Sentiment enum. The sentiment CLI instantiates only SentimentModule, without SQLite, and is the real manual integration path. No REST endpoint or automatic database processing is added.
+
+Configuration defaults: OLLAMA_BASE_URL=http://localhost:11434, OLLAMA_MODEL=gemma3:270m, OLLAMA_TIMEOUT_MS=60000. Loopback origins only; hosted URLs/cloud-tagged models/redirects are rejected. Disable cloud features in the separately running Ollama server using OLLAMA_NO_CLOUD=1 or its server settings. The app cannot configure an already-running server.
+
+POST /api/generate sends a company-focused system prompt, JSON-encoded company/title/excerpt, stream=false and a JSON schema requiring only sentiment from POSITIVE/NEUTRAL/NEGATIVE. Options are temperature=0, seed=42 and num_predict=64. Inputs have explicit small character limits. Validate the completed HTTP envelope and parse/check the exact model object before returning the enum. No substring matching, fallback sentiment, model downloading, retry loop, or Ollama types outside the adapter.
+
+Standard Nest exceptions represent input/configuration/connection/timeout/HTTP/output failures; CLI errors are concise and nonzero. No retries, including malformed responses. There is no schema change for technical failures. Unit tests mock fetch, never require Ollama, and do not prove model quality. A compact model is a reasonable initial choice for this constrained three-class task, but attribution/negation/mixed sentiment need later evaluation against real mentions and manual spot checks. Local end-to-end inference remains unverified here because Ollama is not installed/running.
 
 ## Deliberately deferred
 
-No company seed data/importer, news API, RSS, scraping, relevance logic, sentiment inference, Ollama integration, collection orchestration, scheduled jobs, alerts, real Angular dashboard, authentication, pagination, queues, Redis, CQRS, event bus, Docker or additional database service. No external company or mention write endpoints exist.
+No company seed data, news API, RSS, scraping, relevance logic, collection orchestration, scheduled jobs, alerts, real Angular dashboard, authentication, pagination, queues, Redis, CQRS, event bus, Docker or additional database service. Sentiment is only invoked manually or through its contract; there is no automatic database record processing. No external company or mention write endpoints exist.
 
 ## Assumptions and next stage
 
 Company IDs are positive safe integers. Dates, quarter defaults and day calculations use UTC; day counts mean elapsed full 24-hour periods. URL uniqueness is exact text per company. Migrations run automatically in this single-process assignment. No company-name uniqueness is invented without the real source dataset.
 
-Next: agree the source dataset and importer policy, add actual companies, then implement real news retrieval/relevance/deduplication, validated sentiment classification, collection, scheduling/alerts, and the dashboard in separate increments.
+Next: add the real company list, verify local Ollama and evaluate its output, then implement real news retrieval/relevance/deduplication, collection, scheduling/alerts and the dashboard in separate increments.
 
 ## References
 
@@ -130,3 +154,6 @@ Next: agree the source dataset and importer policy, add actual companies, then i
 - TypeORM migrations: https://typeorm.io/docs/migrations/setup/
 - SQLite driver: https://v0.typeorm.io/docs/drivers/sqlite/
 - NestJS static serving: https://docs.nestjs.com/recipes/serve-static
+
+- Ollama API: https://docs.ollama.com/api/generate
+- Ollama local-only server: https://docs.ollama.com/faq#how-do-i-disable-ollama-cloud-features
