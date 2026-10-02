@@ -64,10 +64,15 @@ export class GdeltNewsProvider implements NewsProvider {
     const url = gdeltRequest(this.settings, input).toString();
     const mode = input.cacheMode ?? 'cached';
     if (!['cached', 'refresh', 'live'].includes(mode)) throw new BadRequestException('Invalid news cache mode');
+    this.logger.debug(`Starting GDELT search for ${input.companyName}, range ${input.from.toISOString()} to ${input.to.toISOString()} (exclusive end); mode=${mode}`);
     let raw = mode === 'cached' ? await this.cache.read(url) : null;
     const cacheStatus = mode === 'live' ? 'bypassed' : raw === null ? 'miss' : 'hit';
     const fromCache = raw !== null;
-    if (raw === null) raw = await this.fetchResponse(url);
+    this.logger.log(`GDELT cache ${mode === 'refresh' ? 'refresh' : cacheStatus} for ${input.companyName}`);
+    if (raw === null) {
+      this.logger.log(`Fetching GDELT news for ${input.companyName}, range ${input.from.toISOString()} to ${input.to.toISOString()} (exclusive end)`);
+      raw = await this.fetchResponse(url, input.companyName);
+    }
     const parsed = parseGdeltResponse(raw, input);
     if (!fromCache && mode !== 'live') {
       try { await this.cache.write({ companyName: input.companyName, query: `"${input.queryName.trim()}"`,
@@ -76,10 +81,12 @@ export class GdeltNewsProvider implements NewsProvider {
     }
     input.onDiagnostics?.({ query: `"${input.queryName.trim()}"`, requestUrl: url, cache: cacheStatus,
       invalidArticles: parsed.invalidArticles, resultLimitReached: parsed.resultLimitReached });
+    this.logger.log(`GDELT search completed for ${input.companyName}: ${parsed.articles.length} articles returned (${fromCache ? 'cache hit' : 'fetched'})`);
+    if (parsed.invalidArticles) this.logger.warn(`GDELT skipped ${parsed.invalidArticles} invalid articles for ${input.companyName}`);
     if (parsed.resultLimitReached) this.logger.warn(`GDELT reached 250 results for ${input.companyName}; this range may be incomplete`);
     return parsed.articles;
   }
-  private async fetchResponse(url: string): Promise<string> {
+  private async fetchResponse(url: string, companyName: string): Promise<string> {
     for (let attempt = 0; ; attempt++) {
       await wait(Math.max(0, this.settings.requestDelayMs - (Date.now() - this.lastRequestStarted)));
       this.lastRequestStarted = Date.now();
@@ -87,6 +94,7 @@ export class GdeltNewsProvider implements NewsProvider {
       const timer = setTimeout(() => controller.abort(), this.settings.timeoutMs);
       let retryMs: number | null = null;
       try {
+        this.logger.debug(`GDELT HTTP request for ${companyName}, attempt ${attempt + 1}/${this.settings.maxRetries + 1}`);
         const response = await fetch(url, { signal: controller.signal, redirect: 'error', headers: { Accept: 'application/json' } });
         if (!response.ok) {
           if ((response.status === 429 || response.status >= 500) && attempt < this.settings.maxRetries) {
@@ -96,6 +104,7 @@ export class GdeltNewsProvider implements NewsProvider {
               throw new ServiceUnavailableException('GDELT requested a retry delay over 60 seconds; retry this run later');
             }
             retryMs = Math.max(this.settings.requestDelayMs, Number.isFinite(retryAfter) ? Math.max(0, retryAfter) : 1000 * (attempt + 1));
+            this.logger.warn(`GDELT HTTP ${response.status} for ${companyName}; retry ${attempt + 1}/${this.settings.maxRetries} in ${retryMs}ms`);
             await response.body?.cancel();
           } else throw new BadGatewayException(`GDELT returned HTTP ${response.status}`);
         } else return await response.text();

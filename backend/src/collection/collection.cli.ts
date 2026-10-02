@@ -1,8 +1,11 @@
 import 'reflect-metadata';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { parseCollectionOptions } from './collection-options';
 import { CollectionService } from './collection.service';
 import { CollectionCliModule } from './collection-cli.module';
+
+const logger = new Logger('CollectionCommand');
 
 async function run(): Promise<void> {
   const options = parseCollectionOptions(process.argv.slice(2));
@@ -13,4 +16,4 @@ async function run(): Promise<void> {
     if (result.aborted || result.errors.length) process.exitCode = 1;
   } finally { await app.close(); }
 }
-void run().catch((error: unknown) => { console.error(error instanceof Error ? error.message : 'Collection failed'); process.exitCode = 1; });
+void run().catch((error: unknown) => { logger.error(`Collection failed: ${error instanceof Error ? error.message : 'Unknown error'}`); process.exitCode = 1; });

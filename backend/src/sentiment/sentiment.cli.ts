@@ -1,9 +1,12 @@
 import 'reflect-metadata';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { parseArgs } from 'node:util';
 import { OllamaSentimentClassifier } from './ollama-sentiment.classifier';
 import { SENTIMENT_CLASSIFIER, SentimentClassifier } from './sentiment-classifier';
 import { SentimentModule } from './sentiment.module';
+
+const logger = new Logger('SentimentCommand');
 
 async function run(): Promise<void> {
   const { values } = parseArgs({
@@ -15,7 +18,7 @@ async function run(): Promise<void> {
   if (!values.company?.trim() || !values.title?.trim()) {
     throw new Error('Usage: npm run sentiment -- --company "Company name" --title "Article title" [--description "Excerpt"]');
   }
-  const app = await NestFactory.createApplicationContext(SentimentModule, { logger: false, abortOnError: false });
+  const app = await NestFactory.createApplicationContext(SentimentModule, { logger: ['log', 'warn', 'error'], abortOnError: false });
   try {
     console.info(`Model: ${app.get(OllamaSentimentClassifier).settings.model}`);
     const classifier = app.get<SentimentClassifier>(SENTIMENT_CLASSIFIER);
@@ -25,6 +28,6 @@ async function run(): Promise<void> {
 }
 
 void run().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : 'Sentiment classification failed');
+  logger.error(`Sentiment classification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   process.exitCode = 1;
 });

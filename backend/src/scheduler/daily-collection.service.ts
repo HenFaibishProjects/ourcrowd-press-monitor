@@ -14,14 +14,16 @@ export class DailyCollectionService {
     this.running = true;
     try {
       const to = new Date(Math.floor(now.getTime() / 1000) * 1000);
+      this.logger.log(`Starting daily collection for all tracked companies; range ${new Date(to.getTime() - this.settings.lookbackHours * 3600000).toISOString()} to ${to.toISOString()} (exclusive end); live news`);
       const result = await this.collection.collect({ from: new Date(to.getTime() - this.settings.lookbackHours * 3600000), to, cacheMode: 'live' });
-      this.logger.log(JSON.stringify(result));
+      this.logger.log(`Daily collection ${result.aborted ? 'aborted' : 'completed'}: ${result.companiesProcessed} companies, ${result.mentionsInserted} new mentions, ${result.errors.length} recorded errors`);
       return { skipped: false, result };
     } finally { this.running = false; }
   }
   async scheduledTick(): Promise<void> {
     if (!this.settings.enabled) return;
+    this.logger.log('Daily collection schedule triggered');
     try { await this.runOnce(); }
-    catch (error: unknown) { this.logger.error(error instanceof Error ? error.message : 'Daily collection failed'); }
+    catch (error: unknown) { this.logger.error(`Scheduled daily collection failed: ${error instanceof Error ? error.message : 'Unknown error'}`); }
   }
 }

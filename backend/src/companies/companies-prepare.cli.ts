@@ -1,10 +1,14 @@
+import { Logger } from '@nestjs/common';
 import { companyJsonPath, prepareCompanyFile } from './company-preparation';
 
+const logger = new Logger('CompanyPreparation');
+logger.log('Preparing company JSON from the supplied OurCrowd TXT');
+
 void prepareCompanyFile().then(({ companies, counts, fallbackLines }) => {
-  console.info(`Prepared ${companies.length} companies: ${companyJsonPath}`);
-  console.info(JSON.stringify(counts));
-  for (const line of fallbackLines) console.warn(`Preserved unparsed source line: ${line}`);
+  logger.log(`Company preparation completed: ${companies.length} companies written to ${companyJsonPath}`);
+  logger.log(`Parsed ${counts.plain} plain names, ${counts.domain} domains, ${counts.expandedAlias} expanded aliases, ${counts.formerAlias} former names; ${counts.fallback} preserved unparsed lines`);
+  for (const line of fallbackLines) logger.warn(`Preserved unparsed source line: ${line}`);
 }).catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : 'Company preparation failed');
+  logger.error(`Company preparation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   process.exitCode = 1;
 });
