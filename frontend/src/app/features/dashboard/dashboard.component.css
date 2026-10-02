@@ -1,0 +1,273 @@
+:host {
+  display: block;
+  max-width: 1400px;
+  margin: auto;
+  padding: 42px 32px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+h1 {
+  margin: 8px 0;
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: -.8px;
+  font-weight: 650;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+.quarter-control {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  min-width: 150px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  background: white;
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 3px #15233b03;
+}
+
+.summary-card span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 650;
+  margin: 10px 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-card small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.positive-text {
+  color: #16734e;
+}
+
+.coverage-section {
+  overflow: hidden;
+}
+
+.table-heading {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+h2 {
+  font-size: 17px;
+  margin: 0 0 6px;
+  font-weight: 650;
+}
+
+.table-heading p, .record-count {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.record-count {
+  white-space: nowrap;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 20px;
+}
+
+.search-control {
+  flex: 1;
+  max-width: 400px;
+}
+
+input {
+  width: 100%;
+}
+
+.activity-control select {
+  min-width: 170px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+th {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .45px;
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+th, td {
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+th:first-child, td:first-child {
+  padding-left: 24px;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr:hover {
+  background: #f7f9fc;
+}
+
+.company-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-weight: 600;
+  text-align: left;
+  color: #233e60;
+}
+
+.company-button span {
+  opacity: 0;
+  margin-left: 6px;
+}
+
+tr:hover .company-button span, .company-button:focus-visible span {
+  opacity: 1;
+}
+
+.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.total-count {
+  font-weight: 650;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.count {
+  display: inline-block;
+  min-width: 28px;
+  text-align: center;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.status-badge {
+  color: #596678;
+  background: #f0f3f7;
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 5px;
+}
+
+.status-badge.recent {
+  background: #e9f5ee;
+  color: #24704d;
+}
+
+.table-note {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 0;
+  padding: 16px 24px;
+  line-height: 1.6;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+  white-space: normal;
+}
+
+.loading-state, .error-state {
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.error-state h2 {
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .table-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  :host {
+    padding: 24px 16px;
+  }
+  .page-header {
+    align-items: start;
+    flex-direction: column;
+  }
+  .quarter-control {
+    width: 100%;
+  }
+  .summary-grid {
+    gap: 12px;
+  }
+  .summary-card {
+    padding: 18px;
+  }
+  .filter-bar {
+    flex-direction: column;
+  }
+  .search-control {
+    max-width: none;
+  }
+  .activity-control select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,133 @@
+dialog {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  width: min(560px, 100%);
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  padding: 0;
+  border: 0;
+  background: white;
+  color: var(--text);
+  box-shadow: -12px 0 40px #19243a20;
+}
+
+dialog::backdrop {
+  background: #18243c55;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+h2 {
+  font-size: 25px;
+  margin: 10px 0 0;
+  letter-spacing: -.5px;
+}
+
+.close-button {
+  background: #f2f4f7;
+  border: 0;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+  font-size: 24px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.drawer-body {
+  padding: 24px 28px;
+}
+
+.detail-summary {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.detail-summary p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.detail-summary strong {
+  color: var(--text);
+  font-size: 26px;
+  margin-right: 5px;
+}
+
+.sentiment-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.last-mentioned {
+  font-size: 12px !important;
+}
+
+h3 {
+  font-size: 15px;
+  margin: 28px 0 16px;
+}
+
+.mention-card {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.mention-card:first-of-type {
+  padding-top: 0;
+}
+
+h4 {
+  margin: 12px 0 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.article-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.description {
+  color: #586579;
+  font-size: 13px;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+a {
+  color: #284f83;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.panel-state {
+  padding: 28px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}

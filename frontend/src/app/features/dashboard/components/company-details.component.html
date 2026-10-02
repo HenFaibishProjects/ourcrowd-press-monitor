@@ -1,0 +1,31 @@
+<dialog #dialog aria-labelledby="details-title" (cancel)="dismiss.emit()">
+  <header class="drawer-header">
+    <div><p class="eyebrow">COMPANY COVERAGE · {{ quarter() }}</p><h2 id="details-title">{{ company().name }}</h2></div>
+    <button class="close-button" aria-label="Close company details" (click)="dismiss.emit()" autofocus>×</button>
+  </header>
+  <div class="drawer-body">
+    <section class="detail-summary" aria-label="Company summary">
+      <p><strong>{{ company().mentions.total }}</strong> mentions this quarter</p>
+      <div class="sentiment-summary"><span class="badge positive">{{ company().mentions.positive }} Positive</span><span class="badge neutral">{{ company().mentions.neutral }} Neutral</span><span class="badge negative">{{ company().mentions.negative }} Negative</span></div>
+      <p class="last-mentioned">Last mentioned, all time: {{ readableDate(company().lastMentionedAt) }}</p>
+    </section>
+    <h3>Press mentions</h3>
+    @if (loading()) {
+      <div class="panel-state" role="status"><span class="spinner" aria-hidden="true"></span> Loading articles…</div>
+    } @else if (loadFailed()) {
+      <div class="panel-state" role="alert"><p>Could not load company mentions.</p><button class="primary-button" (click)="loadMentions()">Retry</button></div>
+    } @else {
+      @for (mention of mentions(); track mention.id) {
+        <article class="mention-card">
+          <span class="badge" [class.positive]="mention.sentiment === 'POSITIVE'" [class.neutral]="mention.sentiment === 'NEUTRAL'" [class.negative]="mention.sentiment === 'NEGATIVE'">{{ mention.sentiment }}</span>
+          <h4>{{ mention.title }}</h4>
+          <p class="article-meta">{{ mention.source }} · {{ readableDate(mention.publishedAt) }}</p>
+          @if (mention.description) { <p class="description">{{ mention.description }}</p> }
+          @if (articleUrl(mention.url); as url) { <a [href]="url" target="_blank" rel="noopener noreferrer">Open article <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a> }
+        </article>
+      } @empty {
+        <p class="panel-state">No press mentions were found for this company in this quarter.</p>
+      }
+    }
+  </div>
+</dialog>

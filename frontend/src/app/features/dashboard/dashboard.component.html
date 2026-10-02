@@ -1,0 +1,67 @@
+<header class="page-header">
+  <div>
+    <p class="eyebrow">PORTFOLIO INTELLIGENCE</p>
+    <h1>OurCrowd Press Monitor</h1>
+    <p class="subtitle">Portfolio company press coverage and sentiment</p>
+  </div>
+  <label class="quarter-control">Reporting quarter
+    <select #quarterSelect [value]="quarter()" (change)="changeQuarter(quarterSelect.value)">
+      @for (option of quarters; track option) { <option [value]="option">{{ option }}</option> }
+    </select>
+  </label>
+</header>
+
+@if (loading()) {
+  <section class="loading-state surface" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span> Loading portfolio coverage…
+  </section>
+} @else if (loadFailed()) {
+  <section class="error-state surface" role="alert">
+    <h2>Could not load dashboard data.</h2>
+    <p>Check that the backend is running, then try again.</p>
+    <button class="primary-button" (click)="loadDashboard()">Retry</button>
+  </section>
+} @else {
+  <section class="summary-grid" aria-label="Selected quarter summary">
+    <article class="summary-card"><span>Companies tracked</span><strong>{{ summary().tracked }}</strong><small>Portfolio companies</small></article>
+    <article class="summary-card"><span>Companies mentioned</span><strong>{{ summary().mentioned }}</strong><small>In {{ quarter() }}</small></article>
+    <article class="summary-card"><span>Total mentions</span><strong>{{ summary().total }}</strong><small>In {{ quarter() }}</small></article>
+    <article class="summary-card"><span>Positive mentions</span><strong class="positive-text">{{ summary().positive }}</strong><small>In {{ quarter() }}</small></article>
+  </section>
+  <section class="surface coverage-section" aria-labelledby="coverage-heading">
+    <div class="table-heading">
+      <div><h2 id="coverage-heading">Company coverage</h2><p>Quarterly counts · Last mention and status reflect all-time coverage</p></div>
+      <span class="record-count">{{ visibleCompanies().length }} of {{ companies().length }} companies</span>
+    </div>
+    <div class="filter-bar">
+      <label class="search-control"><span class="sr-only">Search companies</span><input #companySearch type="search" placeholder="Search companies..." [value]="search()" (input)="search.set(companySearch.value)"></label>
+      <label class="activity-control"><span class="sr-only">Quarter activity</span><select #activitySelect [value]="activity()" (change)="activity.set(activitySelect.value)"><option value="all">All companies</option><option value="mentioned">Mentioned</option><option value="unmentioned">No mentions</option></select></label>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <caption class="sr-only">Company coverage for {{ quarter() }}</caption>
+        <thead><tr><th scope="col">Company</th><th scope="col">Last mentioned</th><th scope="col">Days since mention</th><th scope="col" class="number">Total</th><th scope="col" class="number">Positive</th><th scope="col" class="number">Neutral</th><th scope="col" class="number">Negative</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          @for (company of visibleCompanies(); track company.id) {
+            <tr (click)="selectedCompany.set(company)">
+              <td><button class="company-button" (click)="selectedCompany.set(company); $event.stopPropagation()" [attr.aria-label]="'View mentions for ' + company.name">{{ company.name }} <span aria-hidden="true">↗</span></button></td>
+              <td>{{ readableDate(company.lastMentionedAt) }}</td>
+              <td class="muted">{{ daysDisplay(company.daysSinceLastMention) }}</td>
+              <td class="number total-count">{{ company.mentions.total }}</td>
+              <td class="number"><span class="count positive">{{ company.mentions.positive }}</span></td>
+              <td class="number"><span class="count neutral">{{ company.mentions.neutral }}</span></td>
+              <td class="number"><span class="count negative">{{ company.mentions.negative }}</span></td>
+              <td><span class="status-badge" [class.recent]="coverageStatus(company.daysSinceLastMention) === 'Recent'" title="All-time last mention: Recent 0–30 days; Active 31–90 days; Quiet 91+ days; No mentions means never mentioned.">{{ coverageStatus(company.daysSinceLastMention) }}</span></td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="empty-state">{{ companies().length === 0 ? 'No companies are tracked yet. Run company setup to get started.' : 'No companies match your search.' }}</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Recent: 0–30 days · Active: 31–90 days · Quiet: 91+ days · No mentions: never mentioned</p>
+  </section>
+}
+@if (selectedCompany(); as company) {
+  <app-company-details [company]="company" [quarter]="quarter()" (dismiss)="selectedCompany.set(null)" />
+}
