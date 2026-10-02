@@ -3,15 +3,26 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { databaseOptions } from '../src/database/database.config';
 import { InternalServerErrorException } from '@nestjs/common';
 
-export function testDatabaseOptions(): PostgresConnectionOptions {
-  // We can load from environment if available, or fallback to default TEST_DB_* env vars
-  const dbName = process.env.TEST_DB_DATABASE || 'ourcrowd_press_monitor_test';
-  
-  if (!dbName || dbName === 'ourcrowd_press_monitor' || !dbName.includes('_test')) {
+export function getTestDbName(): string {
+  const dbName = (process.env.TEST_DB_DATABASE || '').trim();
+
+  if (!dbName) {
+    throw new InternalServerErrorException(
+      'TEST DATABASE ISOLATION FAILED: TEST_DB_DATABASE environment variable is required.',
+    );
+  }
+
+  if (dbName === 'ourcrowd_press_monitor' || !dbName.includes('_test')) {
     throw new InternalServerErrorException(
       `TEST DATABASE ISOLATION FAILED: The provided database name "${dbName}" is not a valid test database. Test database must contain "_test" and must not be the production/development database.`,
     );
   }
+
+  return dbName;
+}
+
+export function testDatabaseOptions(): PostgresConnectionOptions {
+  const dbName = getTestDbName();
 
   const baseOptions = databaseOptions() as PostgresConnectionOptions;
   return {

@@ -1,6 +1,7 @@
 import 'dotenv/config';
 // @ts-ignore
 import { Client } from 'pg';
+import { getTestDbName } from './test-database';
 
 async function createTestDb() {
   const host = process.env.TEST_DB_HOST || process.env.DB_HOST || '127.0.0.1';
@@ -12,8 +13,8 @@ async function createTestDb() {
   const client = new Client({ host, port, user, password, database });
   
   try {
+    const dbName = getTestDbName();
     await client.connect();
-    const dbName = process.env.TEST_DB_DATABASE || 'ourcrowd_press_monitor_test';
     
     // Check if database exists
     const res = await client.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName]);

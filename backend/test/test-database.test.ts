@@ -4,34 +4,34 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { testDatabaseOptions } from './test-database';
 
 test('production DB name is rejected', () => {
-  const original = process.env.TEST_DB_DATABASE;
   process.env.TEST_DB_DATABASE = 'ourcrowd_press_monitor';
-  try {
-    assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
-  } finally {
-    process.env.TEST_DB_DATABASE = original;
-  }
+  assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
 });
 
 test('missing test DB name is rejected', () => {
-  const original = process.env.TEST_DB_DATABASE;
+  delete process.env.TEST_DB_DATABASE;
+  assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
+});
+
+test('empty test DB name is rejected', () => {
   process.env.TEST_DB_DATABASE = '';
-  try {
-    assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
-  } finally {
-    process.env.TEST_DB_DATABASE = original;
-  }
+  assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
+});
+
+test('whitespace-only test DB name is rejected', () => {
+  process.env.TEST_DB_DATABASE = '   ';
+  assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
+});
+
+test('name without _test is rejected', () => {
+  process.env.TEST_DB_DATABASE = 'custom_db';
+  assert.throws(() => testDatabaseOptions(), InternalServerErrorException);
 });
 
 test('valid _test database is accepted', () => {
-  const original = process.env.TEST_DB_DATABASE;
-  process.env.TEST_DB_DATABASE = 'custom_db_test';
-  try {
-    const options = testDatabaseOptions();
-    assert.equal(options.database, 'custom_db_test');
-    assert.equal(options.dropSchema, true);
-    assert.equal(options.synchronize, true);
-  } finally {
-    process.env.TEST_DB_DATABASE = original;
-  }
+  process.env.TEST_DB_DATABASE = ' custom_db_test ';
+  const options = testDatabaseOptions();
+  assert.equal(options.database, 'custom_db_test');
+  assert.equal(options.dropSchema, true);
+  assert.equal(options.synchronize, true);
 });
