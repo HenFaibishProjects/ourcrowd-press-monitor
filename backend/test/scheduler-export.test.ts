@@ -15,7 +15,7 @@ import { CollectionService } from '../src/collection/collection.service';
 import { CollectionResult } from '../src/collection/collection-result';
 import { CollectionOptions } from '../src/collection/collection-options';
 import { DataExportService } from '../src/export/data-export.service';
-import { databaseOptions } from '../src/database/database.config';
+import { testDatabaseOptions } from './test-database';
 import { Company } from '../src/companies/company.entity';
 import { CompaniesRepository } from '../src/companies/companies.repository';
 import { CompaniesService } from '../src/companies/companies.service';
@@ -73,7 +73,7 @@ test('invalid scheduling configuration fails clearly', () => {
 });
 
 test('export includes URLs/sentiments and unmentioned companies, stable for fixed DB/range/time', async () => {
-  const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true }); await database.initialize();
+  const database = new DataSource(testDatabaseOptions()); await database.initialize();
   const directory = await mkdtemp(join(tmpdir(), 'press-export-test-'));
   try {
     const [alpha, beta] = await database.getRepository(Company).save([{ name: 'Export Alpha' }, { name: 'Export Beta' }]);

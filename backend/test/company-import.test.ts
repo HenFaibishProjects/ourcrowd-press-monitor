@@ -10,7 +10,7 @@ import { Company } from '../src/companies/company.entity';
 import { CompaniesRepository } from '../src/companies/companies.repository';
 import { validateCompanySeed } from '../src/companies/company-seed';
 import { CompanySeedService } from '../src/companies/company-seed.service';
-import { databaseOptions } from '../src/database/database.config';
+import { testDatabaseOptions } from './test-database';
 
 function seed(name: unknown, fields: Record<string, unknown> = {}) {
   return { name, rawName: name, domain: null, aliases: [], sector: null, ...fields };
@@ -22,7 +22,7 @@ function seedsJson(rows: Array<Record<string, unknown>>): string {
 
 async function withImporter(run: (service: CompanySeedService, database: DataSource, path: string) => Promise<void>): Promise<void> {
   const directory = await mkdtemp(join(tmpdir(), 'press-seed-test-'));
-  const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true });
+  const database = new DataSource(testDatabaseOptions());
   try {
     await database.initialize();
     const service = new CompanySeedService(new CompaniesRepository(database.getRepository(Company), database));

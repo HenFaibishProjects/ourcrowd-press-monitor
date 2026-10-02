@@ -9,7 +9,7 @@ import { Company } from '../src/companies/company.entity';
 import { CompaniesModule } from '../src/companies/companies.module';
 import { CompaniesService } from '../src/companies/companies.service';
 import { createValidationPipe } from '../src/common/validation';
-import { databaseOptions } from '../src/database/database.config';
+import { testDatabaseOptions } from './test-database';
 import { DashboardModule } from '../src/dashboard/dashboard.module';
 import { DashboardService } from '../src/dashboard/dashboard.service';
 import { MentionsModule } from '../src/mentions/mentions.module';
@@ -25,7 +25,7 @@ let baseUrl: string;
 
 before(async () => {
   const module = await Test.createTestingModule({
-    imports: [TypeOrmModule.forRoot({ ...databaseOptions(), dropSchema: true, synchronize: true }), CompaniesModule, MentionsModule, DashboardModule],
+    imports: [TypeOrmModule.forRoot(testDatabaseOptions()), CompaniesModule, MentionsModule, DashboardModule],
   }).compile();
   app = module.createNestApplication({ logger: false });
   app.setGlobalPrefix('api');
