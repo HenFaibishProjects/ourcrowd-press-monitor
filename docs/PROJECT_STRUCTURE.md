@@ -82,13 +82,9 @@ ourcrowd-press-monitor/
   backend/src/sentiment/sentiment-classifier.ts
   backend/src/sentiment/sentiment.cli.ts
   backend/src/sentiment/sentiment.module.ts
-  backend/test/collection.test.ts
-  backend/test/company-import.test.ts
   backend/test/company-preparation.test.ts
   backend/test/dates.test.ts
   backend/test/news.test.ts
-  backend/test/persistence-api.test.ts
-  backend/test/scheduler-export.test.ts
   backend/test/sentiment.test.ts
   backend/tsconfig.build.json
   backend/tsconfig.json
@@ -212,10 +208,9 @@ ourcrowd-press-monitor/
 | `backend/src/database/initialize.ts` | Standalone initialization command after standard environment loading, using the same migrations as startup. |
 | `backend/src/database/migrations/1790856000000-initial-schema.ts` | Initial companies/mentions schema, FK/check/unique constraints, index and reverse migration. |
 | `backend/test/dates.test.ts` | Quarter/calendar/day-calculation unit tests. |
-| `backend/test/persistence-api.test.ts` | In-memory migrated SQLite and HTTP tests for empty state, validation, 404s, uniqueness and aggregation. |
 | `data/README.md` | Documents ignored local SQLite state and links to the single backend source-data flow. |
 
-`database/migrations` owns versioned schema changes. `backend/test` uses isolated in-memory databases. `data` holds ignored local SQLite state; `backend/src/data` holds supplied TXT and committed generated JSON. Frontend source files are unchanged.
+`database/migrations` owns versioned schema changes. `backend/test` contains only database-free unit tests; database integration tests and their bootstrap helpers were removed. `data` holds ignored local SQLite state; `backend/src/data` holds supplied TXT and committed generated JSON. Frontend source files are unchanged.
 
 ## Added seed and local classification files
 
@@ -231,7 +226,6 @@ ourcrowd-press-monitor/
 | `backend/src/sentiment/ollama.config.ts` | Validates loopback URL, local model name and bounded timeout configuration. |
 | `backend/src/sentiment/ollama-sentiment.classifier.ts` | Company-focused prompt, schema-bound local HTTP request, strict output validation and standard errors. |
 | `backend/src/sentiment/sentiment.cli.ts` | Real manual classification with model/sentiment output and no database context. |
-| `backend/test/company-import.test.ts` | Isolated importer tests for idempotence, updates, validation, ambiguity and rollback. |
 | `backend/test/sentiment.test.ts` | Mocked HTTP tests for valid values, malformed output, configuration/input errors, HTTP/connection failures and timeout. |
 
 ## Company source preparation files
@@ -273,8 +267,18 @@ The flow is supplied TXT → generated JSON → existing SQLite Company schema. 
 | `backend/src/export/data-export.service.ts` | Existing mention/dashboard services to deterministic reviewer JSON at a controlled evaluation time. |
 | `backend/src/export/data-export.cli.ts` | SQLite-only export command with quarter selection and explicit empty-dataset warning. |
 | `backend/test/news.test.ts` | Mocked HTTP/provider/cache/config/date/query/URL tests using isolated temporary cache. |
-| `backend/test/collection.test.ts` | In-memory SQLite and fake provider/classifier/alerts for dedup, failures, sequential flow, scope/ranges. |
-| `backend/test/scheduler-export.test.ts` | Disabled/enabled registration, shared daily logic/guard, deterministic export and script forwarding tests. |
 | `data/output/README.md` | Explains real successful-run output requirements; no fabricated output committed. |
 
 `data/cache/gdelt` is runtime-only, ignored and not listed in the committed tree. `data/output` can hold reviewed real JSON exports after manual verification. Existing .env.example/.gitignore/scripts/lockfile and feature registration/read methods are updated accordingly. Frontend files, supplied TXT/generated company JSON, entities and migrations remain unchanged.
+
+## File provider and safe test scope
+
+| File | Responsibility |
+| --- | --- |
+| `backend/src/news/file-news.provider.ts` | Validates local article records and filters by company and date range without HTTP or database writes. |
+| `backend/src/news/news.module.ts` | Selects file (default) or GDELT from NEWS_PROVIDER, constructing only the selected adapter. |
+| `data/fixtures/demo-news.json` | Empty article array awaiting manually verified real records. |
+| `data/fixtures/README.md` | Fixture fields, provenance policy and review commands. |
+| `backend/test/file-news.test.ts` | Database-free checks for selection/validation/provider wiring and description-based enrichment. |
+
+The default test script explicitly lists database-free unit files. No test database setup, schema reset or database integration test is retained.

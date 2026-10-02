@@ -1,6 +1,6 @@
 # OurCrowd Press Monitor
 
-NestJS modular monolith with PostgreSQL/TypeORM and a minimal Angular title shell. Current scope: persistence/read-only REST APIs, real company import, GDELT discovery/cache, sequential collection, local sentiment classification, console alerts, disabled-by-default daily scheduling and export commands. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
+NestJS modular monolith with PostgreSQL/TypeORM and a minimal Angular title shell. Current scope: persistence/read-only REST APIs, real company import, file-based review data and live GDELT discovery/cache, sequential collection, local sentiment classification, console alerts, disabled-by-default daily scheduling and export commands. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
 
 Use Node 24.19 (`nvm use` if available). From the repository root:
 
@@ -180,6 +180,37 @@ Invalid input produces BadRequestException (400); invalid configuration produces
 
 Collection calls the classifier only for new URLs. Existing Mention records are not automatically reclassified. Scheduled collection is disabled by default. No RSS, scraping, hosted AI, email/Slack delivery or Angular dashboard functionality is added.
 
+## Deterministic local news provider
+
+`NEWS_PROVIDER=file` is the default for local review. `FileNewsProvider` reads `data/fixtures/demo-news.json`, validates every record and selects the requested company and date range. It makes no HTTP requests and needs no API key. Set `NEWS_FIXTURE_PATH` to override the repository-relative path.
+
+GDELT remains the live discovery provider. It was tested against the real public endpoint during development; those real runs encountered HTTP 429 rate limiting and temporary availability problems. File input lets a reviewer exercise the pipeline without depending on GDELT or publisher availability.
+
+Both providers use the same `CollectionService`: normalization and duplicate checks → local Ollama relevance and sentiment → PostgreSQL → dashboard APIs and console alerts. There is no second collection flow or fake database path. A non-empty supplied description is used as context without fetching the publisher page. When context is missing, the existing article enrichment fallback still runs. Include a useful description on every fixture record for a review without publisher requests; Ollama remains a real local HTTP call.
+
+**The committed fixture is currently `[]`.** No reliable article cache or export is present in the repository, so no titles, URLs, sources or publication dates have been invented. Supply manually verified article records using [the fixture format](data/fixtures/README.md). There are no GDELT-provenance claims for this empty file. An empty file runs as a valid no-op and does not demonstrate classification or persistence of new mentions.
+
+After configuring PostgreSQL, importing the supplied companies and starting local Ollama:
+
+```dotenv
+NEWS_PROVIDER=file
+NEWS_FIXTURE_PATH=data/fixtures/demo-news.json
+```
+
+```bash
+npm run collect -- --companies=BioCatch --quarter=previous
+```
+
+Use `--quarter=YYYY-QN` or explicit `--from`/`--to` matching your records if the review date has moved to another quarter. Repeated runs use the existing company/URL duplicate protection. File selection is deterministic; model quality and latency still depend on your local Ollama configuration.
+
+To switch back to live discovery, set this in the root `.env` (or process environment) before running the same command:
+
+```dotenv
+NEWS_PROVIDER=gdelt
+```
+
+`--live` and `--refresh` control GDELT caching only; they do not override provider selection. Existing news-only and collection commands continue to use the selected provider. Startup logs `News provider: file` or `News provider: gdelt`. Unsupported provider values fail clearly; no automatic live fallback occurs.
+
 ## News discovery with GDELT
 
 GDELT DOC 2.0 is the first NewsProvider: public JSON news discovery with no API key, exact-phrase queries and explicit date ranges. GET `https://api.gdeltproject.org/api/v2/doc/doc` sends:
@@ -194,7 +225,7 @@ startdatetime=YYYYMMDDHHMMSS
 enddatetime=YYYYMMDDHHMMSS
 ```
 
-Dates are UTC. Returned seendate is mapped into the current Mention publishedAt field; it may represent GDELT observation/indexing, **not a publisher-authoritative publication timestamp**. Source is the article URL hostname. Description is null because no excerpt is guaranteed; pages are not scraped. GDELT tone is ignored: only local Ollama supplies domain sentiment.
+Dates are UTC. Returned seendate is mapped into the current Mention publishedAt field; it may represent GDELT observation/indexing, **not a publisher-authoritative publication timestamp**. Source is the article URL hostname. Description is null because no excerpt is guaranteed; the collection pipeline may enrich a candidate from its publisher when context is missing. GDELT tone is ignored: only local Ollama supplies domain sentiment.
 
 The default query is the primary company name in double quotes. A 2–6-letter uppercase acronym with one explicit multiword expanded alias uses that alias (SSI → Safe Superintelligence). Former aliases are never automatically searched (Ludeo remains Ludeo, not Edge). This is a deterministic selection rule, not semantic relevance/fuzzy matching. Generic names can still produce false positives, and titles alone may not reveal why an article matched. Any later semantic relevance model must remain local Ollama.
 
@@ -214,7 +245,7 @@ Corrupt cache fails clearly and asks for refresh; malformed provider envelopes a
 | --- | --- |
 | GDELT_BASE_URL | https://api.gdeltproject.org/api/v2/doc/doc |
 | GDELT_TIMEOUT_MS | 30000 |
-| GDELT_REQUEST_DELAY_MS | 1000 |
+| GDELT_REQUEST_DELAY_MS | 7000 |
 | GDELT_MAX_RETRIES | 2 |
 | GDELT_CACHE_PATH | data/cache/gdelt |
 
@@ -222,7 +253,7 @@ Corrupt cache fails clearly and asks for refresh; malformed provider envelopes a
 
 All 258 companies stay in the same real companies table. Development scopes the same services to **SpaceX, BioCatch, ZutaCore**, without a test table or fake company data. Generic commands require explicit `--companies=Name,Name` or `--all`; the default range is the previous completed UTC quarter. `--quarter=previous`, `--quarter=current`, `--quarter=YYYY-QN`, or paired `--from`/`--to` are supported. Quarter and explicit range arguments cannot be combined. Current-quarter end is clipped to now. Date-only `to` includes its UTC day using next midnight; timestamp `to` is exclusive. Future ranges, invalid dates and repeated/unknown options fail. GDELT ranges must span at least 15 minutes.
 
-Run these manually in order:
+These commands use the selected provider. Set `NEWS_PROVIDER=gdelt` explicitly for live discovery. Run these manually in order:
 
 ```bash
 npm run companies:setup
@@ -279,28 +310,19 @@ Output is ordered and pretty JSON, stable for the same DB/quarter/evaluation tim
 
 ## Tests and verification
 
-`npm test` uses Node's test runner and ts-node. Tests cover the original dates/schema/REST/importer/classifier behavior plus GDELT mapping/encoding/ranges/HTTP failures/retries/timeouts, raw cache modes, URL identity, selection, collection dedup-before-classification, per-company URL sharing, sequential inference, partial failures/aborts/alerts, scheduler disabled/overlap behavior, exports and root script forwarding. They use mocked HTTP/inference and isolated in-memory SQLite; test fixtures never populate runtime data. Date-sensitive logic accepts controlled evaluation times.
+`npm test` runs an explicit list of database-free unit tests through Node's test runner and ts-node: company preparation, dates, mocked GDELT HTTP/cache behavior, mocked Ollama behavior, and file-provider/enrichment selection. They use temporary files and mocked boundaries, do not initialize PostgreSQL, and cannot reset the development database. Adding another test file does not automatically add it to the default command.
+
+The database-backed `collection.test.ts`, `company-import.test.ts`, `persistence-api.test.ts` and mixed `scheduler-export.test.ts` were removed for this phase. The test database bootstrap/verification files (`create-test-db.ts`, `verify-test-db.ts`, `test-database.ts`, `test-database.test.ts`) and the `pretest` / `test:db:create` scripts were also removed. No destructive test setup is retained. Database integration coverage is deferred until it has a simple, safe isolated setup; the current unit suite does not claim to verify PostgreSQL persistence or REST end-to-end behavior.
 
 ```bash
-npm run typecheck
+npm run typecheck --workspace backend
 npm test
-npm run build
-npm run companies:prepare
-npm run companies
+npm run build --workspace backend
+npm run build --workspace frontend
 ```
 
-After build, default disabled scheduling can be checked with `npm run start` and these read endpoints:
-
-```bash
-curl http://localhost:3000/api/health
-curl http://localhost:3000/api/companies
-curl 'http://localhost:3000/api/dashboard?quarter=2026-Q3'
-```
-
-No Angular dashboard work, scraping/RSS, hosted inference, queues, additional company tables, schema changes, SMTP/Slack, authentication or microservices were added. Real GDELT availability, local inference and classification quality require manual verification.
+No live collection, inference, scheduled jobs or production imports are needed for these checks. To run the real file-based pipeline yourself, provide verified records and follow the local news provider section above. That path intentionally writes new mentions to your configured PostgreSQL database.
 
 See [ARCHITECTURE.md](docs/ARCHITECTURE.md) and [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
 References: [GDELT DOC parameters](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/), [GDELT search-window update](https://blog.gdeltproject.org/doc-2-0-updates-1-5-year-searching-and-updated-mobile-interface/), [NestJS scheduling](https://docs.nestjs.com/application/task-scheduling), [Ollama generate](https://docs.ollama.com/api/generate).
-
-Implementation verification: type checking, 54 automated tests, backend/frontend builds, company preparation and idempotent import passed (258 unchanged). Production startup with scheduling disabled and outbound fetch forbidden served health/companies/dashboard without GDELT/Ollama calls. One actual BioCatch news-only live request was attempted with timeout=5000ms and retries=0; it timed out. No live articles were verified, no Mention rows were written, and no output dataset was fabricated. Real local Ollama and collection remain intentionally unexecuted.

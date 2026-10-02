@@ -15,13 +15,13 @@ OurCrowd company list
 PostgreSQL
         |
         v
-GDELT news discovery
+File fixtures (default) or GDELT live discovery
         |
         v
 URL normalization + duplicate check
         |
         v
-Article enrichment
+Article enrichment only when context is missing
         |
         v
 Local Ollama analysis
@@ -71,6 +71,9 @@ DB_DATABASE=ourcrowd_press_monitor
 OLLAMA_BASE_URL=http://127.0.0.1:11434
 OLLAMA_MODEL=gemma3:270m
 OLLAMA_TIMEOUT_MS=60000
+
+NEWS_PROVIDER=file
+NEWS_FIXTURE_PATH=data/fixtures/demo-news.json
 
 GDELT_BASE_URL=https://api.gdeltproject.org/api/v2/doc/doc
 GDELT_TIMEOUT_MS=30000
@@ -122,13 +125,31 @@ Health:   http://localhost:3000/api/health
 
 ---
 
+## Local review without public news availability
+
+The default is `NEWS_PROVIDER=file`. Add manually verified article records with useful descriptions to `data/fixtures/demo-news.json`, following [the fixture format](data/fixtures/README.md). The committed file is empty because the repository contains no reliable real article records to reuse. This path will select zero articles until records are supplied; it is not a pre-populated demo.
+
+Then run the existing command:
+
+```bash
+npm run collect -- --companies=BioCatch --quarter=previous
+```
+
+The same `CollectionService` performs normalization, deduplication, real local Ollama relevance/sentiment, PostgreSQL persistence and alerts. Supplied non-empty descriptions avoid publisher-page HTTP requests. `NEWS_PROVIDER=file` never calls GDELT, even when `--live` or `--refresh` is passed. Use a fixed quarter matching the fixture dates for reviews in a later quarter.
+
+For actual live discovery, set `NEWS_PROVIDER=gdelt` in `.env` or the process environment. Real public-endpoint testing encountered HTTP 429 and temporary availability problems, which is why review does not depend on that provider by default. No fixture record is claimed to come from GDELT.
+
+`npm test` runs only an explicit database-free unit-test list. Database integration tests and destructive bootstrap helpers were removed; no test database creation or verification command is required.
+
+---
+
 ## Useful manual commands
 
 I kept the external integrations easy to test separately. This made it possible to verify one boundary at a time instead of debugging the whole pipeline at once.
 
 ### Check news discovery only
 
-This calls GDELT but does not call Ollama and does not write mentions:
+This uses the selected news provider, without Ollama or Mention writes. Set `NEWS_PROVIDER=gdelt` explicitly if you want to call GDELT:
 
 ```bash
 npm run news -- --companies=BioCatch --quarter=previous --live
@@ -283,7 +304,7 @@ A BioCatch query returned 76 candidate articles, and some of the first results w
 
 That made it clear that news discovery and relevance are two different problems.
 
-GDELT is used as the discovery layer. Before sending a new candidate to Ollama, the application tries to fetch the article page and extract a small amount of useful text:
+GDELT is the live discovery layer. If a candidate has no supplied description, the application tries to fetch its page before Ollama and extracts a small amount of useful text:
 
 - page title
 - meta / OpenGraph description
@@ -716,7 +737,7 @@ http://localhost:3000/api/docs
 http://localhost:3000/api/companies
 ```
 
-Next, verify the external boundaries independently:
+First supply verified fixture records with descriptions. For the local path, inspect the selected file provider and then check Ollama independently. Set `NEWS_PROVIDER=gdelt` only when intentionally testing live discovery:
 
 ```bash
 npm run news -- --companies=BioCatch --quarter=previous --live

@@ -203,24 +203,27 @@ export class CollectionService {
         }
 
         let enrichedData = null;
-        try {
-          enrichedData = await this.articleEnricher.fetchAndEnrich(article.url);
-          if (enrichedData) {
-            collectionResult.articlesEnriched++;
-          } else {
+
+        if (!article.description) {
+          try {
+            enrichedData = await this.articleEnricher.fetchAndEnrich(article.url);
+            if (enrichedData) {
+              collectionResult.articlesEnriched++;
+            } else {
+              collectionResult.enrichmentFailures++;
+            }
+          } catch (error: unknown) {
             collectionResult.enrichmentFailures++;
+            collectionResult.errors.push({
+              company: company.name,
+              url: article.url,
+              stage: 'enrichment',
+              message: processingErrorMessage(error),
+            });
+            this.logger.warn(
+              `Article enrichment failed for ${article.url}: ${processingErrorMessage(error)}`,
+            );
           }
-        } catch (error: unknown) {
-          collectionResult.enrichmentFailures++;
-          collectionResult.errors.push({
-            company: company.name,
-            url: article.url,
-            stage: 'enrichment',
-            message: processingErrorMessage(error),
-          });
-          this.logger.warn(
-            `Article enrichment failed for ${article.url}: ${processingErrorMessage(error)}`,
-          );
         }
 
         let sentiment: Sentiment | null = null;
