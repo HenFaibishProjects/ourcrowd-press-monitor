@@ -17,107 +17,107 @@ function validatedArticle(article: NewsArticle, options: CollectionOptions): New
       (article.description !== null && typeof article.description !== 'string')) throw new BadRequestException('Invalid article title, URL, source, timestamp, range or description');
   return { ...article, title: article.title.trim(), source: article.source.trim(), url: normalizeArticleUrl(article.url), description: article.description?.trim() || null };
 }
-const message = (error: unknown) => error instanceof Error ? error.message : 'Unknown processing failure';
+const processingErrorMessage = (error: unknown) => error instanceof Error ? error.message : 'Unknown processing failure';
 
 @Injectable()
 export class CollectionService {
   private readonly logger = new Logger(CollectionService.name);
   constructor(
-    private readonly companies: CompaniesService,
-    private readonly searchMetadata: CompanySearchService,
-    private readonly mentions: MentionsService,
-    @Inject(NEWS_PROVIDER) private readonly news: NewsProvider,
-    @Inject(SENTIMENT_CLASSIFIER) private readonly classifier: SentimentClassifier,
-    @Inject(ALERT_SERVICE) private readonly alerts: AlertService,
+    private readonly companiesService: CompaniesService,
+    private readonly companySearchService: CompanySearchService,
+    private readonly mentionsService: MentionsService,
+    @Inject(NEWS_PROVIDER) private readonly newsProvider: NewsProvider,
+    @Inject(SENTIMENT_CLASSIFIER) private readonly sentimentClassifier: SentimentClassifier,
+    @Inject(ALERT_SERVICE) private readonly alertService: AlertService,
   ) {}
   async collect(options: CollectionOptions): Promise<CollectionResult> {
     if (!(options.from instanceof Date) || !(options.to instanceof Date) || !Number.isFinite(options.from.getTime()) ||
         !Number.isFinite(options.to.getTime()) || options.from >= options.to) throw new BadRequestException('Invalid collection range');
-    const metadata = await this.searchMetadata.readMetadata();
-    const selected = await this.searchMetadata.select(options.companies);
-    const queries = selected.map((company) => this.searchMetadata.queryName(company, metadata));
-    this.logger.log(`Starting press collection for ${selected.length} companies, range ${options.from.toISOString()} to ${options.to.toISOString()} (exclusive end); news mode=${options.cacheMode}`);
-    const result: CollectionResult = { companiesProcessed: 0, companiesFailed: 0, articlesFetched: 0,
+    const companyMetadata = await this.companySearchService.readMetadata();
+    const selectedCompanies = await this.companySearchService.select(options.companies);
+    const companyQueryNames = selectedCompanies.map((company) => this.companySearchService.queryName(company, companyMetadata));
+    this.logger.log(`Starting press collection for ${selectedCompanies.length} companies, range ${options.from.toISOString()} to ${options.to.toISOString()} (exclusive end); news mode=${options.cacheMode}`);
+    const collectionResult: CollectionResult = { companiesProcessed: 0, companiesFailed: 0, articlesFetched: 0,
       invalidArticlesSkipped: 0, duplicatesSkipped: 0, classificationFailures: 0, mentionsInserted: 0,
       resultLimitCompanies: [], aborted: false, errors: [] };
-    const inserted: NewMentionAlert[] = [];
+    const newMentionAlerts: NewMentionAlert[] = [];
     let consecutiveTimeouts = 0;
-    companies: for (let index = 0; index < selected.length; index++) {
-      const company = selected[index]!;
+    companies: for (let companyIndex = 0; companyIndex < selectedCompanies.length; companyIndex++) {
+      const company = selectedCompanies[companyIndex]!;
       // Ensure the selected company still exists via the feature boundary, never TypeORM here.
-      await this.companies.findOne(company.id);
+      await this.companiesService.findOne(company.id);
       this.logger.log(`Processing company ${company.name}`);
-      const before = { duplicates: result.duplicatesSkipped, inserted: result.mentionsInserted, classificationFailures: result.classificationFailures };
-      result.companiesProcessed++;
+      const countsBeforeCompany = { duplicates: collectionResult.duplicatesSkipped, inserted: collectionResult.mentionsInserted, classificationFailures: collectionResult.classificationFailures };
+      collectionResult.companiesProcessed++;
       let articles: NewsArticle[];
       try {
-        articles = await this.news.search({ companyName: company.name, queryName: queries[index]!, from: options.from, to: options.to,
-          cacheMode: options.cacheMode, onDiagnostics: (details) => {
-            result.invalidArticlesSkipped += details.invalidArticles;
-            if (details.resultLimitReached) result.resultLimitCompanies.push(company.name);
+        articles = await this.newsProvider.search({ companyName: company.name, queryName: companyQueryNames[companyIndex]!, from: options.from, to: options.to,
+          cacheMode: options.cacheMode, onDiagnostics: (newsDiagnostics) => {
+            collectionResult.invalidArticlesSkipped += newsDiagnostics.invalidArticles;
+            if (newsDiagnostics.resultLimitReached) collectionResult.resultLimitCompanies.push(company.name);
           } });
         if (!Array.isArray(articles)) throw new BadRequestException('Provider must return an article array');
       } catch (error: unknown) {
-        result.companiesFailed++; result.errors.push({ company: company.name, stage: 'provider', message: message(error) });
-        this.logger.error(`News collection failed for ${company.name}: ${message(error)}`);
-        if (error instanceof InternalServerErrorException) { this.logger.warn('Aborting press collection because news configuration is invalid'); result.aborted = true; break; }
+        collectionResult.companiesFailed++; collectionResult.errors.push({ company: company.name, stage: 'provider', message: processingErrorMessage(error) });
+        this.logger.error(`News collection failed for ${company.name}: ${processingErrorMessage(error)}`);
+        if (error instanceof InternalServerErrorException) { this.logger.warn('Aborting press collection because news configuration is invalid'); collectionResult.aborted = true; break; }
         continue;
       }
       this.logger.debug(`Received ${articles.length} articles for ${company.name}`);
-      result.articlesFetched += articles.length;
-      const seen = new Set<string>();
-      for (const input of articles) {
+      collectionResult.articlesFetched += articles.length;
+      const seenArticleUrls = new Set<string>();
+      for (const providerArticle of articles) {
         let article: NewsArticle;
-        try { article = validatedArticle(input, options); }
-        catch (error: unknown) { this.logger.warn(`Skipping invalid article for ${company.name}: ${message(error)}`); result.invalidArticlesSkipped++; result.errors.push({ company: company.name, stage: 'article', message: message(error) }); continue; }
-        if (seen.has(article.url)) { result.duplicatesSkipped++; continue; }
-        seen.add(article.url);
+        try { article = validatedArticle(providerArticle, options); }
+        catch (error: unknown) { this.logger.warn(`Skipping invalid article for ${company.name}: ${processingErrorMessage(error)}`); collectionResult.invalidArticlesSkipped++; collectionResult.errors.push({ company: company.name, stage: 'article', message: processingErrorMessage(error) }); continue; }
+        if (seenArticleUrls.has(article.url)) { collectionResult.duplicatesSkipped++; continue; }
+        seenArticleUrls.add(article.url);
         try {
-          if (await this.mentions.exists(company.id, article.url)) { result.duplicatesSkipped++; continue; }
+          if (await this.mentionsService.exists(company.id, article.url)) { collectionResult.duplicatesSkipped++; continue; }
         } catch (error: unknown) {
-          result.errors.push({ company: company.name, url: article.url, stage: 'persistence', message: message(error) });
-          this.logger.error(`Mention lookup failed for ${company.name}; aborting collection: ${message(error)}`);
-          result.aborted = true; break companies;
+          collectionResult.errors.push({ company: company.name, url: article.url, stage: 'persistence', message: processingErrorMessage(error) });
+          this.logger.error(`Mention lookup failed for ${company.name}; aborting collection: ${processingErrorMessage(error)}`);
+          collectionResult.aborted = true; break companies;
         }
         let sentiment: Sentiment;
         try {
-          sentiment = await this.classifier.classify({ companyName: company.name, title: article.title, description: article.description });
+          sentiment = await this.sentimentClassifier.classify({ companyName: company.name, title: article.title, description: article.description });
           consecutiveTimeouts = 0;
         } catch (error: unknown) {
-          result.classificationFailures++;
-          result.errors.push({ company: company.name, url: article.url, stage: 'classification', message: message(error) });
-          this.logger.warn(`Sentiment classification failed for ${company.name}, source=${article.source}: ${message(error)}`);
+          collectionResult.classificationFailures++;
+          collectionResult.errors.push({ company: company.name, url: article.url, stage: 'classification', message: processingErrorMessage(error) });
+          this.logger.warn(`Sentiment classification failed for ${company.name}, source=${article.source}: ${processingErrorMessage(error)}`);
           if (error instanceof GatewayTimeoutException) consecutiveTimeouts++; else consecutiveTimeouts = 0;
           if (error instanceof ServiceUnavailableException || error instanceof InternalServerErrorException || consecutiveTimeouts >= 2) {
             this.logger.error(`Aborting press collection: sentiment service unavailable, invalid configuration or repeated timeouts for ${company.name}`);
-            result.aborted = true; break companies;
+            collectionResult.aborted = true; break companies;
           }
           continue;
         }
         try {
-          const mention = await this.mentions.create({ companyId: company.id, ...article, sentiment });
-          inserted.push({ companyName: company.name, mention }); result.mentionsInserted++;
+          const mention = await this.mentionsService.create({ companyId: company.id, ...article, sentiment });
+          newMentionAlerts.push({ companyName: company.name, mention }); collectionResult.mentionsInserted++;
         } catch (error: unknown) {
-          if (error instanceof ConflictException) result.duplicatesSkipped++;
+          if (error instanceof ConflictException) collectionResult.duplicatesSkipped++;
           else {
-            this.logger.error(`Mention persistence failed for ${company.name}, source=${article.source}: ${message(error)}`);
-            result.errors.push({ company: company.name, url: article.url, stage: 'persistence', message: message(error) });
+            this.logger.error(`Mention persistence failed for ${company.name}, source=${article.source}: ${processingErrorMessage(error)}`);
+            collectionResult.errors.push({ company: company.name, url: article.url, stage: 'persistence', message: processingErrorMessage(error) });
           }
         }
       }
-      this.logger.log(`Company collection completed for ${company.name}: ${result.mentionsInserted - before.inserted} new mentions, ${result.duplicatesSkipped - before.duplicates} duplicate URLs skipped, ${result.classificationFailures - before.classificationFailures} classification failures`);
+      this.logger.log(`Company collection completed for ${company.name}: ${collectionResult.mentionsInserted - countsBeforeCompany.inserted} new mentions, ${collectionResult.duplicatesSkipped - countsBeforeCompany.duplicates} duplicate URLs skipped, ${collectionResult.classificationFailures - countsBeforeCompany.classificationFailures} classification failures`);
     }
-    if (inserted.length) {
+    if (newMentionAlerts.length) {
       try {
-        await this.alerts.sendNewMentions(inserted);
-        this.logger.log(`New-mention alert sent for ${inserted.length} persisted mentions`);
+        await this.alertService.sendNewMentions(newMentionAlerts);
+        this.logger.log(`New-mention alert sent for ${newMentionAlerts.length} persisted mentions`);
       }
       catch (error: unknown) {
-        this.logger.error(`New-mention alert failed for ${inserted.length} persisted mentions; stored data is retained: ${message(error)}`);
-        result.errors.push({ stage: 'alert', message: message(error) });
+        this.logger.error(`New-mention alert failed for ${newMentionAlerts.length} persisted mentions; stored data is retained: ${processingErrorMessage(error)}`);
+        collectionResult.errors.push({ stage: 'alert', message: processingErrorMessage(error) });
       }
     }
-    this.logger.log(`Collection ${result.aborted ? 'aborted' : 'completed'}: ${result.companiesProcessed}/${selected.length} companies processed, ${result.companiesFailed} provider failures, ${result.articlesFetched} articles, ${result.mentionsInserted} new mentions, ${result.duplicatesSkipped} duplicates skipped, ${result.invalidArticlesSkipped} invalid articles, ${result.classificationFailures} classification failures, ${result.errors.length} recorded errors`);
-    return result;
+    this.logger.log(`Collection ${collectionResult.aborted ? 'aborted' : 'completed'}: ${collectionResult.companiesProcessed}/${selectedCompanies.length} companies processed, ${collectionResult.companiesFailed} provider failures, ${collectionResult.articlesFetched} articles, ${collectionResult.mentionsInserted} new mentions, ${collectionResult.duplicatesSkipped} duplicates skipped, ${collectionResult.invalidArticlesSkipped} invalid articles, ${collectionResult.classificationFailures} classification failures, ${collectionResult.errors.length} recorded errors`);
+    return collectionResult;
   }
 }

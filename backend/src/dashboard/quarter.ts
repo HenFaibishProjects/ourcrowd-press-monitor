@@ -6,8 +6,8 @@ export interface QuarterRange {
   end: Date;
 }
 
-export function parseQuarter(value?: string, now = new Date()): QuarterRange {
-  const quarter = value ?? `${now.getUTCFullYear()}-Q${Math.floor(now.getUTCMonth() / 3) + 1}`;
+export function parseQuarter(requestedQuarter?: string, now = new Date()): QuarterRange {
+  const quarter = requestedQuarter ?? `${now.getUTCFullYear()}-Q${Math.floor(now.getUTCMonth() / 3) + 1}`;
   const match = /^(\d{4})-Q([1-4])$/.exec(quarter);
   if (!match || Number(match[1]) === 0) throw new BadRequestException('quarter must be YYYY-Q1, YYYY-Q2, YYYY-Q3, or YYYY-Q4 (year 0001–9999)');
   const year = Number(match[1]);

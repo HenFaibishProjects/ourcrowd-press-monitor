@@ -7,26 +7,26 @@ import { MentionFilter, NewMention } from './mention.types';
 
 @Injectable()
 export class MentionsRepository {
-  constructor(@InjectRepository(Mention) private readonly mentions: Repository<Mention>) {}
+  constructor(@InjectRepository(Mention) private readonly mentionRepository: Repository<Mention>) {}
 
   findByCompany(companyId: number, filter: MentionFilter): Promise<Mention[]> {
-    const query = this.mentions.createQueryBuilder('mention')
+    const mentionQuery = this.mentionRepository.createQueryBuilder('mention')
       .where('mention.companyId = :companyId', { companyId });
-    if (filter.from) query.andWhere('mention.publishedAt >= :from', { from: filter.from });
-    if (filter.to && filter.to.getUTCFullYear() <= 9999) query.andWhere(`mention.publishedAt ${filter.toExclusive ? '<' : '<='} :to`, { to: filter.to });
-    if (filter.sentiment) query.andWhere('mention.sentiment = :sentiment', { sentiment: filter.sentiment });
-    return query.orderBy('mention.publishedAt', 'DESC').addOrderBy('mention.id', 'DESC').getMany();
+    if (filter.from) mentionQuery.andWhere('mention.publishedAt >= :from', { from: filter.from });
+    if (filter.to && filter.to.getUTCFullYear() <= 9999) mentionQuery.andWhere(`mention.publishedAt ${filter.toExclusive ? '<' : '<='} :to`, { to: filter.to });
+    if (filter.sentiment) mentionQuery.andWhere('mention.sentiment = :sentiment', { sentiment: filter.sentiment });
+    return mentionQuery.orderBy('mention.publishedAt', 'DESC').addOrderBy('mention.id', 'DESC').getMany();
   }
 
   findAll(): Promise<Mention[]> {
-    return this.mentions.find({ relations: { company: true }, order: { companyId: 'ASC', publishedAt: 'ASC', id: 'ASC' } });
+    return this.mentionRepository.find({ relations: { company: true }, order: { companyId: 'ASC', publishedAt: 'ASC', id: 'ASC' } });
   }
 
   exists(companyId: number, url: string): Promise<boolean> {
-    return this.mentions.existsBy({ companyId, url });
+    return this.mentionRepository.existsBy({ companyId, url });
   }
 
-  save(input: NewMention): Promise<Mention> {
-    return this.mentions.save(this.mentions.create({ ...input, description: input.description ?? null }));
+  save(newMention: NewMention): Promise<Mention> {
+    return this.mentionRepository.save(this.mentionRepository.create({ ...newMention, description: newMention.description ?? null }));
   }
 }

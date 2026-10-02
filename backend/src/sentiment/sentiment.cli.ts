@@ -21,8 +21,8 @@ async function run(): Promise<void> {
   const app = await NestFactory.createApplicationContext(SentimentModule, { logger: ['log', 'warn', 'error'], abortOnError: false });
   try {
     console.info(`Model: ${app.get(OllamaSentimentClassifier).settings.model}`);
-    const classifier = app.get<SentimentClassifier>(SENTIMENT_CLASSIFIER);
-    const sentiment = await classifier.classify({ companyName: values.company, title: values.title, description: values.description });
+    const sentimentClassifier = app.get<SentimentClassifier>(SENTIMENT_CLASSIFIER);
+    const sentiment = await sentimentClassifier.classify({ companyName: values.company, title: values.title, description: values.description });
     console.info(`Sentiment: ${sentiment}`);
   } finally { await app.close(); }
 }

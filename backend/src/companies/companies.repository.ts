@@ -6,59 +6,59 @@ import { CompanyImportReport, CompanySeed, companyDomainKey, companyNameKey } fr
 
 @Injectable()
 export class CompaniesRepository {
-  constructor(@InjectRepository(Company) private readonly companies: Repository<Company>, private readonly database: DataSource) {}
+  constructor(@InjectRepository(Company) private readonly companyRepository: Repository<Company>, private readonly database: DataSource) {}
 
   findAll(): Promise<Company[]> {
-    return this.companies.find({ order: { name: 'ASC', id: 'ASC' } });
+    return this.companyRepository.find({ order: { name: 'ASC', id: 'ASC' } });
   }
 
   findById(id: number): Promise<Company | null> {
-    return this.companies.findOneBy({ id });
+    return this.companyRepository.findOneBy({ id });
   }
 
-  async importSeed(seeds: CompanySeed[]): Promise<CompanyImportReport> {
-    return this.database.transaction(async (manager) => {
-      const repository = manager.getRepository(Company);
-      const companies = await repository.find();
-      const claimedIds = new Set<number>();
-      const report: CompanyImportReport = { inserted: 0, updated: 0, unchanged: 0 };
-      for (const seed of seeds) {
-        const domain = companyDomainKey(seed.domain);
-        const domainMatches = domain ? companies.filter((company) => companyDomainKey(company.domain) === domain) : [];
-        const nameMatches = companies.filter((company) => companyNameKey(company.name) === companyNameKey(seed.name));
+  async importSeed(companySeeds: CompanySeed[]): Promise<CompanyImportReport> {
+    return this.database.transaction(async (transactionManager) => {
+      const companyRepository = transactionManager.getRepository(Company);
+      const storedCompanies = await companyRepository.find();
+      const matchedCompanyIds = new Set<number>();
+      const importReport: CompanyImportReport = { inserted: 0, updated: 0, unchanged: 0 };
+      for (const companySeed of companySeeds) {
+        const domain = companyDomainKey(companySeed.domain);
+        const domainMatches = domain ? storedCompanies.filter((company) => companyDomainKey(company.domain) === domain) : [];
+        const nameMatches = storedCompanies.filter((company) => companyNameKey(company.name) === companyNameKey(companySeed.name));
         if (domainMatches.length > 1 || nameMatches.length > 1 ||
             (domainMatches[0] && nameMatches[0] && domainMatches[0].id !== nameMatches[0].id)) {
-          throw new ConflictException(`Ambiguous company identity for "${seed.name}"; resolve duplicate/conflicting names or domains before importing`);
+          throw new ConflictException(`Ambiguous company identity for "${companySeed.name}"; resolve duplicate/conflicting names or domains before importing`);
         }
-        const existing = domainMatches[0] ?? nameMatches[0];
-        if (!existing) {
-          const company = await repository.save(repository.create({ name: seed.name, domain: domain ?? null, sector: seed.sector ?? null }));
-          companies.push(company);
-          claimedIds.add(company.id);
-          report.inserted++;
+        const existingCompany = domainMatches[0] ?? nameMatches[0];
+        if (!existingCompany) {
+          const company = await companyRepository.save(companyRepository.create({ name: companySeed.name, domain: domain ?? null, sector: companySeed.sector ?? null }));
+          storedCompanies.push(company);
+          matchedCompanyIds.add(company.id);
+          importReport.inserted++;
           continue;
         }
-        if (claimedIds.has(existing.id)) {
-          throw new ConflictException(`Multiple seed rows match company ${existing.id}; import cancelled`);
+        if (matchedCompanyIds.has(existingCompany.id)) {
+          throw new ConflictException(`Multiple seed rows match company ${existingCompany.id}; import cancelled`);
         }
-        claimedIds.add(existing.id);
-        if (domain && companyDomainKey(existing.domain) && companyDomainKey(existing.domain) !== domain) {
-          throw new ConflictException(`Conflicting domain for "${seed.name}"; existing non-empty domains are not reassigned by name`);
+        matchedCompanyIds.add(existingCompany.id);
+        if (domain && companyDomainKey(existingCompany.domain) && companyDomainKey(existingCompany.domain) !== domain) {
+          throw new ConflictException(`Conflicting domain for "${companySeed.name}"; existing non-empty domains are not reassigned by name`);
         }
-        const next = {
-          name: seed.name,
-          domain: seed.domain === undefined ? existing.domain : domain,
-          sector: seed.sector === undefined ? existing.sector : seed.sector,
+        const updatedCompanyFields = {
+          name: companySeed.name,
+          domain: companySeed.domain === undefined ? existingCompany.domain : domain,
+          sector: companySeed.sector === undefined ? existingCompany.sector : companySeed.sector,
         };
-        if (existing.name === next.name && existing.domain === next.domain && existing.sector === next.sector) {
-          report.unchanged++;
+        if (existingCompany.name === updatedCompanyFields.name && existingCompany.domain === updatedCompanyFields.domain && existingCompany.sector === updatedCompanyFields.sector) {
+          importReport.unchanged++;
         } else {
           // Keep original identities for the whole transaction so alias rows cannot match twice.
-          await repository.save({ ...existing, ...next });
-          report.updated++;
+          await companyRepository.save({ ...existingCompany, ...updatedCompanyFields });
+          importReport.updated++;
         }
       }
-      return report;
+      return importReport;
     });
   }
 }

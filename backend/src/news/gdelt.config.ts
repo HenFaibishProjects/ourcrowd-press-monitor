@@ -9,27 +9,27 @@ export interface GdeltConfig {
   maxRetries: number;
   cachePath: string;
 }
-export function gdeltConfig(config: ConfigService): GdeltConfig {
-  const number = (key: string, fallback: number, min: number, max: number) => {
-    const raw = String(config.get(key) ?? fallback);
-    const value = Number(raw);
-    if (!/^\d+$/.test(raw) || !Number.isSafeInteger(value) || value < min || value > max) {
-      throw new InternalServerErrorException(`${key} must be an integer from ${min} to ${max}`);
+export function gdeltConfig(configService: ConfigService): GdeltConfig {
+  const integerSetting = (settingName: string, defaultValue: number, minimum: number, maximum: number) => {
+    const settingText = String(configService.get(settingName) ?? defaultValue);
+    const settingNumber = Number(settingText);
+    if (!/^\d+$/.test(settingText) || !Number.isSafeInteger(settingNumber) || settingNumber < minimum || settingNumber > maximum) {
+      throw new InternalServerErrorException(`${settingName} must be an integer from ${minimum} to ${maximum}`);
     }
-    return value;
+    return settingNumber;
   };
   let url: URL;
-  try { url = new URL(config.get<string>('GDELT_BASE_URL') ?? 'https://api.gdeltproject.org/api/v2/doc/doc'); }
+  try { url = new URL(configService.get<string>('GDELT_BASE_URL') ?? 'https://api.gdeltproject.org/api/v2/doc/doc'); }
   catch { throw new InternalServerErrorException('GDELT_BASE_URL must be an absolute HTTP(S) endpoint'); }
   if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
     throw new InternalServerErrorException('GDELT_BASE_URL must be HTTP(S), without credentials, query or fragment');
   }
-  const cachePath = config.get<string>('GDELT_CACHE_PATH') ?? 'data/cache/gdelt';
+  const cachePath = configService.get<string>('GDELT_CACHE_PATH') ?? 'data/cache/gdelt';
   if (!cachePath.trim()) throw new InternalServerErrorException('GDELT_CACHE_PATH must not be blank');
   return {
-    baseUrl: url.toString(), timeoutMs: number('GDELT_TIMEOUT_MS', 30000, 1, 300000),
-    requestDelayMs: number('GDELT_REQUEST_DELAY_MS', 1000, 0, 60000),
-    maxRetries: number('GDELT_MAX_RETRIES', 2, 0, 3),
+    baseUrl: url.toString(), timeoutMs: integerSetting('GDELT_TIMEOUT_MS', 30000, 1, 300000),
+    requestDelayMs: integerSetting('GDELT_REQUEST_DELAY_MS', 1000, 0, 60000),
+    maxRetries: integerSetting('GDELT_MAX_RETRIES', 2, 0, 3),
     cachePath: resolve(__dirname, '../../..', cachePath),
   };
 }

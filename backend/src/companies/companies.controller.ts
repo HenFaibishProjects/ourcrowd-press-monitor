@@ -5,15 +5,15 @@ import { Company } from './company.entity';
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companies: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @Get()
   findAll(): Promise<Company[]> {
-    return this.companies.findAll();
+    return this.companiesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param() params: CompanyIdDto): Promise<Company> {
-    return this.companies.findOne(companyId(params.id));
+    return this.companiesService.findOne(companyId(params.id));
   }
 }

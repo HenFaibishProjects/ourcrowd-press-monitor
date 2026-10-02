@@ -6,8 +6,8 @@ export class CompanyIdDto {
   id!: string;
 }
 
-export function companyId(value: string): number {
-  const id = Number(value);
+export function companyId(idText: string): number {
+  const id = Number(idText);
   if (!Number.isSafeInteger(id) || id <= 0) {
     throw new BadRequestException('id must be a positive safe integer');
   }

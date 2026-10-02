@@ -9,34 +9,34 @@ import { MentionsRepository } from './mentions.repository';
 
 @Injectable()
 export class MentionsService {
-  constructor(private readonly mentions: MentionsRepository, private readonly companies: CompaniesService) {}
+  constructor(private readonly mentionsRepository: MentionsRepository, private readonly companiesService: CompaniesService) {}
 
   async findByCompany(companyId: number, query: MentionsQueryDto): Promise<Mention[]> {
-    const filter: MentionFilter = { sentiment: query.sentiment };
-    if (query.from !== undefined) filter.from = parseApiDate(query.from);
+    const mentionFilter: MentionFilter = { sentiment: query.sentiment };
+    if (query.from !== undefined) mentionFilter.from = parseApiDate(query.from);
     if (query.to !== undefined) {
-      filter.toExclusive = isDateOnly(query.to);
-      const to = parseApiDate(query.to);
-      filter.to = filter.toExclusive ? nextUtcDay(to) : to;
+      mentionFilter.toExclusive = isDateOnly(query.to);
+      const endDate = parseApiDate(query.to);
+      mentionFilter.to = mentionFilter.toExclusive ? nextUtcDay(endDate) : endDate;
     }
-    if (filter.from && filter.to && (filter.toExclusive ? filter.from >= filter.to : filter.from > filter.to)) {
+    if (mentionFilter.from && mentionFilter.to && (mentionFilter.toExclusive ? mentionFilter.from >= mentionFilter.to : mentionFilter.from > mentionFilter.to)) {
       throw new BadRequestException('from must not be after to');
     }
-    await this.companies.findOne(companyId);
-    return this.mentions.findByCompany(companyId, filter);
+    await this.companiesService.findOne(companyId);
+    return this.mentionsRepository.findByCompany(companyId, mentionFilter);
   }
 
-  findAll(): Promise<Mention[]> { return this.mentions.findAll(); }
+  findAll(): Promise<Mention[]> { return this.mentionsRepository.findAll(); }
 
   exists(companyId: number, url: string): Promise<boolean> {
-    return this.mentions.exists(companyId, url);
+    return this.mentionsRepository.exists(companyId, url);
   }
 
   // Internal collection entry point only; there is deliberately no write controller.
-  async create(input: NewMention): Promise<Mention> {
-    await this.companies.findOne(input.companyId);
+  async create(newMention: NewMention): Promise<Mention> {
+    await this.companiesService.findOne(newMention.companyId);
     try {
-      return await this.mentions.save(input);
+      return await this.mentionsRepository.save(newMention);
     } catch (error: unknown) {
       if (error instanceof QueryFailedError &&
           (error.driverError as { code?: string }).code === '23505') {

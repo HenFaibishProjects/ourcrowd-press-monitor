@@ -8,36 +8,36 @@ import { CompaniesService } from './companies.service';
 export const DEVELOPMENT_COMPANIES = ['SpaceX', 'BioCatch', 'ZutaCore'] as const;
 @Injectable()
 export class CompanySearchService {
-  constructor(private readonly companies: CompaniesService) {}
-  async select(names?: string[]): Promise<Company[]> {
-    const companies = await this.companies.findAll();
-    if (companies.length === 0) throw new BadRequestException('No tracked companies; run npm run companies:setup first');
-    if (names === undefined) return companies;
-    if (!names.length || names.some((name) => !name.trim())) throw new BadRequestException('Company selection must not be empty');
-    const keys = names.map(companyNameKey);
-    if (new Set(keys).size !== keys.length) throw new BadRequestException('Company selection contains duplicate names');
-    return names.map((name) => {
-      const matches = companies.filter((company) => companyNameKey(company.name) === companyNameKey(name));
-      if (matches.length !== 1) throw new BadRequestException(`Company "${name}" is missing or ambiguous; run company setup or resolve its identity`);
-      return matches[0]!;
+  constructor(private readonly companiesService: CompaniesService) {}
+  async select(companyNames?: string[]): Promise<Company[]> {
+    const trackedCompanies = await this.companiesService.findAll();
+    if (trackedCompanies.length === 0) throw new BadRequestException('No tracked companies; run npm run companies:setup first');
+    if (companyNames === undefined) return trackedCompanies;
+    if (!companyNames.length || companyNames.some((name) => !name.trim())) throw new BadRequestException('Company selection must not be empty');
+    const companyNameKeys = companyNames.map(companyNameKey);
+    if (new Set(companyNameKeys).size !== companyNameKeys.length) throw new BadRequestException('Company selection contains duplicate names');
+    return companyNames.map((name) => {
+      const matchingCompanies = trackedCompanies.filter((company) => companyNameKey(company.name) === companyNameKey(name));
+      if (matchingCompanies.length !== 1) throw new BadRequestException(`Company "${name}" is missing or ambiguous; run company setup or resolve its identity`);
+      return matchingCompanies[0]!;
     });
   }
   async readMetadata(): Promise<StructuredCompanySeed[]> {
     try { return validateCompanySeed(JSON.parse(await readFile(companyJsonPath, 'utf8'))); }
     catch { throw new InternalServerErrorException('Cannot load company search metadata; run npm run companies:prepare and validate backend/src/data/companies.json'); }
   }
-  queryName(company: Company, metadata: StructuredCompanySeed[]): string {
-    const byDomain = company.domain ? metadata.filter((row) => row.domain?.toLowerCase() === company.domain!.toLowerCase()) : [];
-    const byName = metadata.filter((row) => companyNameKey(row.name) === companyNameKey(company.name));
-    if (byDomain.length > 1 || byName.length > 1 || (byDomain[0] && byName[0] && byDomain[0] !== byName[0])) {
+  queryName(company: Company, companyMetadata: StructuredCompanySeed[]): string {
+    const domainMatches = company.domain ? companyMetadata.filter((companyMetadataEntry) => companyMetadataEntry.domain?.toLowerCase() === company.domain!.toLowerCase()) : [];
+    const nameMatches = companyMetadata.filter((companyMetadataEntry) => companyNameKey(companyMetadataEntry.name) === companyNameKey(company.name));
+    if (domainMatches.length > 1 || nameMatches.length > 1 || (domainMatches[0] && nameMatches[0] && domainMatches[0] !== nameMatches[0])) {
       throw new InternalServerErrorException(`Ambiguous search metadata for ${company.name}`);
     }
-    const row = byDomain[0] ?? byName[0];
+    const companyMetadataEntry = domainMatches[0] ?? nameMatches[0];
     // Use only an explicit expanded alias for an uppercase acronym of 2–6 letters.
     // Former aliases are deliberately excluded; no semantic or fuzzy name inference.
-    if (row && /^[A-Z]{2,6}$/.test(company.name) && row.aliases.length === 1 &&
-        !/\(\s*formerly\b/i.test(row.rawName) && row.aliases[0]!.split(/\s+/).length > 1 &&
-        row.aliases[0]!.replace(/[^\p{L}\p{N}]/gu, '').length > company.name.length) return row.aliases[0]!;
+    if (companyMetadataEntry && /^[A-Z]{2,6}$/.test(company.name) && companyMetadataEntry.aliases.length === 1 &&
+        !/\(\s*formerly\b/i.test(companyMetadataEntry.rawName) && companyMetadataEntry.aliases[0]!.split(/\s+/).length > 1 &&
+        companyMetadataEntry.aliases[0]!.replace(/[^\p{L}\p{N}]/gu, '').length > company.name.length) return companyMetadataEntry.aliases[0]!;
     return company.name;
   }
 }

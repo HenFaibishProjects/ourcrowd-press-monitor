@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 
 export interface OllamaConfig { baseUrl: string; model: string; timeoutMs: number }
 
-export function ollamaConfig(config: ConfigService): OllamaConfig {
-  const baseUrl = config.get<string>('OLLAMA_BASE_URL', 'http://localhost:11434').trim();
-  const model = config.get<string>('OLLAMA_MODEL', 'gemma3:270m').trim();
-  const timeoutText = config.get<string>('OLLAMA_TIMEOUT_MS', '60000');
+export function ollamaConfig(configService: ConfigService): OllamaConfig {
+  const baseUrl = configService.get<string>('OLLAMA_BASE_URL', 'http://localhost:11434').trim();
+  const model = configService.get<string>('OLLAMA_MODEL', 'gemma3:270m').trim();
+  const timeoutText = configService.get<string>('OLLAMA_TIMEOUT_MS', '60000');
   const timeoutMs = Number(timeoutText);
   let url: URL;
   try { url = new URL(baseUrl); }

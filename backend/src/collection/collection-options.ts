@@ -10,38 +10,38 @@ export interface CollectionOptions {
   to: Date; // exclusive
   cacheMode: NewsCacheMode;
 }
-export function collectionRange(values: { quarter?: string; from?: string; to?: string }, now = new Date()) {
-  if (values.quarter !== undefined && (values.from !== undefined || values.to !== undefined)) {
+export function collectionRange(argumentValues: { quarter?: string; from?: string; to?: string }, now = new Date()) {
+  if (argumentValues.quarter !== undefined && (argumentValues.from !== undefined || argumentValues.to !== undefined)) {
     throw new BadRequestException('Use quarter OR from/to, not both');
   }
   let from: Date; let to: Date;
-  if (values.from !== undefined || values.to !== undefined) {
-    if (!values.from || !values.to) throw new BadRequestException('Both from and to are required');
-    from = parseApiDate(values.from); const end = parseApiDate(values.to);
-    to = isDateOnly(values.to) ? nextUtcDay(end) : end;
+  if (argumentValues.from !== undefined || argumentValues.to !== undefined) {
+    if (!argumentValues.from || !argumentValues.to) throw new BadRequestException('Both from and to are required');
+    from = parseApiDate(argumentValues.from); const end = parseApiDate(argumentValues.to);
+    to = isDateOnly(argumentValues.to) ? nextUtcDay(end) : end;
   } else {
-    const current = parseQuarter(undefined, now);
-    const range = values.quarter === 'current' ? current :
-      values.quarter === undefined || values.quarter === 'previous' ? parseQuarter(undefined, new Date(current.start.getTime() - 1)) : parseQuarter(values.quarter);
-    from = range.start; to = new Date(Math.min(range.end.getTime(), now.getTime()));
+    const currentQuarter = parseQuarter(undefined, now);
+    const quarterRange = argumentValues.quarter === 'current' ? currentQuarter :
+      argumentValues.quarter === undefined || argumentValues.quarter === 'previous' ? parseQuarter(undefined, new Date(currentQuarter.start.getTime() - 1)) : parseQuarter(argumentValues.quarter);
+    from = quarterRange.start; to = new Date(Math.min(quarterRange.end.getTime(), now.getTime()));
   }
   if (from >= to || to > now) throw new BadRequestException('Range must have from before exclusive to; future dates are unsupported');
   return { from, to };
 }
 export function parseCollectionOptions(args: string[], now = new Date()): CollectionOptions {
-  let values: { companies?: string; all?: boolean; quarter?: string; from?: string; to?: string; refresh?: boolean; live?: boolean };
+  let argumentValues: { companies?: string; all?: boolean; quarter?: string; from?: string; to?: string; refresh?: boolean; live?: boolean };
   try {
-    const result = parseArgs({ args, strict: true, allowPositionals: false, options: {
+    const parsedArguments = parseArgs({ args, strict: true, allowPositionals: false, options: {
       companies: { type: 'string' }, all: { type: 'boolean' }, quarter: { type: 'string' },
       from: { type: 'string' }, to: { type: 'string' }, refresh: { type: 'boolean' }, live: { type: 'boolean' },
     }, tokens: true });
-    const names = result.tokens.filter((token) => token.kind === 'option').map((token) => token.name);
-    if (new Set(names).size !== names.length) throw Error('Repeated options are not allowed');
-    values = result.values;
+    const optionNames = parsedArguments.tokens.filter((token) => token.kind === 'option').map((token) => token.name);
+    if (new Set(optionNames).size !== optionNames.length) throw Error('Repeated options are not allowed');
+    argumentValues = parsedArguments.values;
   } catch (error: unknown) { throw new BadRequestException(error instanceof Error ? error.message : 'Invalid CLI arguments'); }
-  if ((values.companies !== undefined) === Boolean(values.all)) throw new BadRequestException('Select --companies=Name,Name OR --all explicitly');
-  if (values.refresh && values.live) throw new BadRequestException('Use --refresh OR --live, not both');
-  const companies = values.companies?.split(',').map((name) => name.trim());
-  if (companies?.some((name) => !name)) throw new BadRequestException('Company names must not be blank');
-  return { companies, ...collectionRange(values, now), cacheMode: values.live ? 'live' : values.refresh ? 'refresh' : 'cached' };
+  if ((argumentValues.companies !== undefined) === Boolean(argumentValues.all)) throw new BadRequestException('Select --companies=Name,Name OR --all explicitly');
+  if (argumentValues.refresh && argumentValues.live) throw new BadRequestException('Use --refresh OR --live, not both');
+  const companyNames = argumentValues.companies?.split(',').map((name) => name.trim());
+  if (companyNames?.some((name) => !name)) throw new BadRequestException('Company names must not be blank');
+  return { companies: companyNames, ...collectionRange(argumentValues, now), cacheMode: argumentValues.live ? 'live' : argumentValues.refresh ? 'refresh' : 'cached' };
 }

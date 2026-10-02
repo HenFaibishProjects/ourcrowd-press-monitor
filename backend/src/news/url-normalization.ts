@@ -2,9 +2,9 @@ import { BadRequestException } from '@nestjs/common';
 
 const TRACKING = new Set(['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid']);
 
-export function normalizeArticleUrl(input: string): string {
+export function normalizeArticleUrl(articleUrl: string): string {
   let url: URL;
-  try { url = new URL(input.trim()); }
+  try { url = new URL(articleUrl.trim()); }
   catch { throw new BadRequestException('Article URL must be an absolute HTTP(S) URL'); }
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
     throw new BadRequestException('Article URL must use HTTP(S) without credentials');

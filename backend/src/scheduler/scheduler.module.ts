@@ -6,16 +6,16 @@ import { DailyCollectionService } from './daily-collection.service';
 @Injectable()
 export class DailySchedule implements OnApplicationBootstrap {
   private readonly logger = new Logger(DailySchedule.name);
-  constructor(private readonly daily: DailyCollectionService, private readonly registry: SchedulerRegistry) {}
+  constructor(private readonly dailyCollectionService: DailyCollectionService, private readonly schedulerRegistry: SchedulerRegistry) {}
   onApplicationBootstrap(): void {
-    if (!this.daily.settings.enabled) {
+    if (!this.dailyCollectionService.settings.enabled) {
       this.logger.log('Daily collection scheduler disabled; no automatic GDELT or Ollama requests');
       return;
     }
-    const job = new CronJob(this.daily.settings.cron, () => this.daily.scheduledTick(), null, false, this.daily.settings.timezone);
-    this.registry.addCronJob('daily-collection', job);
-    job.start();
-    this.logger.log(`Daily collection scheduler enabled: cron=${this.daily.settings.cron}, timezone=${this.daily.settings.timezone}, lookback=${this.daily.settings.lookbackHours} hours`);
+    const dailyCollectionJob = new CronJob(this.dailyCollectionService.settings.cron, () => this.dailyCollectionService.scheduledTick(), null, false, this.dailyCollectionService.settings.timezone);
+    this.schedulerRegistry.addCronJob('daily-collection', dailyCollectionJob);
+    dailyCollectionJob.start();
+    this.logger.log(`Daily collection scheduler enabled: cron=${this.dailyCollectionService.settings.cron}, timezone=${this.dailyCollectionService.settings.timezone}, lookback=${this.dailyCollectionService.settings.lookbackHours} hours`);
   }
 }
 @Module({ imports: [ScheduleModule.forRoot(), DailyRunModule], providers: [DailySchedule] })

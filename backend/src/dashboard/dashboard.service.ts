@@ -6,21 +6,21 @@ import { parseQuarter } from './quarter';
 
 @Injectable()
 export class DashboardService {
-  constructor(private readonly dashboard: DashboardRepository) {}
+  constructor(private readonly dashboardRepository: DashboardRepository) {}
 
   async getDashboard(quarter?: string, now = new Date()): Promise<DashboardResponse> {
-    const range = parseQuarter(quarter, now);
-    const rows = await this.dashboard.summarize(range.start, range.end);
+    const quarterRange = parseQuarter(quarter, now);
+    const companySummaries = await this.dashboardRepository.summarize(quarterRange.start, quarterRange.end);
     return {
-      quarter: range.quarter,
-      companies: rows.map((row) => {
-        const lastMentionedAt = row.lastMentionedAt === null ? null : new Date(row.lastMentionedAt);
+      quarter: quarterRange.quarter,
+      companies: companySummaries.map((companySummary) => {
+        const lastMentionedAt = companySummary.lastMentionedAt === null ? null : new Date(companySummary.lastMentionedAt);
         return {
-          id: row.id,
-          name: row.name,
+          id: companySummary.id,
+          name: companySummary.name,
           lastMentionedAt: lastMentionedAt?.toISOString() ?? null,
           daysSinceLastMention: daysSinceLastMention(lastMentionedAt, now),
-          mentions: { total: Number(row.total), positive: Number(row.positive), neutral: Number(row.neutral), negative: Number(row.negative) },
+          mentions: { total: Number(companySummary.total), positive: Number(companySummary.positive), neutral: Number(companySummary.neutral), negative: Number(companySummary.negative) },
         };
       }),
     };

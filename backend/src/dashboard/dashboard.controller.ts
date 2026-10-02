@@ -5,10 +5,10 @@ import { DashboardService } from './dashboard.service';
 
 @Controller('dashboard')
 export class DashboardController {
-  constructor(private readonly dashboard: DashboardService) {}
+  constructor(private readonly dashboardService: DashboardService) {}
 
   @Get()
   getDashboard(@Query() query: DashboardQueryDto): Promise<DashboardResponse> {
-    return this.dashboard.getDashboard(query.quarter);
+    return this.dashboardService.getDashboard(query.quarter);
   }
 }

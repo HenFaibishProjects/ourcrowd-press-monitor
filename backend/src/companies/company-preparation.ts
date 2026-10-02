@@ -15,33 +15,33 @@ export function parseCompanyLine(line: string): { company: StructuredCompanySeed
   if (!/[()]/.test(rawName)) return { company, category: 'plain' };
   const fallback = { company, category: 'fallback' as const };
   // Exactly one trailing, non-nested parenthetical with an explicit separating space.
-  const match = /^([^()]+?)\s+\(([^()]+)\)$/.exec(rawName);
-  if (!match) return fallback;
-  const name = match[1]!.trim();
-  const value = match[2]!.trim();
-  if (!name || !value) return fallback;
-  const domain = value.toLowerCase();
+  const parentheticalMatch = /^([^()]+?)\s+\(([^()]+)\)$/.exec(rawName);
+  if (!parentheticalMatch) return fallback;
+  const name = parentheticalMatch[1]!.trim();
+  const parentheticalText = parentheticalMatch[2]!.trim();
+  if (!name || !parentheticalText) return fallback;
+  const domain = parentheticalText.toLowerCase();
   if (isCompanyDomain(domain)) return { company: { ...company, name, domain }, category: 'domain' };
-  const former = /^formerly\s+(?:known\s+as\s+)?(.+)$/i.exec(value);
-  const alias = former ? former[1]!.trim() : value;
+  const formerAliasMatch = /^formerly\s+(?:known\s+as\s+)?(.+)$/i.exec(parentheticalText);
+  const alias = formerAliasMatch ? formerAliasMatch[1]!.trim() : parentheticalText;
   // Incomplete former markers and URL-like/symbol-only contents are not company names.
-  if (/^formerly(?:\s+known(?:\s+as)?)?$/i.test(value) || !/[\p{L}\p{N}]/u.test(alias) ||
+  if (/^formerly(?:\s+known(?:\s+as)?)?$/i.test(parentheticalText) || !/[\p{L}\p{N}]/u.test(alias) ||
       /[:/\\]/.test(alias) || companyNameKey(alias) === companyNameKey(name)) return fallback;
-  return { company: { ...company, name, aliases: [alias] }, category: former ? 'formerAlias' : 'expandedAlias' };
+  return { company: { ...company, name, aliases: [alias] }, category: formerAliasMatch ? 'formerAlias' : 'expandedAlias' };
 }
 
-export function prepareCompanyText(text: string): {
+export function prepareCompanyText(sourceText: string): {
   companies: StructuredCompanySeed[];
   counts: Record<ParsingCategory, number>;
   fallbackLines: string[];
 } {
   const counts: Record<ParsingCategory, number> = { plain: 0, domain: 0, expandedAlias: 0, formerAlias: 0, fallback: 0 };
   const fallbackLines: string[] = [];
-  const companies = text.split(/\r?\n/).filter((line) => line.trim()).map((line) => {
-    const result = parseCompanyLine(line);
-    counts[result.category]++;
-    if (result.category === 'fallback') fallbackLines.push(result.company.rawName);
-    return result.company;
+  const companies = sourceText.split(/\r?\n/).filter((line) => line.trim()).map((line) => {
+    const preparationResult = parseCompanyLine(line);
+    counts[preparationResult.category]++;
+    if (preparationResult.category === 'fallback') fallbackLines.push(preparationResult.company.rawName);
+    return preparationResult.company;
   });
   return { companies: validateCompanySeed(companies), counts, fallbackLines };
 }
@@ -52,11 +52,11 @@ export function serializeCompanies(companies: StructuredCompanySeed[]): string {
 
 export async function prepareCompanyFile(sourcePath = companySourcePath, outputPath = companyJsonPath) {
   if (resolve(sourcePath) === resolve(outputPath)) throw new BadRequestException('Source and generated paths must differ');
-  let source: string;
-  try { source = await readFile(sourcePath, 'utf8'); }
+  let sourceText: string;
+  try { sourceText = await readFile(sourcePath, 'utf8'); }
   catch { throw new BadRequestException(`Cannot read OurCrowd source: ${sourcePath}. Restore the supplied TXT file; do not invent company entries.`); }
-  const result = prepareCompanyText(source);
+  const preparationResult = prepareCompanyText(sourceText);
   // Validate the complete source before touching the generated file.
-  await writeFile(outputPath, serializeCompanies(result.companies), 'utf8');
-  return result;
+  await writeFile(outputPath, serializeCompanies(preparationResult.companies), 'utf8');
+  return preparationResult;
 }
