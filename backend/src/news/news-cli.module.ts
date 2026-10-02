@@ -7,5 +7,15 @@ import { CompaniesModule } from '../companies/companies.module';
 import { NewsModule } from './news.module';
 
 // No SentimentModule, CollectionModule or Mention-writing context.
-@Module({ imports: [environmentModule, TypeOrmModule.forRootAsync({ imports: [ConfigModule], useFactory: () => databaseOptions() }), CompaniesModule, NewsModule] })
+@Module({
+  imports: [
+    environmentModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: () => databaseOptions(),
+    }),
+    CompaniesModule,
+    NewsModule,
+  ],
+})
 export class NewsCliModule {}

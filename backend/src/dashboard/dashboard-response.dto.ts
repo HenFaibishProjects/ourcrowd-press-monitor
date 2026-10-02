@@ -3,7 +3,12 @@ export interface DashboardCompany {
   name: string;
   lastMentionedAt: string | null;
   daysSinceLastMention: number | null;
-  mentions: { total: number; positive: number; neutral: number; negative: number };
+  mentions: {
+    total: number;
+    positive: number;
+    neutral: number;
+    negative: number;
+  };
 }
 
 export interface DashboardResponse {

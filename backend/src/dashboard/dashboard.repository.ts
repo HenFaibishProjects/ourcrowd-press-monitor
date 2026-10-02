@@ -17,23 +17,45 @@ export interface DashboardRow {
 
 @Injectable()
 export class DashboardRepository {
+
   constructor(@InjectRepository(Company) private readonly companyRepository: Repository<Company>) {}
 
   summarize(start: Date, end: Date): Promise<DashboardRow[]> {
     // Four-digit dates end at year 9999; Q4's exclusive boundary is year 10000.
-    const quarterCondition = 'mention.publishedAt >= :start AND (:endBeyondSupportedYears = true OR mention.publishedAt < :end)';
-    return this.companyRepository.createQueryBuilder('company')
+    const quarterCondition =
+      'mention.publishedAt >= :start AND (:endBeyondSupportedYears = true OR mention.publishedAt < :end)';
+
+    return this.companyRepository
+      .createQueryBuilder('company')
       .leftJoin(Mention, 'mention', 'mention.companyId = company.id')
       .select('company.id', 'id')
       .addSelect('company.name', 'name')
       .addSelect('MAX(mention.publishedAt)', 'lastMentionedAt')
       .addSelect(`SUM(CASE WHEN ${quarterCondition} THEN 1 ELSE 0 END)`, 'total')
-      .addSelect(`SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :positive THEN 1 ELSE 0 END)`, 'positive')
-      .addSelect(`SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :neutral THEN 1 ELSE 0 END)`, 'neutral')
-      .addSelect(`SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :negative THEN 1 ELSE 0 END)`, 'negative')
-      .setParameters({ start, end, endBeyondSupportedYears: end.getUTCFullYear() > 9999, positive: Sentiment.POSITIVE, neutral: Sentiment.NEUTRAL, negative: Sentiment.NEGATIVE })
-      .groupBy('company.id').addGroupBy('company.name')
-      .orderBy('company.name', 'ASC').addOrderBy('company.id', 'ASC')
+      .addSelect(
+        `SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :positive THEN 1 ELSE 0 END)`,
+        'positive',
+      )
+      .addSelect(
+        `SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :neutral THEN 1 ELSE 0 END)`,
+        'neutral',
+      )
+      .addSelect(
+        `SUM(CASE WHEN ${quarterCondition} AND mention.sentiment = :negative THEN 1 ELSE 0 END)`,
+        'negative',
+      )
+      .setParameters({
+        start,
+        end,
+        endBeyondSupportedYears: end.getUTCFullYear() > 9999,
+        positive: Sentiment.POSITIVE,
+        neutral: Sentiment.NEUTRAL,
+        negative: Sentiment.NEGATIVE,
+      })
+      .groupBy('company.id')
+      .addGroupBy('company.name')
+      .orderBy('company.name', 'ASC')
+      .addOrderBy('company.id', 'ASC')
       .getRawMany<DashboardRow>();
   }
 }

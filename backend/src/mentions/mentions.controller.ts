@@ -6,10 +6,14 @@ import { MentionsService } from './mentions.service';
 
 @Controller('companies/:id/mentions')
 export class MentionsController {
+
   constructor(private readonly mentionsService: MentionsService) {}
 
   @Get()
-  findByCompany(@Param() params: CompanyIdDto, @Query() query: MentionsQueryDto): Promise<Mention[]> {
+  findByCompany(
+    @Param() params: CompanyIdDto,
+    @Query() query: MentionsQueryDto,
+  ): Promise<Mention[]> {
     return this.mentionsService.findByCompany(companyId(params.id), query);
   }
 }

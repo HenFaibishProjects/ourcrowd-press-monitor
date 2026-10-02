@@ -20,20 +20,30 @@ import { DashboardModule } from './dashboard/dashboard.module';
 @Module({
   imports: [
     environmentModule,
-    TypeOrmModule.forRootAsync({ imports: [ConfigModule], useFactory: () => databaseOptions() }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: () => databaseOptions(),
+    }),
     ServeStaticModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: () => {
-        if (!getRuntimeConfig().isProduction) return [];
+        if (!getRuntimeConfig().isProduction) {
+          return [];
+        }
+
         const frontendPath = join(__dirname, '../../frontend/dist/frontend/browser');
+
         if (!existsSync(join(frontendPath, 'index.html'))) {
           throw new Error('Angular production build is missing. Run npm run build from the root.');
         }
-        return [{
-          rootPath: frontendPath,
-          exclude: ['/api', '/api/{*path}'],
-          renderPath: /^(?!\/api(?:\/|$))(?!.*\.[^/]+$).*/,
-        }];
+
+        return [
+          {
+            rootPath: frontendPath,
+            exclude: ['/api', '/api/{*path}'],
+            renderPath: /^(?!\/api(?:\/|$))(?!.*\.[^/]+$).*/,
+          },
+        ];
       },
     }),
     HealthModule,

@@ -7,6 +7,13 @@ import { CompaniesModule } from './companies.module';
 
 // CLI context only: migrations and company import, without HTTP or Ollama.
 @Module({
-  imports: [environmentModule, TypeOrmModule.forRootAsync({ imports: [ConfigModule], useFactory: () => databaseOptions() }), CompaniesModule],
+  imports: [
+    environmentModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: () => databaseOptions(),
+    }),
+    CompaniesModule,
+  ],
 })
 export class CompaniesImportModule {}

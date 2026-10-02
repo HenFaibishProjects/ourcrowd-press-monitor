@@ -4,6 +4,7 @@ import { Company } from './company.entity';
 
 @Injectable()
 export class CompaniesService {
+
   constructor(private readonly companiesRepository: CompaniesRepository) {}
 
   findAll(): Promise<Company[]> {
@@ -12,7 +13,11 @@ export class CompaniesService {
 
   async findOne(id: number): Promise<Company> {
     const company = await this.companiesRepository.findById(id);
-    if (!company) throw new NotFoundException(`Company ${id} not found`);
+
+    if (!company) {
+      throw new NotFoundException(`Company ${id} not found`);
+    }
+
     return company;
   }
 }
