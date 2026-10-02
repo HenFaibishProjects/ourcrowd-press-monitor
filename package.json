@@ -20,7 +20,9 @@
     "companies": "npm run companies --workspace backend",
     "sentiment": "npm run sentiment --workspace backend --",
     "sentiment:test": "npm run sentiment --",
-    "db": "npm run db:init"
+    "db": "npm run db:init",
+    "companies:prepare": "npm run companies:prepare --workspace backend",
+    "companies:setup": "npm run companies:prepare && npm run companies"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

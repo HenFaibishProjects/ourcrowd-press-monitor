@@ -1,9 +1,17 @@
 import { BadRequestException } from '@nestjs/common';
 
+// Persistence input intentionally excludes source-only search metadata.
 export interface CompanySeed {
   name: string;
   domain?: string | null;
   sector?: string | null;
+}
+export interface StructuredCompanySeed {
+  name: string;
+  rawName: string;
+  domain: string | null;
+  aliases: string[];
+  sector: string | null;
 }
 export interface CompanyImportReport {
   inserted: number;
@@ -19,7 +27,12 @@ export function companyDomainKey(domain: string | null | undefined): string | nu
   return domain?.trim().toLowerCase() || null;
 }
 
-export function validateCompanySeed(value: unknown): CompanySeed[] {
+export function isCompanyDomain(value: string): boolean {
+  return value.length <= 253 && value.split('.').every((label) => label.length <= 63) &&
+    /^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z](?:[a-z0-9-]*[a-z0-9])?$/.test(value);
+}
+
+export function validateCompanySeed(value: unknown): StructuredCompanySeed[] {
   if (!Array.isArray(value)) throw new BadRequestException('Company seed must be a JSON array');
   const names = new Set<string>();
   const domains = new Set<string>();
@@ -29,33 +42,43 @@ export function validateCompanySeed(value: unknown): CompanySeed[] {
       throw new BadRequestException(`${label} must be an object`);
     }
     const row = entry as Record<string, unknown>;
-    if (Object.keys(row).some((key) => !['name', 'domain', 'sector'].includes(key))) {
-      throw new BadRequestException(`${label} has unsupported fields; use name, domain and sector only`);
+    const fields = ['name', 'rawName', 'domain', 'aliases', 'sector'];
+    if (Object.keys(row).some((key) => !fields.includes(key)) || fields.some((key) => !Object.hasOwn(row, key))) {
+      throw new BadRequestException(`${label} requires exactly name, rawName, domain, aliases and sector`);
     }
-    if (typeof row['name'] !== 'string' || !row['name'].trim()) {
-      throw new BadRequestException(`${label} requires a non-blank string name`);
-    }
-    const seed: CompanySeed = { name: row['name'].trim() };
-    for (const field of ['domain', 'sector'] as const) {
-      if (!Object.hasOwn(row, field)) continue;
-      const input = row[field];
-      if (input !== null && typeof input !== 'string') {
-        throw new BadRequestException(`${label} ${field} must be a string or null`);
+    for (const field of ['name', 'rawName'] as const) {
+      if (typeof row[field] !== 'string' || !row[field].trim()) {
+        throw new BadRequestException(`${label} requires a non-blank string ${field}`);
       }
-      seed[field] = typeof input === 'string' ? input.trim() || null : null;
     }
-    seed.domain = Object.hasOwn(row, 'domain') ? companyDomainKey(seed.domain) : undefined;
-    if (seed.domain !== undefined && seed.domain !== null &&
-        !/^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(seed.domain)) {
+    for (const field of ['domain', 'sector'] as const) {
+      if (row[field] !== null && (typeof row[field] !== 'string' || !row[field].trim())) {
+        throw new BadRequestException(`${label} ${field} must be a non-blank string or null`);
+      }
+    }
+    const name = (row['name'] as string).trim();
+    const domain = companyDomainKey(row['domain'] as string | null);
+    if (domain !== null && !isCompanyDomain(domain)) {
       throw new BadRequestException(`${label} domain must be a plain hostname, without protocol, path or port`);
     }
-    const nameKey = companyNameKey(seed.name);
-    const domainKey = companyDomainKey(seed.domain);
-    if (names.has(nameKey) || (domainKey !== null && domains.has(domainKey))) {
+    if (!Array.isArray(row['aliases'])) throw new BadRequestException(`${label} aliases must be a string array`);
+    const aliasKeys = new Set<string>();
+    const aliases = row['aliases'].map((alias: unknown) => {
+      if (typeof alias !== 'string' || !alias.trim()) throw new BadRequestException(`${label} aliases must be non-blank strings`);
+      const key = companyNameKey(alias);
+      if (key === companyNameKey(name) || aliasKeys.has(key)) {
+        throw new BadRequestException(`${label} aliases must be unique and different from the primary name`);
+      }
+      aliasKeys.add(key);
+      return alias.trim();
+    });
+    const nameKey = companyNameKey(name);
+    if (names.has(nameKey) || (domain !== null && domains.has(domain))) {
       throw new BadRequestException(`${label} duplicates a company name or domain in the seed file`);
     }
     names.add(nameKey);
-    if (domainKey !== null) domains.add(domainKey);
-    return seed;
+    if (domain !== null) domains.add(domain);
+    return { name, rawName: (row['rawName'] as string).trim(), domain, aliases,
+      sector: row['sector'] === null ? null : (row['sector'] as string).trim() };
   });
 }

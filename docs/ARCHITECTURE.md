@@ -8,7 +8,7 @@ One NestJS application owns the REST API and all feature modules. Features colla
 
 | Feature | Responsibility / current status |
 | --- | --- |
-| Companies | Company entity, feature repository/service, list and detail REST endpoints. Transactional source-of-truth seed import CLI with conservative exact identity matching. |
+| Companies | Company entity, feature repository/service, list and detail REST endpoints. Deterministic supplied-TXT preparation and transactional structured-JSON import with conservative exact identity matching. |
 | Mentions | Mention entity, feature repository/service, read filters, existence check and internal persistence. Database uniqueness is authoritative. No external writes. |
 | Dashboard | Specialized aggregate read repository, request-time derivation service and quarter-filtered REST endpoint. |
 | News | Empty module; future NewsProvider with a real provider implementation. |
@@ -106,15 +106,31 @@ flowchart TD
 | --- | --- | --- |
 | News API | NewsProvider in NewsModule | Provider, credentials, rate limits, article identity and relevance policy. |
 | Ollama | Implemented local SentimentClassifier adapter | Real local smoke test and quality evaluation; selected model remains configurable. |
-| Storage | Companies/Mentions repositories | Add the actual company list and run the implemented conservative importer; domains remain optional. |
+| Storage | Companies/Mentions repositories | Real supplied TXT and derived JSON are committed; explicit preparation/import populate runtime companies. Domains remain optional. |
 | Scheduler | SchedulerModule calls CollectionModule | Timezone, run time, overlap prevention and failure behavior. |
 | Alert channel | AlertsModule | Console initially, delivery payload/failure handling, future external channels. |
 
-## Company seed import
+## Company source preparation and import
 
-The developer adds the real dataset to `data/companies.json` and runs `npm run companies`. No data file is committed yet. CompanySeedService reads/parses/validates the complete file, then CompaniesRepository performs one transactional import. A CLI-only module loads configuration and SQLite, without the HTTP application or Ollama.
+**`backend/src/data/companies.json` is generated from the supplied TXT; do not normally edit it manually.** TXT is authoritative supplied data, JSON is its structured representation, and SQLite is the application's runtime representation. Both source files are committed; SQLite files remain ignored.
 
-Names must be non-blank; optional domain/sector strings are trimmed and blank strings map to null. Domains are plain hostnames and normalized to lowercase. Source duplicates are rejected by exact normalized domain or case-insensitive trimmed name. Prefer a unique domain match, then a unique name; reject conflicting or ambiguous matches, non-empty domain reassignment by name, and two source rows targeting one existing company. Original identities are retained during the transaction so renamed aliases cannot be imported twice. A domain match may rename the display name. Omitted optional values preserve existing fields; explicit null/blank clears them. Counts report inserted/updated/unchanged. No deletion or fuzzy matching occurs. Any failure rolls back all writes. This is a single-import-at-a-time take-home workflow, without a concurrent importer framework.
+```mermaid
+flowchart TD
+    TXT["OurCrowd TXT: authoritative"] -->|Explicit companies:prepare| Prepare["Deterministic preparation"]
+    Prepare --> JSON["Committed JSON: structured metadata"]
+    JSON -->|Explicit companies| Validate["Validate complete source"]
+    Validate --> Import["Transactional CompaniesRepository import"]
+    Import --> SQLite["SQLite: name/domain/sector only"]
+    JSON -.-> Search["Future search/relevance metadata"]
+```
+
+`npm run companies:prepare` reads `backend/src/data/ourcrowd_companies.txt`, ignores blank lines, trims lines, preserves order, and writes pretty JSON with stable field order and a trailing newline. It never writes the TXT or performs external lookups. One clean trailing parenthetical becomes an explicit domain, former-name alias (formerly / formerly known as), or expanded alias. Unsupported/ambiguous forms retain the entire original trimmed line as name/rawName. Sector is always null. Duplicate normalized names/domains fail before writing output. The real source contains 258 companies with no fallback lines.
+
+The explicit StructuredCompanySeed schema requires name/rawName/domain/aliases/sector. Names and rawName are non-blank, domains lowercase plain hostnames or null, aliases trimmed/non-blank/unique case-insensitively/not equal to name, and sector string or null. Source-only rawName and aliases stay in JSON for future search/relevance. Name is the primary identity; explicitly supplied domain may disambiguate results; aliases contain only supplied names. No search behavior or new database columns/migrations are introduced.
+
+`npm run companies` reads only `backend/src/data/companies.json`. CompanySeedService validates the entire file and projects name/domain/sector; CompaniesRepository performs one transactional import. A CLI-only context loads configuration and applies the existing migrations without HTTP/Ollama. `npm run companies:setup` prepares then invokes this initializer/importer. Normal startup does not prepare/import.
+
+Identity prefers a unique normalized domain, then exact trimmed case-insensitive name. Conflicting/ambiguous matches, non-empty domain reassignment by name, or two source rows targeting one existing company fail and roll back. Original identities remain stable during the transaction. Unique domain matching may rename a company. All structured fields are explicit: null domain/sector clears the field, other values update it. Unchanged input reports unchanged and preserves timestamps. No deletion or fuzzy matching; only one import runs at a time. Missing files and invalid input fail with clear errors and nonzero CLI exit status.
 
 ## Local sentiment classification
 
@@ -140,13 +156,13 @@ Standard Nest exceptions represent input/configuration/connection/timeout/HTTP/o
 
 ## Deliberately deferred
 
-No company seed data, news API, RSS, scraping, relevance logic, collection orchestration, scheduled jobs, alerts, real Angular dashboard, authentication, pagination, queues, Redis, CQRS, event bus, Docker or additional database service. Sentiment is only invoked manually or through its contract; there is no automatic database record processing. No external company or mention write endpoints exist.
+No news API, RSS, scraping, relevance logic, collection orchestration, scheduled jobs, alerts, real Angular dashboard, authentication, pagination, queues, Redis, CQRS, event bus, Docker or additional database service. Sentiment is only invoked manually or through its contract; there is no automatic database record processing. No external company or mention write endpoints exist.
 
 ## Assumptions and next stage
 
-Company IDs are positive safe integers. Dates, quarter defaults and day calculations use UTC; day counts mean elapsed full 24-hour periods. URL uniqueness is exact text per company. Migrations run automatically in this single-process assignment. No company-name uniqueness is invented without the real source dataset.
+Company IDs are positive safe integers. Dates, quarter defaults and day calculations use UTC; day counts mean elapsed full 24-hour periods. URL uniqueness is exact text per company. Migrations run automatically in this single-process assignment. No company-name database uniqueness constraint is added; conservative import validation rejects duplicate source names/domains.
 
-Next: add the real company list, verify local Ollama and evaluate its output, then implement real news retrieval/relevance/deduplication, collection, scheduling/alerts and the dashboard in separate increments.
+Next: verify local Ollama and evaluate its output, then implement real news retrieval/relevance/deduplication, collection, scheduling/alerts and the dashboard in separate increments.
 
 ## References
 

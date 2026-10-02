@@ -1,0 +1,1830 @@
+[
+  {
+    "name": "ZutaCore",
+    "rawName": "ZutaCore",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Maolac",
+    "rawName": "Maolac",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Biolojic Design",
+    "rawName": "Biolojic Design",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "OncoHost",
+    "rawName": "OncoHost",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Morphisec",
+    "rawName": "Morphisec",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Harvey",
+    "rawName": "Harvey",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "OpenEvidence",
+    "rawName": "OpenEvidence",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Stripe",
+    "rawName": "Stripe",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cerebras",
+    "rawName": "Cerebras",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Together AI",
+    "rawName": "Together AI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Harbinger Motors",
+    "rawName": "Harbinger Motors",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "TensorWave",
+    "rawName": "TensorWave",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Glean",
+    "rawName": "Glean",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "SpaceX",
+    "rawName": "SpaceX",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "DeepKeep",
+    "rawName": "DeepKeep",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Lambda",
+    "rawName": "Lambda (lambda.ai)",
+    "domain": "lambda.ai",
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "SSI",
+    "rawName": "SSI (Safe Superintelligence)",
+    "domain": null,
+    "aliases": [
+      "Safe Superintelligence"
+    ],
+    "sector": null
+  },
+  {
+    "name": "xAI",
+    "rawName": "xAI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Island",
+    "rawName": "Island",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Velotix",
+    "rawName": "Velotix",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Databricks",
+    "rawName": "Databricks",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ayar Labs",
+    "rawName": "Ayar Labs",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "RepAir Carbon",
+    "rawName": "RepAir Carbon",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kardome",
+    "rawName": "Kardome",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Omnix Medical",
+    "rawName": "Omnix Medical",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kodiak Robotics",
+    "rawName": "Kodiak Robotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Scale AI",
+    "rawName": "Scale AI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Spot AI",
+    "rawName": "Spot AI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Siteaware",
+    "rawName": "Siteaware",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ukko",
+    "rawName": "Ukko",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Groq",
+    "rawName": "Groq",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Anthropic",
+    "rawName": "Anthropic",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Bites",
+    "rawName": "Bites",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Atlas Obscura",
+    "rawName": "Atlas Obscura",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Stoke Space",
+    "rawName": "Stoke Space",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "SeeTree",
+    "rawName": "SeeTree",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "OneAI",
+    "rawName": "OneAI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Edity Therapeutics",
+    "rawName": "Edity Therapeutics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Carrar",
+    "rawName": "Carrar",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Quidnet Energy",
+    "rawName": "Quidnet Energy",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Lano",
+    "rawName": "Lano",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Flash Forest",
+    "rawName": "Flash Forest",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kando",
+    "rawName": "Kando",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "NT-Tao",
+    "rawName": "NT-Tao",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Neolithics",
+    "rawName": "Neolithics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Arrow Global",
+    "rawName": "Arrow Global",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Air EV",
+    "rawName": "Air EV",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ursa Major",
+    "rawName": "Ursa Major",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Quai.MD",
+    "rawName": "Quai.MD",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cyfirma",
+    "rawName": "Cyfirma",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ludeo",
+    "rawName": "Ludeo (formerly Edge)",
+    "domain": null,
+    "aliases": [
+      "Edge"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Lightico",
+    "rawName": "Lightico",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "3d Signals",
+    "rawName": "3d Signals",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "IQM",
+    "rawName": "IQM",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kini",
+    "rawName": "Kini",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Liquid Instruments",
+    "rawName": "Liquid Instruments",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sotero",
+    "rawName": "Sotero",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Connected Energy",
+    "rawName": "Connected Energy",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BetterSeeds",
+    "rawName": "BetterSeeds",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Oshi",
+    "rawName": "Oshi (formerly Plantish)",
+    "domain": null,
+    "aliases": [
+      "Plantish"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Genopore",
+    "rawName": "Genopore",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Mermade Seafoods",
+    "rawName": "Mermade Seafoods",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "ProFuse",
+    "rawName": "ProFuse",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "AEYE Health",
+    "rawName": "AEYE Health",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Workspot",
+    "rawName": "Workspot",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Spectrum Labs",
+    "rawName": "Spectrum Labs",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Anodot",
+    "rawName": "Anodot",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Xage Security",
+    "rawName": "Xage Security",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "IronVest",
+    "rawName": "IronVest",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "The EVERY Company",
+    "rawName": "The EVERY Company",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "InsideTracker",
+    "rawName": "InsideTracker",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CarDekho",
+    "rawName": "CarDekho",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "One Zero Digital Bank Ltd.",
+    "rawName": "One Zero Digital Bank Ltd.",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Binah.ai",
+    "rawName": "Binah.ai",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Eko Health",
+    "rawName": "Eko Health",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cycuity",
+    "rawName": "Cycuity (formerly Tortuga Logic)",
+    "domain": null,
+    "aliases": [
+      "Tortuga Logic"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Peak",
+    "rawName": "Peak",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Oriient",
+    "rawName": "Oriient",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tabnine",
+    "rawName": "Tabnine",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "InZiv",
+    "rawName": "InZiv",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BlueTree Technologies",
+    "rawName": "BlueTree Technologies",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BioLumic",
+    "rawName": "BioLumic",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Orchard",
+    "rawName": "Orchard",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tailor Brands",
+    "rawName": "Tailor Brands",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Flytrex",
+    "rawName": "Flytrex",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Quantum Machines",
+    "rawName": "Quantum Machines",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sufresca",
+    "rawName": "Sufresca",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Guild",
+    "rawName": "Guild",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sfara",
+    "rawName": "Sfara",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Zippin",
+    "rawName": "Zippin",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Privateer",
+    "rawName": "Privateer",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cordio Medical",
+    "rawName": "Cordio Medical",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "wefox",
+    "rawName": "wefox",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Moodify",
+    "rawName": "Moodify",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Polaris Quantum Biotech",
+    "rawName": "Polaris Quantum Biotech",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Alloy Therapeutics",
+    "rawName": "Alloy Therapeutics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ynsect",
+    "rawName": "Ynsect",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Treedom",
+    "rawName": "Treedom",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "MaterialsZone",
+    "rawName": "MaterialsZone",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BrightInsight",
+    "rawName": "BrightInsight",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Launchpad",
+    "rawName": "Launchpad",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sequentify",
+    "rawName": "Sequentify",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tamar Robotics",
+    "rawName": "Tamar Robotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Entangled Networks",
+    "rawName": "Entangled Networks",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Dandelion Energy",
+    "rawName": "Dandelion Energy",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Shield",
+    "rawName": "Shield",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "People.ai",
+    "rawName": "People.ai",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "H2Pro",
+    "rawName": "H2Pro",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "JumpCloud",
+    "rawName": "JumpCloud",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Future Family",
+    "rawName": "Future Family",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Remilk",
+    "rawName": "Remilk",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ordergroove",
+    "rawName": "Ordergroove",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Clinch",
+    "rawName": "Clinch",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BlueGreen Water Technologies",
+    "rawName": "BlueGreen Water Technologies",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Classiq",
+    "rawName": "Classiq",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Diagnostic Robotics",
+    "rawName": "Diagnostic Robotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Overtime",
+    "rawName": "Overtime",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Dataloop",
+    "rawName": "Dataloop",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Greenlight",
+    "rawName": "Greenlight",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cyabra",
+    "rawName": "Cyabra",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "C2A Security",
+    "rawName": "C2A Security",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "MasterClass",
+    "rawName": "MasterClass",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "HEQA Security",
+    "rawName": "HEQA Security (formerly QuantLR)",
+    "domain": null,
+    "aliases": [
+      "QuantLR"
+    ],
+    "sector": null
+  },
+  {
+    "name": "CytoReason",
+    "rawName": "CytoReason",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tovala",
+    "rawName": "Tovala",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ro",
+    "rawName": "Ro",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "MigVax",
+    "rawName": "MigVax",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Skillz",
+    "rawName": "Skillz",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BlueCircle",
+    "rawName": "BlueCircle (formerly Trellis)",
+    "domain": null,
+    "aliases": [
+      "Trellis"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Near",
+    "rawName": "Near",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CyberX",
+    "rawName": "CyberX",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Celeno",
+    "rawName": "Celeno",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kenna Security",
+    "rawName": "Kenna Security",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Wayup",
+    "rawName": "Wayup",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Nanorep",
+    "rawName": "Nanorep",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Taranis",
+    "rawName": "Taranis",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Momentis Surgical",
+    "rawName": "Momentis Surgical (formerly Memic)",
+    "domain": null,
+    "aliases": [
+      "Memic"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Argus Cyber Security",
+    "rawName": "Argus Cyber Security",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "The Bouqs",
+    "rawName": "The Bouqs",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Zoomcar",
+    "rawName": "Zoomcar",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sweetch",
+    "rawName": "Sweetch",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "TechSee",
+    "rawName": "TechSee",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Replay Technologies",
+    "rawName": "Replay Technologies",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "NooBaa",
+    "rawName": "NooBaa",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "mPrest",
+    "rawName": "mPrest",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Amitree",
+    "rawName": "Amitree",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Wave",
+    "rawName": "Wave",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Firefly Neuroscience",
+    "rawName": "Firefly Neuroscience (formerly ElMindA)",
+    "domain": null,
+    "aliases": [
+      "ElMindA"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Syqe",
+    "rawName": "Syqe",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ubimo",
+    "rawName": "Ubimo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BIScience",
+    "rawName": "BIScience",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Verse.ai",
+    "rawName": "Verse.ai",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Global Kinetics",
+    "rawName": "Global Kinetics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Zebra Medical Vision",
+    "rawName": "Zebra Medical Vision",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Corephotonics",
+    "rawName": "Corephotonics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "JUMP Bikes",
+    "rawName": "JUMP Bikes",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "UPnRIDE",
+    "rawName": "UPnRIDE",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Appforma",
+    "rawName": "Appforma",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Nextpeer",
+    "rawName": "Nextpeer",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Parko",
+    "rawName": "Parko",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "PulmOne",
+    "rawName": "PulmOne",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Shopial",
+    "rawName": "Shopial",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Fireblade",
+    "rawName": "Fireblade",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Freightos",
+    "rawName": "Freightos",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "The Trendlines Group",
+    "rawName": "The Trendlines Group",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Viewbix",
+    "rawName": "Viewbix",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "eVigilo",
+    "rawName": "eVigilo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Appdome",
+    "rawName": "Appdome",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "enVerid",
+    "rawName": "enVerid",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Crosswise",
+    "rawName": "Crosswise",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Abes Market",
+    "rawName": "Abes Market",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Surgical Theater",
+    "rawName": "Surgical Theater",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "MST",
+    "rawName": "MST",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Bizzabo",
+    "rawName": "Bizzabo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Neverware",
+    "rawName": "Neverware",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BioCatch",
+    "rawName": "BioCatch",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sight Diagnostics",
+    "rawName": "Sight Diagnostics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Consumer Physics",
+    "rawName": "Consumer Physics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "StackIQ",
+    "rawName": "StackIQ",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Mentad",
+    "rawName": "Mentad",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CropX",
+    "rawName": "CropX",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Powwow",
+    "rawName": "Powwow",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Apploi",
+    "rawName": "Apploi",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Lifeward",
+    "rawName": "Lifeward (formerly known as ReWalk)",
+    "domain": null,
+    "aliases": [
+      "ReWalk"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Cimagine",
+    "rawName": "Cimagine",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Boatsetter",
+    "rawName": "Boatsetter",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Stringify",
+    "rawName": "Stringify",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BriefCam",
+    "rawName": "BriefCam",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BillGuard",
+    "rawName": "BillGuard",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Xsense",
+    "rawName": "Xsense (formerly BT9)",
+    "domain": null,
+    "aliases": [
+      "BT9"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Astra",
+    "rawName": "Astra",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "NeuReality",
+    "rawName": "NeuReality",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "EquipmentShare",
+    "rawName": "EquipmentShare",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Hub Security",
+    "rawName": "Hub Security",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BlueNalu",
+    "rawName": "BlueNalu",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Medisafe",
+    "rawName": "Medisafe",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ravin AI",
+    "rawName": "Ravin AI",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kemtai",
+    "rawName": "Kemtai",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Kryon Systems",
+    "rawName": "Kryon Systems",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "TubiTV",
+    "rawName": "TubiTV",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "NetOp",
+    "rawName": "NetOp",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CorrActions",
+    "rawName": "CorrActions",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "SaNOtize",
+    "rawName": "SaNOtize",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Stellar Cyber",
+    "rawName": "Stellar Cyber",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "SeeTrue",
+    "rawName": "SeeTrue",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Perception Point",
+    "rawName": "Perception Point",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Innovalve",
+    "rawName": "Innovalve",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tala",
+    "rawName": "Tala",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Signals Analytics",
+    "rawName": "Signals Analytics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "PlaySight",
+    "rawName": "PlaySight",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "EduNav",
+    "rawName": "EduNav",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Barcode Nanotech",
+    "rawName": "Barcode Nanotech",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ride Vision",
+    "rawName": "Ride Vision",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Frontier Car Group",
+    "rawName": "Frontier Car Group",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Autobrains",
+    "rawName": "Autobrains",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "DailyPay",
+    "rawName": "DailyPay",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sayata",
+    "rawName": "Sayata",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Locusview",
+    "rawName": "Locusview",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Juganu",
+    "rawName": "Juganu",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Nanomedic",
+    "rawName": "Nanomedic",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Incredo",
+    "rawName": "Incredo (formerly known as DouxMatok)",
+    "domain": null,
+    "aliases": [
+      "DouxMatok"
+    ],
+    "sector": null
+  },
+  {
+    "name": "Casper",
+    "rawName": "Casper",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CB4",
+    "rawName": "CB4",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Foretellix",
+    "rawName": "Foretellix",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Neura",
+    "rawName": "Neura",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "ItsMine",
+    "rawName": "ItsMine",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Tevel",
+    "rawName": "Tevel",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Trusona",
+    "rawName": "Trusona",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Beyond Meat",
+    "rawName": "Beyond Meat",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "HoneyBook",
+    "rawName": "HoneyBook",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "RealView Imaging",
+    "rawName": "RealView Imaging",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "CyberMDX",
+    "rawName": "CyberMDX",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Alpha Tau",
+    "rawName": "Alpha Tau",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "ThetaRay",
+    "rawName": "ThetaRay",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "VAYAVISION",
+    "rawName": "VAYAVISION",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Insightec",
+    "rawName": "Insightec",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Cognigo",
+    "rawName": "Cognigo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Ossio",
+    "rawName": "Ossio",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "MeMed",
+    "rawName": "MeMed",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Arbe Robotics",
+    "rawName": "Arbe Robotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Lemonade",
+    "rawName": "Lemonade",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Hailo",
+    "rawName": "Hailo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Sense Education",
+    "rawName": "Sense Education",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Unispectral",
+    "rawName": "Unispectral",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Klook",
+    "rawName": "Klook",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Innoviz",
+    "rawName": "Innoviz",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Rewire",
+    "rawName": "Rewire",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "YuLife",
+    "rawName": "YuLife",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Edgybees",
+    "rawName": "Edgybees",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "DreaMed Diabetes",
+    "rawName": "DreaMed Diabetes",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Magisto",
+    "rawName": "Magisto",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Virgin Hyperloop One",
+    "rawName": "Virgin Hyperloop One",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Airobotics",
+    "rawName": "Airobotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Scopio Labs",
+    "rawName": "Scopio Labs",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BeetleSat",
+    "rawName": "BeetleSat",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Silo",
+    "rawName": "Silo",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "BrainQ Technologies",
+    "rawName": "BrainQ Technologies",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  },
+  {
+    "name": "Intuition Robotics",
+    "rawName": "Intuition Robotics",
+    "domain": null,
+    "aliases": [],
+    "sector": null
+  }
+]

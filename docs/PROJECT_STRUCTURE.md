@@ -17,6 +17,8 @@ ourcrowd-press-monitor/
   backend/src/common/company-id.dto.ts
   backend/src/common/dates.ts
   backend/src/common/validation.ts
+  backend/src/companies/companies-prepare.cli.ts
+  backend/src/companies/company-preparation.ts
   backend/src/companies/companies-import.module.ts
   backend/src/companies/companies.cli.ts
   backend/src/companies/companies.controller.ts
@@ -35,6 +37,9 @@ ourcrowd-press-monitor/
   backend/src/dashboard/dashboard.repository.ts
   backend/src/dashboard/dashboard.service.ts
   backend/src/dashboard/quarter.ts
+  backend/src/data/README.md
+  backend/src/data/ourcrowd_companies.txt
+  backend/src/data/companies.json
   backend/src/database/database.config.ts
   backend/src/database/initialize.ts
   backend/src/database/migrations/1790856000000-initial-schema.ts
@@ -57,6 +62,7 @@ ourcrowd-press-monitor/
   backend/src/sentiment/sentiment.cli.ts
   backend/src/sentiment/sentiment.module.ts
   backend/test/company-import.test.ts
+  backend/test/company-preparation.test.ts
   backend/test/dates.test.ts
   backend/test/persistence-api.test.ts
   backend/test/sentiment.test.ts
@@ -91,9 +97,10 @@ ourcrowd-press-monitor/
 | --- | --- |
 | backend | Independent NestJS workspace. |
 | backend/src | Application composition and feature modules. |
-| backend/src/{companies,mentions,news,sentiment,collection,scheduler,alerts,dashboard} | One folder per empty feature boundary. |
+| backend/src/{companies,mentions,news,sentiment,collection,scheduler,alerts,dashboard} | One folder per feature; companies/mentions/dashboard/sentiment have implementations, others remain boundaries. |
 | backend/src/config | Minimal runtime configuration. |
 | backend/src/common | Reserved shared infrastructure. |
+| backend/src/data | Committed authoritative TXT and generated structured company JSON. |
 | backend/src/health | Process health endpoint. |
 | frontend | Independent Angular workspace. |
 | frontend/src | Browser bootstrap, document, and styles. |
@@ -114,7 +121,7 @@ ourcrowd-press-monitor/
 | `.nvmrc` | Pins the recommended Node runtime. |
 | `README.md` | Setup, migration/database commands, REST contracts, validation/date semantics, seed preparation and tests. |
 | `backend/nest-cli.json` | Nest CLI source and clean-build settings. |
-| `backend/package.json` | Nest, TypeORM, SQLite and validation dependencies; development/build/production/test/db:init scripts. |
+| `backend/package.json` | Nest, TypeORM, SQLite and validation dependencies; development/build/production/test/db:init/company preparation/import scripts. |
 | `backend/src/alerts/alerts.module.ts` | Empty AlertsModule feature boundary, registered in AppModule; no providers or controllers. |
 | `backend/src/app.module.ts` | Composes features, TypeORM initialization/migrations, health and production Angular static serving. |
 | `backend/src/collection/collection.module.ts` | Empty CollectionModule feature boundary, registered in AppModule; no providers or controllers. |
@@ -150,7 +157,7 @@ ourcrowd-press-monitor/
 | `frontend/tsconfig.app.json` | Application-specific compiler inputs and output settings. |
 | `frontend/tsconfig.json` | Strict frontend TypeScript and Angular template checks. |
 | `package-lock.json` | Locks the resolved dependency tree for reproducible npm ci installs. |
-| `package.json` | Defines workspaces and root dev/build/start/typecheck/test/db/companies/sentiment scripts. |
+| `package.json` | Defines workspaces and root dev/build/start/typecheck/test/db/companies:prepare/companies/companies:setup/sentiment scripts. |
 
 ## Added persistence/API files
 
@@ -181,9 +188,9 @@ ourcrowd-press-monitor/
 | `backend/src/database/migrations/1790856000000-initial-schema.ts` | Initial companies/mentions schema, FK/check/unique constraints, index and reverse migration. |
 | `backend/test/dates.test.ts` | Quarter/calendar/day-calculation unit tests. |
 | `backend/test/persistence-api.test.ts` | In-memory migrated SQLite and HTTP tests for empty state, validation, 404s, uniqueness and aggregation. |
-| `data/README.md` | Documents required real dataset, importer matching/update behavior and absence of fake data. |
+| `data/README.md` | Documents ignored local SQLite state and links to the single backend source-data flow. |
 
-`database/migrations` owns versioned schema changes. `backend/test` uses isolated in-memory databases. `data` holds the documented future input location and ignored local SQLite state. Frontend source files are unchanged.
+`database/migrations` owns versioned schema changes. `backend/test` uses isolated in-memory databases. `data` holds ignored local SQLite state; `backend/src/data` holds supplied TXT and committed generated JSON. Frontend source files are unchanged.
 
 ## Added seed and local classification files
 
@@ -191,8 +198,8 @@ ourcrowd-press-monitor/
 | --- | --- |
 | `.env.example` | Non-secret SQLite and local Ollama configuration defaults. |
 | `backend/src/config/environment.ts` | Shared standard Nest ConfigModule .env loading for all entry points. |
-| `backend/src/companies/company-seed.ts` | Seed input/report contracts, exact identity normalization and full JSON structure validation. |
-| `backend/src/companies/company-seed.service.ts` | Reads the seed file, reports missing/invalid input and delegates transactional import. |
+| `backend/src/companies/company-seed.ts` | Persistence/structured-source/report contracts, identity normalization, hostname and five-field metadata validation. |
+| `backend/src/companies/company-seed.service.ts` | Reads generated backend JSON, validates metadata, projects name/domain/sector and delegates transactional import. |
 | `backend/src/companies/companies-import.module.ts` | CLI-only environment/database/companies context; no HTTP or Ollama. |
 | `backend/src/companies/companies.cli.ts` | Root companies command entry point, count reporting and nonzero errors. |
 | `backend/src/sentiment/sentiment-classifier.ts` | Domain-only classifier input/interface and injection token. |
@@ -201,3 +208,16 @@ ourcrowd-press-monitor/
 | `backend/src/sentiment/sentiment.cli.ts` | Real manual classification with model/sentiment output and no database context. |
 | `backend/test/company-import.test.ts` | Isolated importer tests for idempotence, updates, validation, ambiguity and rollback. |
 | `backend/test/sentiment.test.ts` | Mocked HTTP tests for valid values, malformed output, configuration/input errors, HTTP/connection failures and timeout. |
+
+## Company source preparation files
+
+| File | Purpose |
+| --- | --- |
+| `backend/src/data/ourcrowd_companies.txt` | Existing authoritative OurCrowd list, preserved byte-for-byte. |
+| `backend/src/data/companies.json` | Deterministic committed structured representation; source-only rawName and aliases, null sectors. |
+| `backend/src/data/README.md` | Generated-file policy, schema, parser rules and explicit developer commands. |
+| `backend/src/companies/company-preparation.ts` | Conservative line parser, category report, validation, deterministic serializer and file preparation; shared default source paths. |
+| `backend/src/companies/companies-prepare.cli.ts` | Preparation-only CLI; prints category counts/fallbacks, exits nonzero on errors; no database context. |
+| `backend/test/company-preparation.test.ts` | Isolated parsing, whitespace, duplicate, fallback, metadata, deterministic bytes and path tests. |
+
+The flow is supplied TXT → generated JSON → existing SQLite Company schema. `companies:setup` prepares then uses the current importer/database initialization. No startup seeding, frontend changes, schema changes or integrations are added.

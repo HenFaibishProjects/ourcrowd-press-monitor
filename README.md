@@ -1,6 +1,6 @@
 # OurCrowd Press Monitor
 
-NestJS modular monolith with SQLite/TypeORM and a minimal Angular title shell. Current scope: company/mention persistence, read-only REST APIs, a company seed importer and an independently testable local sentiment classifier. No company seed data or press mentions are included.
+NestJS modular monolith with SQLite/TypeORM and a minimal Angular title shell. Current scope: company/mention persistence, read-only REST APIs, a company seed importer and an independently testable local sentiment classifier. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
 
 Use Node 24.19 (`nvm use` if available). From the repository root:
 
@@ -52,7 +52,7 @@ For a larger production system, PostgreSQL would likely be preferred, but SQLite
 | GET /api/companies/:id/mentions?from=...&to=...&sentiment=... | Filtered mentions, newest first; 404 if company absent. |
 | GET /api/dashboard?quarter=YYYY-QN | Every company, quarter sentiment counts and all-time latest mention. Defaults to current UTC quarter. |
 
-Current empty-database responses:
+Before the explicit company import, empty-database responses are:
 
 ```json
 []
@@ -90,21 +90,34 @@ Dates accept real YYYY-MM-DD values or ISO timestamps with an explicit timezone.
 
 Dashboard counts and days are derived at request time, not persisted. lastMentionedAt is the latest publishedAt across all time, independently of the selected quarter. Days mean elapsed full 24-hour periods, clamped to zero for future-dated publications. Never-mentioned companies get null lastMentionedAt/null daysSinceLastMention and zero counts.
 
-## Company seed import
+## Company preparation and import
 
-Create `data/companies.json` using the real OurCrowd-provided source-of-truth list. No company file or fake entries are committed. See [data/README.md](data/README.md) for the schema. Then run:
+**Generated file: `backend/src/data/companies.json` is derived from the supplied TXT and should not normally be edited manually.** Both files are committed for review.
+
+The single flow is: authoritative `backend/src/data/ourcrowd_companies.txt` → deterministic structured `backend/src/data/companies.json` → SQLite runtime `companies` table. Preparation never modifies the supplied TXT, performs no internet lookup and preserves source order. Run explicitly from the repository root:
 
 ```bash
+npm run companies:prepare
 npm run companies
+# Or prepare, initialize SQLite through existing migrations, and import:
+npm run companies:setup
 ```
 
-The command initializes SQLite through the existing migrations, validates the entire JSON array, imports within one transaction, and reports `inserted`, `updated`, and `unchanged`. A missing file produces an actionable error and exit code 1. An empty array is a valid no-op.
+Normal application startup neither prepares nor imports companies. The importer initializes the database using the current migrations; `npm run db` remains an optional standalone initialization. Missing TXT/JSON files produce actionable errors and nonzero exit codes. An empty list is a valid no-op. See [source format and policy](backend/src/data/README.md).
 
-Names are required strings and must be non-blank. Strings are trimmed; domains are lowercased plain hostnames without a scheme/path/port. Domain and sector are optional and may be null. Duplicate trimmed, case-insensitive names or domains within a file are rejected.
+Preparation ignores blank lines, trims surrounding whitespace and produces stable, two-space-indented JSON with a trailing newline. Every record contains:
 
-Matching first uses an exact normalized domain when present, otherwise an exact trimmed, case-insensitive name. No fuzzy matching, www stripping, or mandatory domains. If domain and name point to different rows, several database rows match, or two input rows target one company, the entire transaction fails. A name-only match may gain a previously missing domain, but cannot replace a different non-empty domain; resolve that conflict explicitly first. A unique domain match may update the displayed name.
+```typescript
+{ name: string; rawName: string; domain: string | null; aliases: string[]; sector: string | null }
+```
 
-Omitted domain/sector fields preserve existing values. Explicit null or a blank optional string clears that field. Other provided values update it. Repeating an unchanged file creates no duplicates and does not update timestamps. Companies absent from a later list are not deleted. Run one importer at a time; no concurrent import framework is introduced.
+A plain name stays unchanged. One clean trailing parenthetical becomes an explicit lowercased domain if its entire content is a hostname; `formerly X` / `formerly known as X` becomes a former-name alias; another clean company-identifying value becomes an expanded alias. Multiple, nested, unbalanced, empty, URL-like or otherwise unsupported parentheticals retain the entire line as name/rawName with no domain or aliases. Parsing does not infer information. Generated sector is always null. The supplied list yields 258 records: 246 plain, 1 domain, 1 expanded alias, 10 former aliases, and 0 fallbacks.
+
+Structured input requires exactly all five fields, valid non-blank name/rawName, nullable domain/sector and string-array aliases. All strings are trimmed, domains lowercased, and blank optional strings are rejected (use null). Aliases must be non-blank, case-insensitively unique within the record and different from its primary name. Duplicate normalized names or domains fail explicitly; preparation does not drop duplicate lines.
+
+CompanySeedService validates the whole file, then passes **only name/domain/sector** to the existing transactional CompaniesRepository. Neither rawName nor aliases is persisted; no schema change is needed. Primary name and explicit domain may later identify/disambiguate search results, and aliases retain only supplied names for future NewsProvider search/relevance. Search itself is not implemented.
+
+Matching first uses an exact normalized domain when supplied, otherwise an exact trimmed, case-insensitive name. No fuzzy matching or www stripping. If domain and name point to different rows, several rows match, or two input records target one company, the entire import rolls back. A name-only match may acquire a missing domain but cannot replace a different non-empty domain. A unique domain match may update the display name. Required null domain/sector values clear those fields; provided values update them. Repeating an unchanged file reports `unchanged` without duplicating rows or updating timestamps. Reports include `inserted`, `updated`, and `unchanged`. Absent companies are never deleted; run one importer at a time.
 
 ## Local sentiment classification with Ollama
 
@@ -173,7 +186,7 @@ No news, RSS, scraping, collection, scheduled jobs, alert delivery, automatic re
 
 ## Tests and verification
 
-`npm test` uses Node's test runner and ts-node. Focused tests cover quarter parsing/boundaries/invalid inputs; elapsed days; calendar validation; migration idempotence; missing-company 404s; HTTP query validation; per-company URL uniqueness; dashboard quarter versus all-time behavior; empty/no-mention companies; and mention filtering/order. New tests cover importer validation/idempotence/updates/ambiguity/rollback and all three classifier values, request schema, malformed output, HTTP failure, connection failure, timeout, input/configuration rejection. HTTP is mocked in tests; npm test never requires Ollama.
+`npm test` uses Node's test runner and ts-node. Focused tests cover quarter parsing/boundaries/invalid inputs; elapsed days; calendar validation; migration idempotence; missing-company 404s; HTTP query validation; per-company URL uniqueness; dashboard quarter versus all-time behavior; empty/no-mention companies; and mention filtering/order. Company tests cover TXT parsing, fallback, duplicate rejection, byte preservation, deterministic output, source paths, structured validation, metadata projection, importer idempotence/updates/ambiguity/rollback and all three classifier values, request schema, malformed output, HTTP failure, connection failure, timeout, input/configuration rejection. HTTP is mocked in tests; npm test never requires Ollama.
 
 After initialization/build, `npm run start` can be checked with:
 

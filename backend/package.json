@@ -10,7 +10,8 @@
     "test": "node --require ts-node/register --test test/*.test.ts",
     "db:init": "npm run build && node dist/database/initialize.js",
     "companies": "ts-node src/companies/companies.cli.ts",
-    "sentiment": "ts-node src/sentiment/sentiment.cli.ts"
+    "sentiment": "ts-node src/sentiment/sentiment.cli.ts",
+    "companies:prepare": "ts-node src/companies/companies-prepare.cli.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
