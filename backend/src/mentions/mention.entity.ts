@@ -29,12 +29,12 @@ export class Mention {
   @Column({ type: 'text' })
   source!: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   publishedAt!: Date;
 
   @Column({ type: 'text' })
   sentiment!: Sentiment;
 
-  @CreateDateColumn({ type: 'datetime', default: () => "strftime('%Y-%m-%d %H:%M:%f', 'now')" })
+  @CreateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
   discoveredAt!: Date;
 }

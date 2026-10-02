@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Company } from '../companies/company.entity';
-import { sqliteDate } from '../common/dates';
 import { Mention } from '../mentions/mention.entity';
 import { Sentiment } from '../mentions/sentiment.enum';
 
@@ -22,7 +21,7 @@ export class DashboardRepository {
 
   summarize(start: Date, end: Date): Promise<DashboardRow[]> {
     // Four-digit dates end at year 9999; Q4's exclusive boundary is year 10000.
-    const inQuarter = 'mention.publishedAt >= :start AND (:endBeyondSupportedYears = 1 OR mention.publishedAt < :end)';
+    const inQuarter = 'mention.publishedAt >= :start AND (:endBeyondSupportedYears = true OR mention.publishedAt < :end)';
     return this.companies.createQueryBuilder('company')
       .leftJoin(Mention, 'mention', 'mention.companyId = company.id')
       .select('company.id', 'id')
@@ -32,7 +31,7 @@ export class DashboardRepository {
       .addSelect(`SUM(CASE WHEN ${inQuarter} AND mention.sentiment = :positive THEN 1 ELSE 0 END)`, 'positive')
       .addSelect(`SUM(CASE WHEN ${inQuarter} AND mention.sentiment = :neutral THEN 1 ELSE 0 END)`, 'neutral')
       .addSelect(`SUM(CASE WHEN ${inQuarter} AND mention.sentiment = :negative THEN 1 ELSE 0 END)`, 'negative')
-      .setParameters({ start: sqliteDate(start), end: sqliteDate(end), endBeyondSupportedYears: end.getUTCFullYear() > 9999 ? 1 : 0, positive: Sentiment.POSITIVE, neutral: Sentiment.NEUTRAL, negative: Sentiment.NEGATIVE })
+      .setParameters({ start, end, endBeyondSupportedYears: end.getUTCFullYear() > 9999, positive: Sentiment.POSITIVE, neutral: Sentiment.NEUTRAL, negative: Sentiment.NEGATIVE })
       .groupBy('company.id').addGroupBy('company.name')
       .orderBy('company.name', 'ASC').addOrderBy('company.id', 'ASC')
       .getRawMany<DashboardRow>();

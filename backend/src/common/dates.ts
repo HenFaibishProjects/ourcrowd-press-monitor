@@ -39,11 +39,3 @@ export function nextUtcDay(date: Date): Date {
   return new Date(date.getTime() + DAY_MS);
 }
 
-// Match TypeORM's SQLite datetime serialization for parameterized range comparisons.
-export function sqliteDate(date: Date): string {
-  return date.toISOString().replace('T', ' ').replace('Z', '');
-}
-
-export function fromSqliteDate(value: string): Date {
-  return new Date(value.replace(' ', 'T') + 'Z');
-}

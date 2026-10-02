@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { daysSinceLastMention, fromSqliteDate } from '../common/dates';
+import { daysSinceLastMention } from '../common/dates';
 import { DashboardRepository } from './dashboard.repository';
 import { DashboardResponse } from './dashboard-response.dto';
 import { parseQuarter } from './quarter';
@@ -14,13 +14,13 @@ export class DashboardService {
     return {
       quarter: range.quarter,
       companies: rows.map((row) => {
-        const lastMentionedAt = row.lastMentionedAt === null ? null : fromSqliteDate(row.lastMentionedAt);
+        const lastMentionedAt = row.lastMentionedAt === null ? null : new Date(row.lastMentionedAt);
         return {
           id: row.id,
           name: row.name,
           lastMentionedAt: lastMentionedAt?.toISOString() ?? null,
           daysSinceLastMention: daysSinceLastMention(lastMentionedAt, now),
-          mentions: { total: row.total, positive: row.positive, neutral: row.neutral, negative: row.negative },
+          mentions: { total: Number(row.total), positive: Number(row.positive), neutral: Number(row.neutral), negative: Number(row.negative) },
         };
       }),
     };

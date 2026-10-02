@@ -39,7 +39,7 @@ export class MentionsService {
       return await this.mentions.save(input);
     } catch (error: unknown) {
       if (error instanceof QueryFailedError &&
-          (error.driverError as { code?: string }).code === 'SQLITE_CONSTRAINT_UNIQUE') {
+          (error.driverError as { code?: string }).code === '23505') {
         throw new ConflictException('This URL is already stored for this company');
       }
       throw error;

@@ -15,9 +15,9 @@ export class Company {
   @Column({ type: 'text', nullable: true })
   sector!: string | null;
 
-  @CreateDateColumn({ type: 'datetime', default: () => "strftime('%Y-%m-%d %H:%M:%f', 'now')" })
+  @CreateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
   createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'datetime', default: () => "strftime('%Y-%m-%d %H:%M:%f', 'now')" })
+  @UpdateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
   updatedAt!: Date;
 }
