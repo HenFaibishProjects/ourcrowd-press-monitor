@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { BadGatewayException, BadRequestException, GatewayTimeoutException, InternalServerErrorException, ServiceUnavailableException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, GatewayTimeoutException, InternalServerErrorException, ServiceUnavailableException, HttpException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GdeltNewsProvider, gdeltDate, gdeltRequest, parseGdeltResponse } from '../src/news/gdelt-news.provider';
 import { gdeltConfig } from '../src/news/gdelt.config';
@@ -83,6 +83,37 @@ test('transient 429 and 5xx retry a bounded number; permanent 4xx does not retry
   calls = 0;
   await boundary(async (provider) => { await assert.rejects(provider.search(input), /HTTP 503/); assert.equal(calls, 3); },
     async () => { calls++; return new Response('temporary', { status: 503, headers: { 'retry-after': '0' } }); });
+});
+
+test('429 rate limits wait configured delay or Retry-After, and exhaust to a clear 429 error', async () => {
+  let calls = 0;
+  const start = Date.now();
+  await boundary(async (provider) => {
+    try {
+      await provider.search(input);
+      assert.fail('Should have thrown HttpException');
+    } catch (e: any) {
+      assert(e instanceof HttpException);
+      assert.equal(e.getStatus(), 429);
+      assert.equal(e.message, 'GDELT rate limit exceeded (HTTP 429)');
+    }
+  }, async () => { calls++; return new Response('too many requests', { status: 429 }); }, { GDELT_REQUEST_DELAY_MS: 50, GDELT_MAX_RETRIES: 1 });
+  assert.equal(calls, 2);
+  assert(Date.now() - start >= 50);
+
+  calls = 0;
+  const start2 = Date.now();
+  await boundary(async (provider) => {
+    try {
+      await provider.search(input);
+      assert.fail('Should have thrown HttpException');
+    } catch (e: any) {
+      assert(e instanceof HttpException);
+      assert.equal(e.getStatus(), 429);
+    }
+  }, async () => { calls++; return new Response('too many requests', { status: 429, headers: { 'retry-after': '1' } }); }, { GDELT_REQUEST_DELAY_MS: 10, GDELT_MAX_RETRIES: 1 });
+  assert.equal(calls, 2);
+  assert(Date.now() - start2 >= 1000);
 });
 
 test('malformed response is not retried or cached; excessive Retry-After surfaces clearly', async () => {

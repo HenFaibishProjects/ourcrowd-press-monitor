@@ -5,10 +5,11 @@ import { NewsModule } from '../news/news.module';
 import { SentimentModule } from '../sentiment/sentiment.module';
 import { AlertsModule } from '../alerts/alerts.module';
 import { CollectionService } from './collection.service';
+import { ArticleEnricher } from './article-enricher';
 
 @Module({
   imports: [CompaniesModule, MentionsModule, NewsModule, SentimentModule, AlertsModule],
-  providers: [CollectionService],
+  providers: [CollectionService, ArticleEnricher],
   exports: [CollectionService],
 })
 export class CollectionModule {}

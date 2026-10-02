@@ -25,7 +25,8 @@ async function fixture(run: (context: {
   service: CollectionService; mentions: MentionsService; database: DataSource; scope: CompanySearchService;
   fetched: string[]; classified: string[]; alerts: NewMentionAlert[][];
   news: { search: (input: { companyName: string }) => Promise<NewsArticle[]> };
-  classifier: { classify: (input: { companyName: string }) => Promise<Sentiment> };
+  classifier: { classify: (input: { companyName: string }) => Promise<{ relevant: boolean; sentiment: Sentiment | null }> };
+  enricher: { fetchAndEnrich: (url: string) => Promise<{ title?: string; description?: string; content: string } | null> };
   alert: { sendNewMentions: (mentions: NewMentionAlert[]) => Promise<void> };
 }) => Promise<void>) {
   const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true }); await database.initialize();
@@ -37,17 +38,18 @@ async function fixture(run: (context: {
     const mentions = new MentionsService(new MentionsRepository(database.getRepository(Mention)), companies);
     const fetched: string[] = []; const classified: string[] = []; const alerts: NewMentionAlert[][] = [];
     const news = { search: async ({ companyName }: { companyName: string }) => { fetched.push(companyName); return [article()]; } };
-    const classifier = { classify: async ({ companyName }: { companyName: string }) => { classified.push(companyName); return Sentiment.POSITIVE; } };
+    const classifier = { classify: async ({ companyName }: { companyName: string }) => { classified.push(companyName); return { relevant: true, sentiment: Sentiment.POSITIVE }; } };
     const alert = { sendNewMentions: async (input: NewMentionAlert[]) => { assert.equal(await database.getRepository(Mention).count(), input.length); alerts.push(input); } };
-    const service = new CollectionService(companies, scope, mentions, news, classifier, alert);
-    await run({ service, mentions, database, scope, fetched, classified, alerts, news, classifier, alert });
+    const enricher = { fetchAndEnrich: async (url: string) => ({ content: 'enriched text' }) };
+    const service = new CollectionService(companies, scope, mentions, news, classifier as any, alert, enricher as any);
+    await run({ service, mentions, database, scope, fetched, classified, alerts, news, classifier, enricher as any, alert } as any);
   } finally { await database.destroy(); }
 }
 
 test('new articles persist per company, classification is sequential, and one alert follows persistence', async () => {
   await fixture(async ({ service, classified, alerts, database, classifier }) => {
     let active = 0; let maximum = 0;
-    classifier.classify = async ({ companyName }) => { active++; maximum = Math.max(maximum, active); await Promise.resolve(); active--; classified.push(companyName); return Sentiment.POSITIVE; };
+    classifier.classify = async ({ companyName }) => { active++; maximum = Math.max(maximum, active); await Promise.resolve(); active--; classified.push(companyName); return { relevant: true, sentiment: Sentiment.POSITIVE }; };
     const result = await service.collect(options);
     assert.equal(result.companiesProcessed, 2); assert.equal(result.companiesFailed, 0); assert.equal(result.articlesFetched, 2);
     assert.equal(result.mentionsInserted, 2); assert.equal(result.duplicatesSkipped, 0); assert.equal(result.classificationFailures, 0);
@@ -84,11 +86,31 @@ test('unavailable classifier aborts early without neutral persistence or dozens 
   });
 });
 
+test('irrelevant article is skipped and not persisted', async () => {
+  await fixture(async ({ service, classifier, database, alerts }) => {
+    classifier.classify = async () => ({ relevant: false, sentiment: null });
+    const result = await service.collect(options);
+    assert.equal(result.irrelevantArticlesSkipped, 2);
+    assert.equal(result.mentionsInserted, 0);
+    assert.equal(await database.getRepository(Mention).count(), 0);
+    assert.equal(alerts.length, 0);
+  });
+});
+
+test('enrichment failure falls back safely to original article text', async () => {
+  await fixture(async ({ service, enricher }) => {
+    enricher.fetchAndEnrich = async () => null;
+    const result = await service.collect(options);
+    assert.equal(result.enrichmentFailures, 2);
+    assert.equal(result.mentionsInserted, 2);
+  });
+});
+
 test('malformed model responses continue, two consecutive timeouts abort, partial inserts still alert', async () => {
   await fixture(async ({ service, classifier, news, alerts }) => {
     news.search = async () => [article('https://news.example/1'), article('https://news.example/2'), article('https://news.example/3'), article('https://news.example/4')];
     let calls = 0;
-    classifier.classify = async () => { calls++; if (calls === 1) throw new BadGatewayException('malformed output'); if (calls >= 3) throw new GatewayTimeoutException('timeout'); return Sentiment.NEUTRAL; };
+    classifier.classify = async () => { calls++; if (calls === 1) throw new BadGatewayException('malformed output'); if (calls >= 3) throw new GatewayTimeoutException('timeout'); return { relevant: true, sentiment: Sentiment.NEUTRAL }; };
     const result = await service.collect(options);
     assert.equal(calls, 4); assert.equal(result.classificationFailures, 3); assert.equal(result.mentionsInserted, 1); assert.equal(result.aborted, true);
     assert.equal(alerts.length, 1); assert.equal(alerts[0]?.length, 1);

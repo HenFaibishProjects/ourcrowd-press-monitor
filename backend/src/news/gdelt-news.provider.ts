@@ -243,10 +243,10 @@ export class GdeltNewsProvider implements NewsProvider {
         });
 
         if (!response.ok) {
-          if (
-            (response.status === 429 || response.status >= 500) &&
-            attempt < this.settings.maxRetries
-          ) {
+          const isRateLimit = response.status === 429;
+          const isServerError = response.status >= 500;
+
+          if ((isRateLimit || isServerError) && attempt < this.settings.maxRetries) {
             const retryAfterHeader = response.headers.get('retry-after');
             const retryAfterMs =
               retryAfterHeader === null
@@ -261,15 +261,23 @@ export class GdeltNewsProvider implements NewsProvider {
               );
             }
 
+            const defaultDelay = isRateLimit ? this.settings.requestDelayMs : 1000 * (attempt + 1);
             retryDelayMs = Math.max(
               this.settings.requestDelayMs,
-              Number.isFinite(retryAfterMs) ? Math.max(0, retryAfterMs) : 1000 * (attempt + 1),
+              Number.isFinite(retryAfterMs) ? Math.max(0, retryAfterMs) : defaultDelay,
             );
             this.logger.warn(
               `GDELT HTTP ${response.status} for ${companyName}; retry ${attempt + 1}/${this.settings.maxRetries} in ${retryDelayMs}ms`,
             );
-            await response.body?.cancel();
+            try {
+              await response.body?.cancel();
+            } catch {
+              // Ignore errors while discarding body
+            }
           } else {
+            if (response.status === 429) {
+              throw new HttpException('GDELT rate limit exceeded (HTTP 429)', 429);
+            }
             throw new BadGatewayException(`GDELT returned HTTP ${response.status}`);
           }
         } else {

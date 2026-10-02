@@ -18,6 +18,7 @@ import { normalizeArticleUrl } from '../news/url-normalization';
 import { SENTIMENT_CLASSIFIER, SentimentClassifier } from '../sentiment/sentiment-classifier';
 import { CollectionOptions } from './collection-options';
 import { CollectionResult } from './collection-result';
+import { ArticleEnricher } from './article-enricher';
 
 function validatedArticle(article: NewsArticle, options: CollectionOptions): NewsArticle {
   if (
@@ -61,6 +62,7 @@ export class CollectionService {
     @Inject(NEWS_PROVIDER) private readonly newsProvider: NewsProvider,
     @Inject(SENTIMENT_CLASSIFIER) private readonly sentimentClassifier: SentimentClassifier,
     @Inject(ALERT_SERVICE) private readonly alertService: AlertService,
+    private readonly articleEnricher: ArticleEnricher,
   ) {}
 
   async collect(options: CollectionOptions): Promise<CollectionResult> {
@@ -88,7 +90,10 @@ export class CollectionService {
       articlesFetched: 0,
       invalidArticlesSkipped: 0,
       duplicatesSkipped: 0,
+      articlesEnriched: 0,
+      enrichmentFailures: 0,
       classificationFailures: 0,
+      irrelevantArticlesSkipped: 0,
       mentionsInserted: 0,
       resultLimitCompanies: [],
       aborted: false,
@@ -105,6 +110,7 @@ export class CollectionService {
         duplicates: collectionResult.duplicatesSkipped,
         inserted: collectionResult.mentionsInserted,
         classificationFailures: collectionResult.classificationFailures,
+        irrelevant: collectionResult.irrelevantArticlesSkipped,
       };
       collectionResult.companiesProcessed++;
       let articles: NewsArticle[];
@@ -196,14 +202,43 @@ export class CollectionService {
           break companies;
         }
 
-        let sentiment: Sentiment;
+        let enrichedData = null;
+        try {
+          enrichedData = await this.articleEnricher.fetchAndEnrich(article.url);
+          if (enrichedData) {
+            collectionResult.articlesEnriched++;
+          } else {
+            collectionResult.enrichmentFailures++;
+          }
+        } catch (error: unknown) {
+          collectionResult.enrichmentFailures++;
+          collectionResult.errors.push({
+            company: company.name,
+            url: article.url,
+            stage: 'enrichment',
+            message: processingErrorMessage(error),
+          });
+          this.logger.warn(
+            `Article enrichment failed for ${article.url}: ${processingErrorMessage(error)}`,
+          );
+        }
+
+        let sentiment: Sentiment | null = null;
+        let isRelevant = false;
 
         try {
-          sentiment = await this.sentimentClassifier.classify({
+          const combinedDescription = enrichedData
+            ? [enrichedData.description, enrichedData.content].filter(Boolean).join('\n\n').substring(0, 4000)
+            : article.description;
+
+          const classificationResult = await this.sentimentClassifier.classify({
             companyName: company.name,
-            title: article.title,
-            description: article.description,
+            title: enrichedData?.title || article.title,
+            description: combinedDescription || null,
           });
+          
+          isRelevant = classificationResult.relevant;
+          sentiment = classificationResult.sentiment;
           consecutiveTimeouts = 0;
         } catch (error: unknown) {
           collectionResult.classificationFailures++;
@@ -238,11 +273,16 @@ export class CollectionService {
           continue;
         }
 
+        if (!isRelevant) {
+          collectionResult.irrelevantArticlesSkipped++;
+          continue;
+        }
+
         try {
           const mention = await this.mentionsService.create({
             companyId: company.id,
             ...article,
-            sentiment,
+            sentiment: sentiment as Sentiment,
           });
           newMentionAlerts.push({
             companyName: company.name,
@@ -267,7 +307,7 @@ export class CollectionService {
       }
 
       this.logger.log(
-        `Company collection completed for ${company.name}: ${collectionResult.mentionsInserted - countsBeforeCompany.inserted} new mentions, ${collectionResult.duplicatesSkipped - countsBeforeCompany.duplicates} duplicate URLs skipped, ${collectionResult.classificationFailures - countsBeforeCompany.classificationFailures} classification failures`,
+        `Company collection completed for ${company.name}: ${collectionResult.mentionsInserted - countsBeforeCompany.inserted} new mentions, ${collectionResult.duplicatesSkipped - countsBeforeCompany.duplicates} duplicate URLs skipped, ${collectionResult.classificationFailures - countsBeforeCompany.classificationFailures} classification failures, ${collectionResult.irrelevantArticlesSkipped - countsBeforeCompany.irrelevant} irrelevant skipped`,
       );
     }
 
@@ -287,7 +327,7 @@ export class CollectionService {
     }
 
     this.logger.log(
-      `Collection ${collectionResult.aborted ? 'aborted' : 'completed'}: ${collectionResult.companiesProcessed}/${selectedCompanies.length} companies processed, ${collectionResult.companiesFailed} provider failures, ${collectionResult.articlesFetched} articles, ${collectionResult.mentionsInserted} new mentions, ${collectionResult.duplicatesSkipped} duplicates skipped, ${collectionResult.invalidArticlesSkipped} invalid articles, ${collectionResult.classificationFailures} classification failures, ${collectionResult.errors.length} recorded errors`,
+      `Collection ${collectionResult.aborted ? 'aborted' : 'completed'}: ${collectionResult.companiesProcessed}/${selectedCompanies.length} companies processed, ${collectionResult.companiesFailed} provider failures, ${collectionResult.articlesFetched} articles, ${collectionResult.mentionsInserted} new mentions, ${collectionResult.duplicatesSkipped} duplicates skipped, ${collectionResult.invalidArticlesSkipped} invalid articles, ${collectionResult.classificationFailures} classification failures, ${collectionResult.articlesEnriched} enriched, ${collectionResult.enrichmentFailures} enrichment failures, ${collectionResult.irrelevantArticlesSkipped} irrelevant, ${collectionResult.errors.length} recorded errors`,
     );
 
     return collectionResult;

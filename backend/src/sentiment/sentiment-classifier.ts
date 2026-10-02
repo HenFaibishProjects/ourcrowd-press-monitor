@@ -8,6 +8,11 @@ export interface SentimentInput {
   description?: string | null;
 }
 
+export interface SentimentResult {
+  relevant: boolean;
+  sentiment: Sentiment | null;
+}
+
 export interface SentimentClassifier {
-  classify(input: SentimentInput): Promise<Sentiment>;
+  classify(input: SentimentInput): Promise<SentimentResult>;
 }

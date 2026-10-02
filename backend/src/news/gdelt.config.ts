@@ -64,7 +64,7 @@ export function gdeltConfig(configService: ConfigService): GdeltConfig {
   return {
     baseUrl: url.toString(),
     timeoutMs: integerSetting('GDELT_TIMEOUT_MS', 30000, 1, 300000),
-    requestDelayMs: integerSetting('GDELT_REQUEST_DELAY_MS', 1000, 0, 60000),
+    requestDelayMs: integerSetting('GDELT_REQUEST_DELAY_MS', 7000, 0, 60000),
     maxRetries: integerSetting('GDELT_MAX_RETRIES', 2, 0, 3),
     cachePath: resolve(__dirname, '../../..', cachePath),
   };

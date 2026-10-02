@@ -26,16 +26,24 @@ for (const sentiment of Object.values(Sentiment)) {
       assert.deepEqual(JSON.parse(String(body['prompt'])), input);
       assert.equal(body['stream'], false);
       assert.deepEqual(body['options'], { temperature: 0, seed: 42, num_predict: 64 });
-      assert.deepEqual(body['format'], { type: 'object', properties: { sentiment: { type: 'string', enum: Object.values(Sentiment) } }, required: ['sentiment'], additionalProperties: false });
-      return output({ sentiment });
+      assert.deepEqual(body['format'], {
+        type: 'object',
+        properties: {
+          relevant: { type: 'boolean' },
+          sentiment: { type: ['string', 'null'], enum: [...Object.values(Sentiment), null] },
+        },
+        required: ['relevant', 'sentiment'],
+        additionalProperties: false,
+      });
+      return output({ relevant: true, sentiment });
     });
-    assert.equal(await classifier().classify(input), sentiment);
+    assert.deepEqual(await classifier().classify(input), { relevant: true, sentiment });
     assert.equal(http.mock.callCount(), 1);
   });
 }
 
 test('malformed JSON, invalid values and extra fields fail without retries or neutral fallback', async () => {
-  const values = ['not JSON', '{', '```json\n{"sentiment":"POSITIVE"}\n```', { sentiment: 'positive' }, { sentiment: 'MIXED' }, { sentiment: 'NEUTRAL', explanation: 'extra' }, ['POSITIVE'], null];
+  const values = ['not JSON', '{', '```json\n{"relevant":true,"sentiment":"POSITIVE"}\n```', { relevant: true, sentiment: 'positive' }, { sentiment: 'MIXED' }, { relevant: true, sentiment: 'NEUTRAL', explanation: 'extra' }, ['POSITIVE'], null, { relevant: false, sentiment: 'POSITIVE' }];
   for (const value of values) {
     const http = mock.method(globalThis, 'fetch', async () => output(value));
     await assert.rejects(classifier().classify(input), BadGatewayException);
@@ -45,7 +53,7 @@ test('malformed JSON, invalid values and extra fields fail without retries or ne
 });
 
 test('invalid or incomplete Ollama envelopes and non-JSON HTTP bodies fail', async () => {
-  for (const body of [{ done: false, response: '{"sentiment":"NEUTRAL"}' }, { done: true }, { done: true, response: 1 }]) {
+  for (const body of [{ done: false, response: '{"relevant":true,"sentiment":"NEUTRAL"}' }, { done: true }, { done: true, response: 1 }]) {
     const http = mock.method(globalThis, 'fetch', async () => Response.json(body));
     await assert.rejects(classifier().classify(input), BadGatewayException);
     http.mock.restore();
@@ -73,12 +81,12 @@ test('timeout aborts the HTTP boundary and surfaces 504', async () => {
 });
 
 test('invalid input makes no HTTP request, while null description is accepted', async () => {
-  const http = mock.method(globalThis, 'fetch', async () => output({ sentiment: 'NEUTRAL' }));
+  const http = mock.method(globalThis, 'fetch', async () => output({ relevant: true, sentiment: 'NEUTRAL' }));
   await assert.rejects(classifier().classify({ ...input, title: '  ' }), BadRequestException);
   await assert.rejects(classifier().classify({ ...input, companyName: '' }), BadRequestException);
   await assert.rejects(classifier().classify({ ...input, description: 'x'.repeat(4001) }), BadRequestException);
   assert.equal(http.mock.callCount(), 0);
-  assert.equal(await classifier().classify({ ...input, description: null }), Sentiment.NEUTRAL);
+  assert.deepEqual(await classifier().classify({ ...input, description: null }), { relevant: true, sentiment: Sentiment.NEUTRAL });
 });
 
 test('invalid config, hosted URLs and cloud-tagged models are rejected before HTTP', () => {

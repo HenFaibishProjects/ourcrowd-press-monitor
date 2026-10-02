@@ -28,7 +28,7 @@ import { DashboardRepository } from '../src/dashboard/dashboard.repository';
 
 const now = new Date('2026-10-02T12:00:00Z');
 const empty: CollectionResult = { companiesProcessed: 0, companiesFailed: 0, articlesFetched: 0, invalidArticlesSkipped: 0,
-  duplicatesSkipped: 0, classificationFailures: 0, mentionsInserted: 0, resultLimitCompanies: [], aborted: false, errors: [] };
+  duplicatesSkipped: 0, articlesEnriched: 0, enrichmentFailures: 0, classificationFailures: 0, irrelevantArticlesSkipped: 0, mentionsInserted: 0, resultLimitCompanies: [], aborted: false, errors: [] };
 
 test('disabled scheduling registers no timer and never calls collection', async () => {
   let calls = 0;

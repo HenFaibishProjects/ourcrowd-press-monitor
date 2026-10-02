@@ -1,7 +1,7 @@
 export interface CollectionError {
   company?: string;
   url?: string;
-  stage: 'provider' | 'article' | 'classification' | 'persistence' | 'alert';
+  stage: 'provider' | 'article' | 'enrichment' | 'classification' | 'persistence' | 'alert';
   message: string;
 }
 export interface CollectionResult {
@@ -10,7 +10,10 @@ export interface CollectionResult {
   articlesFetched: number;
   invalidArticlesSkipped: number;
   duplicatesSkipped: number;
+  articlesEnriched: number;
+  enrichmentFailures: number;
   classificationFailures: number;
+  irrelevantArticlesSkipped: number;
   mentionsInserted: number;
   resultLimitCompanies: string[];
   aborted: boolean;
