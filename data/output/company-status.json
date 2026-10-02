@@ -2666,66 +2666,6 @@
       }
     },
     {
-      "id": 1,
-      "name": "Test company A",
-      "lastMentionedAt": "2026-07-01T00:00:00.000Z",
-      "daysSinceLastMention": 93,
-      "mentions": {
-        "total": 1,
-        "positive": 1,
-        "neutral": 0,
-        "negative": 0
-      }
-    },
-    {
-      "id": 2,
-      "name": "Test company B",
-      "lastMentionedAt": "2026-07-01T00:00:00.000Z",
-      "daysSinceLastMention": 93,
-      "mentions": {
-        "total": 1,
-        "positive": 1,
-        "neutral": 0,
-        "negative": 0
-      }
-    },
-    {
-      "id": 3,
-      "name": "Test company C",
-      "lastMentionedAt": "2026-10-01T00:00:00.000Z",
-      "daysSinceLastMention": 1,
-      "mentions": {
-        "total": 2,
-        "positive": 1,
-        "neutral": 1,
-        "negative": 0
-      }
-    },
-    {
-      "id": 4,
-      "name": "Test company D",
-      "lastMentionedAt": null,
-      "daysSinceLastMention": null,
-      "mentions": {
-        "total": 0,
-        "positive": 0,
-        "neutral": 0,
-        "negative": 0
-      }
-    },
-    {
-      "id": 5,
-      "name": "Test final supported year",
-      "lastMentionedAt": "9999-12-31T23:59:59.999Z",
-      "daysSinceLastMention": 0,
-      "mentions": {
-        "total": 0,
-        "positive": 0,
-        "neutral": 0,
-        "negative": 0
-      }
-    },
-    {
       "id": 232,
       "name": "Tevel",
       "lastMentionedAt": null,
