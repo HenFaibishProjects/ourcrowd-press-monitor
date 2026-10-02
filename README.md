@@ -651,16 +651,16 @@ ollama pull gemma3:270m
 
 If you choose another model, set OLLAMA_MODEL and pull that exact local model instead. The application never pulls models automatically. The default compact `gemma3:270m` is an intentionally modest starting point for a constrained three-class classification problem, rather than general-purpose generation. Classification quality is **not proven**. Compact models can misread company attribution, mixed sentiment, negation, sarcasm or incomplete excerpts. Quality validation comes later using real collected mentions and manual spot checking; the configurable model can be replaced after evaluation.
 
-Configuration in `.env.example`:
+Working local configuration (see the complete `.env` example above):
 
-| Variable | Default | Meaning |
+| Variable | Local value | Meaning |
 | --- | --- | --- |
-| DB_HOST | localhost | PostgreSQL host |
+| DB_HOST | 127.0.0.1 | PostgreSQL host |
 | DB_PORT | 5433 | PostgreSQL port |
 | DB_USERNAME | ourcrowd | PostgreSQL username |
 | DB_PASSWORD | ourcrowd | PostgreSQL password |
 | DB_DATABASE | ourcrowd_press_monitor | PostgreSQL database name |
-| OLLAMA_BASE_URL | http://localhost:11434 | Local Ollama origin; localhost, 127.0.0.1 or [::1] only. |
+| OLLAMA_BASE_URL | http://127.0.0.1:11434 | Local Ollama origin; localhost, 127.0.0.1 or [::1] only. |
 | OLLAMA_MODEL | gemma3:270m | Selected local model; cloud-tagged names rejected. |
 | OLLAMA_TIMEOUT_MS | 60000 | Request/body timeout, integer 1–300000 milliseconds. |
 

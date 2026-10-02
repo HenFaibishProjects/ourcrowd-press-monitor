@@ -99,10 +99,7 @@ ourcrowd-press-monitor/
   frontend/src/app/app.config.ts
   frontend/src/app/app.routes.ts
   frontend/src/app/core/README.md
-  frontend/src/app/features/dashboard/components/README.md
   frontend/src/app/features/dashboard/dashboard.component.ts
-  frontend/src/app/models/README.md
-  frontend/src/app/services/README.md
   frontend/src/index.html
   frontend/src/main.ts
   frontend/src/styles.css
@@ -127,22 +124,22 @@ ourcrowd-press-monitor/
 | frontend/src | Browser bootstrap, document, and styles. |
 | frontend/src/app | Root Angular composition. |
 | frontend/src/app/core | Reserved application-wide infrastructure. |
-| frontend/src/app/models | Reserved typed frontend models. |
-| frontend/src/app/services | Reserved REST clients. |
+| frontend/src/app/models | Typed dashboard and mention response models. |
+| frontend/src/app/services | Typed relative /api REST clients. |
 | frontend/src/app/features | Feature-oriented UI areas. |
-| frontend/src/app/features/dashboard | Minimal routed dashboard shell. |
-| frontend/src/app/features/dashboard/components | Reserved feature-local UI components. |
+| frontend/src/app/features/dashboard | Quarterly coverage dashboard with company filtering. |
+| frontend/src/app/features/dashboard/components | Company article-details drawer. |
 | docs | Architecture and project navigation documentation. |
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
-| `.gitignore` | Excludes dependencies, builds, caches, local .env, SQLite state and logs; .env.example is committed. |
+| `.gitignore` | Excludes dependencies, builds, caches, local .env, legacy database files and logs; .env.example is committed. |
 | `.nvmrc` | Pins the recommended Node runtime. |
 | `README.md` | Setup, migration/database commands, REST contracts, validation/date semantics, seed preparation and tests. |
 | `backend/nest-cli.json` | Nest CLI source and clean-build settings. |
-| `backend/package.json` | Nest, TypeORM, SQLite and validation dependencies; development/build/production/test/db:init/company preparation/import scripts. |
+| `backend/package.json` | Nest, TypeORM, PostgreSQL and validation dependencies; development/build/production/test/db:init/company preparation/import scripts. |
 | `backend/src/alerts/alerts.module.ts` | Registers the console adapter and ALERT_SERVICE token; no controller. |
 | `backend/src/app.module.ts` | Composes features, TypeORM initialization/migrations, health and production Angular static serving. |
 | `backend/src/collection/collection.module.ts` | Composes feature services and provider tokens for the shared sequential collection pipeline. |
@@ -159,22 +156,19 @@ ourcrowd-press-monitor/
 | `backend/src/sentiment/sentiment.module.ts` | Registers the local adapter and SentimentClassifier token; no HTTP controller or automatic processing. |
 | `backend/tsconfig.build.json` | Build-specific TypeScript exclusions. |
 | `backend/tsconfig.json` | Strict TypeScript, decorator metadata, CommonJS output, and source maps. |
-| `docs/ARCHITECTURE.md` | Current persistence/API architecture, SQLite schema/trade-offs, derived data, future diagrams, runtime modes and deferred integrations. |
+| `docs/ARCHITECTURE.md` | Current persistence/API architecture, PostgreSQL schema/trade-offs, derived data, future diagrams, runtime modes and deferred integrations. |
 | `docs/PROJECT_STRUCTURE.md` | This complete file and folder map. |
 | `frontend/angular.json` | Angular CLI browser build, production budgets, independent dev server, and proxy configuration. |
 | `frontend/package.json` | Angular dependencies and dev/build/template-typecheck scripts; TypeScript 6.0. |
 | `frontend/proxy.conf.json` | Forwards /api and descendants to localhost:3000 during development. |
 | `frontend/src/app/app.component.ts` | Root shell containing the router outlet. |
 | `frontend/src/app/app.config.ts` | Registers router and HttpClient providers; makes no API calls. |
-| `frontend/src/app/app.routes.ts` | Lazily loads the dashboard shell at the root route. |
+| `frontend/src/app/app.routes.ts` | Lazily loads the dashboard at the root route. |
 | `frontend/src/app/core/README.md` | Reserved application-wide providers and HTTP infrastructure. |
-| `frontend/src/app/features/dashboard/components/README.md` | Reserved dashboard presentation components; no fake UI datasets. |
-| `frontend/src/app/features/dashboard/dashboard.component.ts` | Displays only Press Mentions Monitoring. |
-| `frontend/src/app/models/README.md` | Reserved future typed models; no domain data yet. |
-| `frontend/src/app/services/README.md` | Reserved future REST clients and relative /api URL convention. |
+| `frontend/src/app/features/dashboard/dashboard.component.ts` | Loads quarterly dashboard data, summary counts, company filters and the details drawer. |
 | `frontend/src/index.html` | Browser document, title, viewport, base URL, and Angular host element. |
 | `frontend/src/main.ts` | Bootstraps the standalone Angular application. |
-| `frontend/src/styles.css` | Minimal page spacing and typography. |
+| `frontend/src/styles.css` | Shared dashboard typography, sentiment colors and accessible controls. |
 | `frontend/tsconfig.app.json` | Application-specific compiler inputs and output settings. |
 | `frontend/tsconfig.json` | Strict frontend TypeScript and Angular template checks. |
 | `package-lock.json` | Locks the resolved dependency tree for reproducible npm ci installs. |
@@ -185,7 +179,7 @@ ourcrowd-press-monitor/
 | File | Purpose |
 | --- | --- |
 | `backend/src/common/company-id.dto.ts` | Validates canonical positive integer route IDs and rejects unsafe numbers. |
-| `backend/src/common/dates.ts` | Strict calendar/timestamp validation, UTC date bounds, SQLite datetime conversion and elapsed-day calculation. |
+| `backend/src/common/dates.ts` | Strict calendar/timestamp validation, UTC date bounds, elapsed-day calculation. |
 | `backend/src/common/validation.ts` | Reusable global ValidationPipe configuration, also used by HTTP tests. |
 | `backend/src/companies/company.entity.ts` | Company fields, optional domain/sector, required-name constraint and timestamps. |
 | `backend/src/companies/companies.repository.ts` | TypeORM company reads and conservative transactional seed import. |
@@ -204,19 +198,19 @@ ourcrowd-press-monitor/
 | `backend/src/dashboard/dashboard.repository.ts` | One aggregate read query for quarter counts and all-time latest publication. |
 | `backend/src/dashboard/dashboard.service.ts` | Derives timestamps and elapsed days; accepts controlled evaluation time for deterministic export/tests. |
 | `backend/src/dashboard/dashboard.controller.ts` | Read-only GET dashboard endpoint. |
-| `backend/src/database/database.config.ts` | SQLite path resolution, directory creation, registered entities/migrations and disabled synchronization. |
+| `backend/src/database/database.config.ts` | PostgreSQL connection settings, registered entities/migrations and disabled synchronization. |
 | `backend/src/database/initialize.ts` | Standalone initialization command after standard environment loading, using the same migrations as startup. |
 | `backend/src/database/migrations/1790856000000-initial-schema.ts` | Initial companies/mentions schema, FK/check/unique constraints, index and reverse migration. |
 | `backend/test/dates.test.ts` | Quarter/calendar/day-calculation unit tests. |
-| `data/README.md` | Documents ignored local SQLite state and links to the single backend source-data flow. |
+| `data/README.md` | Documents fixtures, cache, and reviewer exports and links to the single backend source-data flow. |
 
-`database/migrations` owns versioned schema changes. `backend/test` contains only database-free unit tests; database integration tests and their bootstrap helpers were removed. `data` holds ignored local SQLite state; `backend/src/data` holds supplied TXT and committed generated JSON. Frontend source files are unchanged.
+`database/migrations` owns versioned schema changes. `backend/test` contains only database-free unit tests; database integration tests and their bootstrap helpers were removed. `data` holds fixtures, ignored cache files, and reviewer exports; `backend/src/data` holds supplied TXT and committed generated JSON. The frontend dashboard reads the existing APIs.
 
 ## Added seed and local classification files
 
 | File | Purpose |
 | --- | --- |
-| `.env.example` | Non-secret SQLite and local Ollama configuration defaults. |
+| `.env.example` | Non-secret PostgreSQL and local Ollama configuration defaults. |
 | `backend/src/config/environment.ts` | Shared standard Nest ConfigModule .env loading for all entry points. |
 | `backend/src/companies/company-seed.ts` | Persistence/structured-source/report contracts, identity normalization, hostname and five-field metadata validation. |
 | `backend/src/companies/company-seed.service.ts` | Reads generated backend JSON, validates metadata, projects name/domain/sector and delegates transactional import. |
@@ -239,7 +233,7 @@ ourcrowd-press-monitor/
 | `backend/src/companies/companies-prepare.cli.ts` | Preparation-only CLI; prints category counts/fallbacks, exits nonzero on errors; no database context. |
 | `backend/test/company-preparation.test.ts` | Isolated parsing, whitespace, duplicate, fallback, metadata, deterministic bytes and path tests. |
 
-The flow is supplied TXT → generated JSON → existing SQLite Company schema. `companies:setup` prepares then uses the current importer/database initialization. No startup seeding, frontend changes or schema changes are added; news/collection integrations are described below.
+The flow is supplied TXT → generated JSON → existing PostgreSQL Company schema. `companies:setup` prepares then uses the current importer/database initialization. No startup seeding, frontend changes or schema changes are added; news/collection integrations are described below.
 
 ## Collection infrastructure files
 
@@ -265,11 +259,11 @@ The flow is supplied TXT → generated JSON → existing SQLite Company schema. 
 | `backend/src/scheduler/daily-run.module.ts` | Daily service composition shared by scheduler/manual CLI, without timer registration. |
 | `backend/src/scheduler/daily.cli.ts` | Executes the daily workflow once without cron; invokes real inference when run manually. |
 | `backend/src/export/data-export.service.ts` | Existing mention/dashboard services to deterministic reviewer JSON at a controlled evaluation time. |
-| `backend/src/export/data-export.cli.ts` | SQLite-only export command with quarter selection and explicit empty-dataset warning. |
+| `backend/src/export/data-export.cli.ts` | PostgreSQL-only export command with quarter selection and explicit empty-dataset warning. |
 | `backend/test/news.test.ts` | Mocked HTTP/provider/cache/config/date/query/URL tests using isolated temporary cache. |
 | `data/output/README.md` | Explains real successful-run output requirements; no fabricated output committed. |
 
-`data/cache/gdelt` is runtime-only, ignored and not listed in the committed tree. `data/output` can hold reviewed real JSON exports after manual verification. Existing .env.example/.gitignore/scripts/lockfile and feature registration/read methods are updated accordingly. Frontend files, supplied TXT/generated company JSON, entities and migrations remain unchanged.
+`data/cache/gdelt` is runtime-only, ignored and not listed in the committed tree. `data/output` can hold reviewed real JSON exports after manual verification. Existing .env.example/.gitignore/scripts/lockfile and feature registration/read methods are updated accordingly. The supplied TXT/generated company JSON, entities and migrations retain their existing roles.
 
 ## File provider and safe test scope
 
@@ -277,7 +271,7 @@ The flow is supplied TXT → generated JSON → existing SQLite Company schema. 
 | --- | --- |
 | `backend/src/news/file-news.provider.ts` | Validates local article records and filters by company and date range without HTTP or database writes. |
 | `backend/src/news/news.module.ts` | Selects file (default) or GDELT from NEWS_PROVIDER, constructing only the selected adapter. |
-| `data/fixtures/demo-news.json` | Empty article array awaiting manually verified real records. |
+| `data/fixtures/demo-news.json` | Five verified BioCatch article records for deterministic 2026-Q3 review. |
 | `data/fixtures/README.md` | Fixture fields, provenance policy and review commands. |
 | `backend/test/file-news.test.ts` | Database-free checks for selection/validation/provider wiring and description-based enrichment. |
 

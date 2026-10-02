@@ -1,13 +1,13 @@
 # Supplied and generated company source
 
-**Generated: `companies.json` comes from `ourcrowd_companies.txt`; do not normally edit JSON manually.** Both are committed. The TXT is authoritative OurCrowd-supplied input and must remain unchanged. JSON is derived structured data; SQLite is its runtime representation.
+**Generated: `companies.json` comes from `ourcrowd_companies.txt`; do not normally edit JSON manually.** Both are committed. The TXT is authoritative OurCrowd-supplied input and must remain unchanged. JSON is derived structured data; PostgreSQL is its runtime representation.
 
 From the repository root:
 
 ```bash
 npm run companies:prepare
 npm run companies
-# Equivalent combined operation (importer initializes SQLite if needed):
+# Equivalent combined operation (importer initializes PostgreSQL if needed):
 npm run companies:setup
 ```
 

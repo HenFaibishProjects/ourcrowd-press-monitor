@@ -1,6 +1,6 @@
 # Local news fixtures
 
-`demo-news.json` is intentionally an empty array. No reliable article records were committed in a GDELT cache or export, so this change does not invent news. Supply real records manually before expecting mentions from the demo pipeline.
+`demo-news.json` contains five real, verified BioCatch news records from 2026-Q3, with descriptions to avoid publisher-page requests. The dataset was used in a successful local end-to-end run: five mentions persisted, all classified POSITIVE. This verifies the pipeline, not model quality; it does not claim the records came from GDELT.
 
 Use a JSON array of objects with these fields:
 
@@ -22,7 +22,7 @@ Set `NEWS_PROVIDER=file` (the default). The default path is repository-relative,
 After configuring PostgreSQL, importing the real company list and starting local Ollama, run:
 
 ```bash
-npm run collect -- --companies=BioCatch --quarter=previous
+npm run collect -- --companies=BioCatch --quarter=2026-Q3
 ```
 
 Use an explicit `--quarter=YYYY-QN` or `--from`/`--to` matching the supplied article dates for a repeatable review after the quarter changes. An empty file or no matching records produces zero articles and zero new mentions. Inference quality and timing still depend on the configured local model; the file makes article selection deterministic.
