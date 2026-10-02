@@ -39,7 +39,9 @@ async function run(): Promise<void> {
       title: values.title,
       description: values.description,
     });
-    console.info(`Sentiment: ${sentiment}`);
+    console.info(
+  `Relevant: ${sentiment.relevant}, Sentiment: ${sentiment.sentiment}`,
+);
   } finally {
     await app.close();
   }
