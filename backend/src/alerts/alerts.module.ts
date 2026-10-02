@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
-
-@Module({})
+import { ALERT_SERVICE } from './alert-service';
+import { ConsoleAlertService } from './console-alert.service';
+@Module({ providers: [ConsoleAlertService, { provide: ALERT_SERVICE, useExisting: ConsoleAlertService }], exports: [ALERT_SERVICE] })
 export class AlertsModule {}

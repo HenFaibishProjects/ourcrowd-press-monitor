@@ -18,6 +18,10 @@ export class MentionsRepository {
     return query.orderBy('mention.publishedAt', 'DESC').addOrderBy('mention.id', 'DESC').getMany();
   }
 
+  findAll(): Promise<Mention[]> {
+    return this.mentions.find({ relations: { company: true }, order: { companyId: 'ASC', publishedAt: 'ASC', id: 'ASC' } });
+  }
+
   exists(companyId: number, url: string): Promise<boolean> {
     return this.mentions.existsBy({ companyId, url });
   }

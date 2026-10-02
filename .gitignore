@@ -10,3 +10,6 @@ dist/
 *.db-*
 *.sqlite
 *.sqlite-*
+
+# Runtime raw GDELT responses
+data/cache/gdelt/

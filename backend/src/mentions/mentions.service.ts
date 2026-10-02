@@ -26,6 +26,8 @@ export class MentionsService {
     return this.mentions.findByCompany(companyId, filter);
   }
 
+  findAll(): Promise<Mention[]> { return this.mentions.findAll(); }
+
   exists(companyId: number, url: string): Promise<boolean> {
     return this.mentions.exists(companyId, url);
   }

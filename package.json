@@ -22,7 +22,15 @@
     "sentiment:test": "npm run sentiment --",
     "db": "npm run db:init",
     "companies:prepare": "npm run companies:prepare --workspace backend",
-    "companies:setup": "npm run companies:prepare && npm run companies"
+    "companies:setup": "npm run companies:prepare && npm run companies",
+    "news": "npm run news --workspace backend --",
+    "news:dev": "npm run news -- --companies=SpaceX,BioCatch,ZutaCore",
+    "news:dev:refresh": "npm run news:dev -- --refresh",
+    "collect": "npm run collect --workspace backend --",
+    "collect:dev": "npm run collect -- --companies=SpaceX,BioCatch,ZutaCore",
+    "collect:all": "npm run collect -- --all --live",
+    "daily:run": "npm run daily:run --workspace backend --",
+    "data:export": "npm run data:export --workspace backend --"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

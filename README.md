@@ -1,6 +1,6 @@
 # OurCrowd Press Monitor
 
-NestJS modular monolith with SQLite/TypeORM and a minimal Angular title shell. Current scope: company/mention persistence, read-only REST APIs, a company seed importer and an independently testable local sentiment classifier. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
+NestJS modular monolith with SQLite/TypeORM and a minimal Angular title shell. Current scope: persistence/read-only REST APIs, real company import, GDELT discovery/cache, sequential collection, local sentiment classification, console alerts, disabled-by-default daily scheduling and export commands. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
 
 Use Node 24.19 (`nvm use` if available). From the repository root:
 
@@ -86,7 +86,7 @@ type DashboardResponse = {
 };
 ```
 
-Dates accept real YYYY-MM-DD values or ISO timestamps with an explicit timezone. Date-only bounds use UTC; `to=2026-09-30` includes September 30 using October 1 as an exclusive boundary. Timestamp `to` is inclusive. Quarter ranges are start-inclusive/end-exclusive. Invalid IDs, calendar dates, ranges, sentiment, quarter, repeated values or unknown query parameters return 400 through standard NestJS exceptions. Missing companies return 404. No external write endpoints exist; the future collection pipeline will call MentionsService internally. Duplicate internal company/URL writes produce ConflictException.
+Dates accept real YYYY-MM-DD values or ISO timestamps with an explicit timezone. Date-only bounds use UTC; `to=2026-09-30` includes September 30 using October 1 as an exclusive boundary. Timestamp `to` is inclusive. Quarter ranges are start-inclusive/end-exclusive. Invalid IDs, calendar dates, ranges, sentiment, quarter, repeated values or unknown query parameters return 400 through standard NestJS exceptions. Missing companies return 404. No external write endpoints exist; the collection pipeline calls MentionsService internally. Duplicate internal company/URL writes produce ConflictException.
 
 Dashboard counts and days are derived at request time, not persisted. lastMentionedAt is the latest publishedAt across all time, independently of the selected quarter. Days mean elapsed full 24-hour periods, clamped to zero for future-dated publications. Never-mentioned companies get null lastMentionedAt/null daysSinceLastMention and zero counts.
 
@@ -115,7 +115,7 @@ A plain name stays unchanged. One clean trailing parenthetical becomes an explic
 
 Structured input requires exactly all five fields, valid non-blank name/rawName, nullable domain/sector and string-array aliases. All strings are trimmed, domains lowercased, and blank optional strings are rejected (use null). Aliases must be non-blank, case-insensitively unique within the record and different from its primary name. Duplicate normalized names or domains fail explicitly; preparation does not drop duplicate lines.
 
-CompanySeedService validates the whole file, then passes **only name/domain/sector** to the existing transactional CompaniesRepository. Neither rawName nor aliases is persisted; no schema change is needed. Primary name and explicit domain may later identify/disambiguate search results, and aliases retain only supplied names for future NewsProvider search/relevance. Search itself is not implemented.
+CompanySeedService validates the whole file, then passes **only name/domain/sector** to the existing transactional CompaniesRepository. Neither rawName nor aliases is persisted; no schema change is needed. Primary name and explicit domain may later identify/disambiguate search results, and aliases retain only supplied names for future NewsProvider search/relevance. The news search selector uses primary names or explicit expanded acronym aliases; semantic relevance filtering remains deferred.
 
 Matching first uses an exact normalized domain when supplied, otherwise an exact trimmed, case-insensitive name. No fuzzy matching or www stripping. If domain and name point to different rows, several rows match, or two input records target one company, the entire import rolls back. A name-only match may acquire a missing domain but cannot replace a different non-empty domain. A unique domain match may update the display name. Required null domain/sector values clear those fields; provided values update them. Repeating an unchanged file reports `unchanged` without duplicating rows or updating timestamps. Reports include `inserted`, `updated`, and `unchanged`. Absent companies are never deleted; run one importer at a time.
 
@@ -182,13 +182,118 @@ The user prompt is a JSON-encoded object containing `companyName`, `title`, and 
 
 Invalid input produces BadRequestException (400); invalid configuration produces InternalServerErrorException (500); unavailable/connection failure produces ServiceUnavailableException (503); timeout produces GatewayTimeoutException (504); non-2xx HTTP, malformed envelopes or invalid model output produces BadGatewayException (502). These are internal Nest exceptions; CLI failures print the message and return exit code 1. No sentiment HTTP endpoint is added.
 
-No news, RSS, scraping, collection, scheduled jobs, alert delivery, automatic record classification or UI changes exist.
+Collection calls the classifier only for new URLs. Existing Mention records are not automatically reclassified. Scheduled collection is disabled by default. No RSS, scraping, hosted AI, email/Slack delivery or Angular dashboard functionality is added.
+
+## News discovery with GDELT
+
+GDELT DOC 2.0 is the first NewsProvider: public JSON news discovery with no API key, exact-phrase queries and explicit date ranges. GET `https://api.gdeltproject.org/api/v2/doc/doc` sends:
+
+```text
+query="BioCatch"
+mode=ArtList
+format=json
+sort=DateDesc
+maxrecords=250
+startdatetime=YYYYMMDDHHMMSS
+enddatetime=YYYYMMDDHHMMSS
+```
+
+Dates are UTC. Returned seendate is mapped into the current Mention publishedAt field; it may represent GDELT observation/indexing, **not a publisher-authoritative publication timestamp**. Source is the article URL hostname. Description is null because no excerpt is guaranteed; pages are not scraped. GDELT tone is ignored: only local Ollama supplies domain sentiment.
+
+The default query is the primary company name in double quotes. A 2–6-letter uppercase acronym with one explicit multiword expanded alias uses that alias (SSI → Safe Superintelligence). Former aliases are never automatically searched (Ludeo remains Ludeo, not Edge). This is a deterministic selection rule, not semantic relevance/fuzzy matching. Generic names can still produce false positives, and titles alone may not reveal why an article matched. Any later semantic relevance model must remain local Ollama.
+
+Limitations: public API downtime/rate limiting, at most 250 articles per query/range (a warning is emitted at the cap), no automatic result pagination/time slicing, imperfect discovery coverage, uncertain publication timestamps, absent excerpts and stale cache. Historical range acceptance must be verified against the live endpoint. GDELT's documentation has changed over time; ArtList has documented restrictions to the latest three months of a requested window. A requested quarter is not a guarantee of exhaustive quarterly coverage. Use narrower explicit ranges when inspecting coverage; nothing silently substitutes a different quarter or fabricated data.
+
+### Development cache and resilience
+
+`data/cache/gdelt/` is runtime-only and ignored by git. A SHA-256 key of the complete encoded request URL distinguishes query, endpoint, parameters and date range. Entries retain company/query, from/to, request URL, fetchedAt and the actual raw response text. They are reparsed on every read.
+
+- Default cached mode: use an existing entry; otherwise fetch, validate, cache and return.
+- `--refresh`: fetch and replace the entry.
+- `--live`: bypass cache reads/writes.
+
+Corrupt cache fails clearly and asks for refresh; malformed provider envelopes are not cached. Individual invalid articles are skipped/reported. The timeout includes response-body reading. Requests are sequential in the workflows, with configurable minimum start spacing. Only HTTP 429/5xx retry, at most GDELT_MAX_RETRIES (0–3). Retry-After is honored up to 60 seconds; larger requested waits surface an error asking to retry later. Permanent 4xx, malformed responses, connection failures and timeouts do not retry. No general retry/cache framework.
+
+| Variable | Default |
+| --- | --- |
+| GDELT_BASE_URL | https://api.gdeltproject.org/api/v2/doc/doc |
+| GDELT_TIMEOUT_MS | 30000 |
+| GDELT_REQUEST_DELAY_MS | 1000 |
+| GDELT_MAX_RETRIES | 2 |
+| GDELT_CACHE_PATH | data/cache/gdelt |
+
+### Manual verification workflow
+
+All 258 companies stay in the same real companies table. Development scopes the same services to **SpaceX, BioCatch, ZutaCore**, without a test table or fake company data. Generic commands require explicit `--companies=Name,Name` or `--all`; the default range is the previous completed UTC quarter. `--quarter=previous`, `--quarter=current`, `--quarter=YYYY-QN`, or paired `--from`/`--to` are supported. Quarter and explicit range arguments cannot be combined. Current-quarter end is clipped to now. Date-only `to` includes its UTC day using next midnight; timestamp `to` is exclusive. Future ranges, invalid dates and repeated/unknown options fail. GDELT ranges must span at least 15 minutes.
+
+Run these manually in order:
+
+```bash
+npm run companies:setup
+npm run news:dev
+# Refetch the same three-company request set if desired:
+npm run news:dev:refresh
+# Or one company / narrower explicit range:
+npm run news -- --companies=BioCatch --quarter=previous
+npm run news -- --companies=BioCatch --from=2026-09-01 --to=2026-09-30 --live
+```
+
+News-only commands print query/range, cache status, article count, skipped invalid count, cap warning and at most three title/URL previews. They load no SentimentModule and write no Mention rows. They may initialize the existing database schema. Once news is verified, start/pull local Ollama as documented above, then continue manually:
+
+```bash
+npm run sentiment:test -- --company 'BioCatch' --title 'BioCatch announces a product update'
+npm run collect:dev
+# Inspect APIs/SQLite and then run all companies:
+npm run collect:all
+npm run data:export
+```
+
+The implementation phase does **not** execute sentiment:test, collect:dev, collect:all or daily:run. These are the developer's next runtime checks. Generic collection is available through `npm run collect -- --companies=BioCatch --quarter=previous --refresh`. collect:dev allows cached news; collect:all uses all tracked companies with live news and the previous completed quarter by default. All use the same CollectionService, real configured classifier, persistence and console alert.
+
+### Collection, failure handling and alerts
+
+Select companies → NewsProvider → validate/normalize/deduplicate results → check stored company/URL → classify new articles sequentially → MentionsService.create → one console alert for newly persisted mentions.
+
+URL normalization trims, canonicalizes hostname casing, removes fragments and known utm_source/medium/campaign/term/content, fbclid and gclid trackers. Remaining query bytes/order, path and HTTP versus HTTPS are retained. No arbitrary query parameter removal, redirects, URL fetching, www stripping or publisher-specific canonicalization. Deduplication precedes Ollama; the composite database unique constraint remains authoritative for races. The same article can still be stored/classified separately for different companies. Older stored URLs are not rewritten by this stage; they may need a deliberate migration if they contain tracking parameters.
+
+Provider failure for one company is reported and processing continues; global invalid configuration aborts. Bad individual articles and malformed classifier output are recorded/skipped. Ollama connection/unavailable or invalid configuration aborts immediately; two consecutive timeouts abort, while a successful classification resets the timeout counter. Failures never become NEUTRAL. Already persisted mentions remain durable, including a partial aborted run. A duplicate persistence race counts as skipped; other persistence errors are reported. A failed existence check aborts because deduplication can no longer be trusted.
+
+The result reports attempted companies, provider-failed companies, fetched valid mapped articles, invalid rows/articles skipped, duplicates, classification failures, inserts, capped company names, aborted flag and staged errors. Errors/abort yield CLI exit code 1. Alerts run once after persistence, only when new mentions exist; their failures are reported without rolling back data. Console alerts include count, company, title, source, date, sentiment and URL. AlertService can support another channel later; no email/Slack/webhook integration is introduced.
+
+### Daily workflow
+
+NestJS scheduling registers no daily timer unless enabled. Defaults:
+
+```dotenv
+DAILY_COLLECTION_ENABLED=false
+DAILY_COLLECTION_CRON=0 8 * * *
+DAILY_COLLECTION_TIMEZONE=Asia/Jerusalem
+DAILY_COLLECTION_LOOKBACK_HOURS=48
+```
+
+To enable, set DAILY_COLLECTION_ENABLED=true in `.env` and restart the application. Cron/timezone/lookback are validated. The job runs once daily by default, uses all tracked companies and the recent rolling lookback with live news (no stale development cache). Overlapping scheduled/manual invocations within the same service instance are skipped with a log message. Overlapping lookbacks are safe through per-company URL uniqueness. This is a single-process application; no distributed lock exists, so do not run simultaneous manual and scheduled processes or multiple scheduler-enabled replicas.
+
+`npm run daily:run` invokes that same daily service once, even with scheduling disabled; it never starts a cron timer. It invokes real inference, so leave it for the manual phase. Startup with the default disabled setting makes no GDELT/Ollama request.
+
+### Reviewer output export
+
+`npm run data:export` reads SQLite only and writes `data/output/mentions.json` and `data/output/company-status.json`. Mentions include company, title, source, URL, timestamp and sentiment; status includes every company with all-time latest mention/elapsed days and requested-quarter counts. It reuses DashboardService rather than duplicating aggregation. Default export quarter is previous; override with `-- --quarter=YYYY-QN` or current/previous.
+
+Output is ordered and pretty JSON, stable for the same DB/quarter/evaluation time. Days are derived and naturally change as time passes. An empty export is explicitly identified as empty, not a successful assignment dataset. No output files are fabricated during implementation. After successful real collection, inspect and commit these files for reviewers. See [data/output/README.md](data/output/README.md).
 
 ## Tests and verification
 
-`npm test` uses Node's test runner and ts-node. Focused tests cover quarter parsing/boundaries/invalid inputs; elapsed days; calendar validation; migration idempotence; missing-company 404s; HTTP query validation; per-company URL uniqueness; dashboard quarter versus all-time behavior; empty/no-mention companies; and mention filtering/order. Company tests cover TXT parsing, fallback, duplicate rejection, byte preservation, deterministic output, source paths, structured validation, metadata projection, importer idempotence/updates/ambiguity/rollback and all three classifier values, request schema, malformed output, HTTP failure, connection failure, timeout, input/configuration rejection. HTTP is mocked in tests; npm test never requires Ollama.
+`npm test` uses Node's test runner and ts-node. Tests cover the original dates/schema/REST/importer/classifier behavior plus GDELT mapping/encoding/ranges/HTTP failures/retries/timeouts, raw cache modes, URL identity, selection, collection dedup-before-classification, per-company URL sharing, sequential inference, partial failures/aborts/alerts, scheduler disabled/overlap behavior, exports and root script forwarding. They use mocked HTTP/inference and isolated in-memory SQLite; test fixtures never populate runtime data. Date-sensitive logic accepts controlled evaluation times.
 
-After initialization/build, `npm run start` can be checked with:
+```bash
+npm run typecheck
+npm test
+npm run build
+npm run companies:prepare
+npm run companies
+```
+
+After build, default disabled scheduling can be checked with `npm run start` and these read endpoints:
 
 ```bash
 curl http://localhost:3000/api/health
@@ -196,8 +301,10 @@ curl http://localhost:3000/api/companies
 curl 'http://localhost:3000/api/dashboard?quarter=2026-Q3'
 ```
 
-See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for schema/ownership/runtime decisions and future diagrams, and [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for the file map.
+No Angular dashboard work, scraping/RSS, hosted inference, queues, additional company tables, schema changes, SMTP/Slack, authentication or microservices were added. Real GDELT availability, local inference and classification quality require manual verification.
 
-Real local inference could not be verified in this execution environment: no Ollama binary was installed and port 11434 refused connections. Automated HTTP-boundary tests and the real CLI unavailable/error path are verified; run the manual command above after starting your local Ollama server. Model quality remains unvalidated.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md) and [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
-Ollama references: [API generate](https://docs.ollama.com/api/generate), [local-only configuration](https://docs.ollama.com/faq#how-do-i-disable-ollama-cloud-features), [default model](https://ollama.com/library/gemma3:270m).
+References: [GDELT DOC parameters](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/), [GDELT search-window update](https://blog.gdeltproject.org/doc-2-0-updates-1-5-year-searching-and-updated-mobile-interface/), [NestJS scheduling](https://docs.nestjs.com/application/task-scheduling), [Ollama generate](https://docs.ollama.com/api/generate).
+
+Implementation verification: type checking, 54 automated tests, backend/frontend builds, company preparation and idempotent import passed (258 unchanged). Production startup with scheduling disabled and outbound fetch forbidden served health/companies/dashboard without GDELT/Ollama calls. One actual BioCatch news-only live request was attempted with timeout=5000ms and retries=0; it timed out. No live articles were verified, no Mention rows were written, and no output dataset was fabricated. Real local Ollama and collection remain intentionally unexecuted.

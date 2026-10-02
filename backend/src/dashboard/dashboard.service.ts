@@ -8,8 +8,7 @@ import { parseQuarter } from './quarter';
 export class DashboardService {
   constructor(private readonly dashboard: DashboardRepository) {}
 
-  async getDashboard(quarter?: string): Promise<DashboardResponse> {
-    const now = new Date();
+  async getDashboard(quarter?: string, now = new Date()): Promise<DashboardResponse> {
     const range = parseQuarter(quarter, now);
     const rows = await this.dashboard.summarize(range.start, range.end);
     return {

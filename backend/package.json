@@ -11,18 +11,24 @@
     "db:init": "npm run build && node dist/database/initialize.js",
     "companies": "ts-node src/companies/companies.cli.ts",
     "sentiment": "ts-node src/sentiment/sentiment.cli.ts",
-    "companies:prepare": "ts-node src/companies/companies-prepare.cli.ts"
+    "companies:prepare": "ts-node src/companies/companies-prepare.cli.ts",
+    "news": "ts-node src/news/news.cli.ts",
+    "collect": "ts-node src/collection/collection.cli.ts",
+    "daily:run": "ts-node src/scheduler/daily.cli.ts",
+    "data:export": "ts-node src/export/data-export.cli.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/schedule": "^12.0.2",
     "@nestjs/serve-static": "^5.0.0",
     "@nestjs/typeorm": "^11.0.3",
     "better-sqlite3": "^12.11.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "cron": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "typeorm": "^0.3.31"
