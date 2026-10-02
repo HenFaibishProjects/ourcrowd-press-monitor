@@ -43,23 +43,33 @@ The backend is a NestJS modular monolith. The frontend is Angular. PostgreSQL is
 
 ## Quick start
 
-### Requirements
+You will need Node.js 24.19, npm 10 or newer, Docker / Docker Compose, and Ollama.
 
-You will need:
+Create a root `.env` using the configuration below. Make sure the local Ollama server is running: the desktop application may already provide it; otherwise run `ollama serve` in a separate terminal.
 
-- Node.js 24.15 or newer
-- npm 10 or newer
-- Docker / Docker Compose
-- Ollama
-
-From the repository root:
+From the repository root, the recommended deterministic review path is:
 
 ```bash
 npm install
 docker compose up -d
+npm run db
+npm run companies:setup
+ollama pull gemma3:270m
+npm run collect -- --companies=BioCatch --quarter=2026-Q3
+npm run data:export -- --quarter=2026-Q3
+npm run dev
 ```
 
-Create a root `.env` file with the following values:
+Company setup imports the supplied list, currently 258 companies. The fixed quarter matches the committed demo records, so the review does not change when the current quarter changes. Exported JSON is written under `data/output/`.
+
+- Angular: [http://localhost:4200](http://localhost:4200)
+- Swagger: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- Dashboard API: [http://localhost:3000/api/dashboard?quarter=2026-Q3](http://localhost:3000/api/dashboard?quarter=2026-Q3)
+- Health: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+
+## Local `.env` used during development
+
+`.env` itself is intentionally not committed. This is the local configuration used for the working setup. The credentials below are for the local development database.
 
 ```dotenv
 DB_HOST=127.0.0.1
@@ -72,12 +82,9 @@ OLLAMA_BASE_URL=http://127.0.0.1:11434
 OLLAMA_MODEL=gemma3:270m
 OLLAMA_TIMEOUT_MS=60000
 
-NEWS_PROVIDER=file
-NEWS_FIXTURE_PATH=data/fixtures/demo-news.json
-
 GDELT_BASE_URL=https://api.gdeltproject.org/api/v2/doc/doc
 GDELT_TIMEOUT_MS=30000
-GDELT_REQUEST_DELAY_MS=7000
+GDELT_REQUEST_DELAY_MS=9000
 GDELT_MAX_RETRIES=2
 GDELT_CACHE_PATH=data/cache/gdelt
 
@@ -85,61 +92,45 @@ DAILY_COLLECTION_ENABLED=false
 DAILY_COLLECTION_CRON=0 8 * * *
 DAILY_COLLECTION_TIMEZONE=Asia/Jerusalem
 DAILY_COLLECTION_LOOKBACK_HOURS=48
+
+TEST_DB_HOST=127.0.0.1
+TEST_DB_PORT=5433
+TEST_DB_USERNAME=ourcrowd
+TEST_DB_PASSWORD=ourcrowd
+TEST_DB_DATABASE=ourcrowd_press_monitor_test
+
+NEWS_PROVIDER=file
+NEWS_FIXTURE_PATH=data/fixtures/demo-news.json
 ```
 
-Initialize the database and import the supplied company list:
+The `TEST_DB_*` entries are legacy local values. Current code does not consume them, and they are not required for normal application startup or `npm test`. The old destructive database integration tests and their bootstrap helpers were removed from the normal test setup. The current command runs database-free unit tests; reviewers do not need to create a test database.
 
-```bash
-npm run db
-npm run companies:setup
-```
+## Why the demo news file exists
 
-The supplied list currently produces 258 companies.
+GDELT is the original live provider. It was tested against the real public endpoint during development. Those runs repeatedly returned HTTP 429 rate-limit responses and occasionally failed because the service was temporarily unavailable.
 
-Start Ollama. Depending on the installation, the Ollama desktop application may already be running the local server. Otherwise:
+The goal of the take-home is to demonstrate the application and its data-processing flow, without making the reviewer depend on a third-party public service being available at that exact moment. A deterministic file-based provider was added for local review and demos. This is a scope and reliability decision, with the live-provider limitation documented openly.
 
-```bash
-ollama serve
-```
+`data/fixtures/demo-news.json` contains a small BioCatch dataset of real, verified news records, rather than invented articles. The data is not inserted directly into PostgreSQL. It enters through the existing `NewsProvider` abstraction and follows the same real application flow:
 
-Pull the small local model used by default:
+`FileNewsProvider` → `CollectionService` → normalization/deduplication → local Ollama relevance + sentiment → PostgreSQL → dashboard/API → alerts.
 
-```bash
-ollama pull gemma3:270m
-```
+Only the discovery source is deterministic. The rest of the pipeline remains real. Descriptions are included in the demo records so review does not depend on publisher websites allowing page fetching or scraping.
 
-Start the application:
+With `NEWS_PROVIDER=file`, the collection command above calls neither GDELT nor publisher websites for the supplied demo records. It still calls local Ollama and writes new mentions to the configured PostgreSQL database.
 
-```bash
-npm run dev
-```
+`NEWS_PROVIDER=file` is intentionally the default for a predictable reviewer experience. GDELT remains available: set `NEWS_PROVIDER=gdelt` in `.env` or the process environment, then run the same collection command to use live discovery. Provider selection is separate from the GDELT cache flags `--live` and `--refresh`.
 
-Default addresses:
+### Verified local end-to-end run
 
-```text
-Angular:  http://localhost:4200
-Backend:  http://localhost:3000
-Swagger:  http://localhost:3000/api/docs
-Health:   http://localhost:3000/api/health
-```
+The committed BioCatch dataset was successfully used in a local run for `2026-Q3`:
 
----
+- 5 BioCatch articles selected
+- 5 mentions persisted
+- 5 classified as `POSITIVE`
+- dashboard returned BioCatch with `total=5` and `positive=5`
 
-## Local review without public news availability
-
-The default is `NEWS_PROVIDER=file`. Add manually verified article records with useful descriptions to `data/fixtures/demo-news.json`, following [the fixture format](data/fixtures/README.md). The committed file is empty because the repository contains no reliable real article records to reuse. This path will select zero articles until records are supplied; it is not a pre-populated demo.
-
-Then run the existing command:
-
-```bash
-npm run collect -- --companies=BioCatch --quarter=previous
-```
-
-The same `CollectionService` performs normalization, deduplication, real local Ollama relevance/sentiment, PostgreSQL persistence and alerts. Supplied non-empty descriptions avoid publisher-page HTTP requests. `NEWS_PROVIDER=file` never calls GDELT, even when `--live` or `--refresh` is passed. Use a fixed quarter matching the fixture dates for reviews in a later quarter.
-
-For actual live discovery, set `NEWS_PROVIDER=gdelt` in `.env` or the process environment. Real public-endpoint testing encountered HTTP 429 and temporary availability problems, which is why review does not depend on that provider by default. No fixture record is claimed to come from GDELT.
-
-`npm test` runs only an explicit database-free unit-test list. Database integration tests and destructive bootstrap helpers were removed; no test database creation or verification command is required.
+This verifies the end-to-end path, not model quality. Quality evaluation still needs real collected mentions and manual spot checking. Repeating the command skips already-stored company/URL pairs rather than inserting the same five mentions again. Dashboard totals can differ if your database already contains other BioCatch mentions for that quarter.
 
 ---
 
@@ -152,7 +143,7 @@ I kept the external integrations easy to test separately. This made it possible 
 This uses the selected news provider, without Ollama or Mention writes. Set `NEWS_PROVIDER=gdelt` explicitly if you want to call GDELT:
 
 ```bash
-npm run news -- --companies=BioCatch --quarter=previous --live
+npm run news -- --companies=BioCatch --quarter=2026-Q3 --live
 ```
 
 There are also development helpers for a small real-company scope:
@@ -181,7 +172,7 @@ npm run sentiment:test -- --company "BioCatch" --title "BioCatch announces new f
 ### Run the real collection flow for one company
 
 ```bash
-npm run collect -- --companies=BioCatch --quarter=previous --live
+npm run collect -- --companies=BioCatch --quarter=2026-Q3 --live
 ```
 
 ### Run the small development collection
@@ -203,7 +194,7 @@ I would only use the full command when needed. More on that in the rate-limit se
 After a successful collection:
 
 ```bash
-npm run data:export
+npm run data:export -- --quarter=2026-Q3
 ```
 
 The export writes reviewer-friendly JSON under:
@@ -239,7 +230,7 @@ The main point was to keep the code easy to follow from top to bottom.
 
 ## Why PostgreSQL
 
-The assignment allows either files or a lightweight database. I chose PostgreSQL instead of SQLite because the data naturally has relationships and constraints that are useful here.
+The assignment allows either files or a lightweight database. I chose PostgreSQL because the data naturally has relationships and constraints that are useful here.
 
 For example:
 
@@ -266,8 +257,6 @@ PostgreSQL also made sense for:
 - a setup that is still simple to run locally with Docker
 - staying reasonably close to how I would store this data in a real service
 
-SQLite would have been quicker for the first few hours of the task, but PostgreSQL gives the project a more realistic persistence layer without making local setup difficult.
-
 The database runs in Docker and is exposed on host port `5433` so it does not conflict with a common local PostgreSQL installation on `5432`.
 
 ---
@@ -286,7 +275,7 @@ GDELT provides:
 
 The tradeoff is that it is a public service, so it needs to be treated politely.
 
-During live testing, GDELT returned HTTP 429 and explicitly requested that calls be spaced at least five seconds apart. The application therefore uses a safer default spacing of seven seconds and has bounded retry handling for rate limits and temporary server failures.
+During live testing, GDELT returned HTTP 429 and explicitly requested that calls be spaced at least five seconds apart. The working local configuration spaces requests nine seconds apart and uses bounded retries for rate limits and temporary server failures.
 
 The raw GDELT response can also be cached locally during development, so repeating the same test does not need to hit the public service again.
 
@@ -498,7 +487,7 @@ I also used single-company live tests when debugging GDELT behavior.
 
 This was enough to verify that live news discovery works. For example, a live BioCatch quarterly search returned real candidate articles.
 
-The public GDELT endpoint asked for at least five seconds between requests during testing, so the project currently uses seven seconds as a safer default.
+The public GDELT endpoint asked for at least five seconds between requests during testing, so the working local configuration uses nine seconds between requests.
 
 With 258 companies, even the news-discovery part of a full live run has a meaningful minimum runtime before article enrichment and local LLM inference are added.
 
@@ -706,7 +695,6 @@ There are places where a smaller implementation would have been possible.
 
 For example:
 
-- SQLite would have been quicker than PostgreSQL.
 - Express would have required less framework setup than NestJS.
 - title-only classification would have avoided article enrichment.
 - a larger Ollama model might improve some classifications.
@@ -719,42 +707,4 @@ Where I found a real issue during runtime testing, I preferred to make the behav
 
 # Suggested review path
 
-For a quick review, I would use this order:
-
-```bash
-docker compose up -d
-npm install
-npm run db
-npm run companies:setup
-ollama pull gemma3:270m
-npm run dev
-```
-
-Then check:
-
-```text
-http://localhost:3000/api/docs
-http://localhost:3000/api/companies
-```
-
-First supply verified fixture records with descriptions. For the local path, inspect the selected file provider and then check Ollama independently. Set `NEWS_PROVIDER=gdelt` only when intentionally testing live discovery:
-
-```bash
-npm run news -- --companies=BioCatch --quarter=previous --live
-
-npm run sentiment:test -- --company "BioCatch" --title "BioCatch announces new fraud prevention technology"
-```
-
-Finally, run the actual pipeline for one company:
-
-```bash
-npm run collect -- --companies=BioCatch --quarter=previous --live
-```
-
-After a successful collection:
-
-```bash
-npm run data:export
-```
-
-That path exercises the project without immediately running a large 258-company live collection.
+Follow the fixed-quarter commands in [Quick start](#quick-start), then inspect Swagger and the `2026-Q3` dashboard response. That path uses the committed BioCatch records and exercises local inference, persistence, dashboard aggregation and alerts without starting a full-company live collection.
