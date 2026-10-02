@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "company": {
+      "id": 1,
+      "name": "Test company A"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/shared",
+    "publishedAt": "2026-07-01T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T11:29:00.394Z"
+  },
+  {
+    "id": 3,
+    "company": {
+      "id": 2,
+      "name": "Test company B"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/shared",
+    "publishedAt": "2026-07-01T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T11:29:00.404Z"
+  },
+  {
+    "id": 4,
+    "company": {
+      "id": 3,
+      "name": "Test company C"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/2026-06-30T23:59:59.999Z",
+    "publishedAt": "2026-06-30T23:59:59.999Z",
+    "sentiment": "NEGATIVE",
+    "discoveredAt": "2026-10-02T11:29:00.426Z"
+  },
+  {
+    "id": 5,
+    "company": {
+      "id": 3,
+      "name": "Test company C"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/2026-07-01T00:00:00Z",
+    "publishedAt": "2026-07-01T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T11:29:00.431Z"
+  },
+  {
+    "id": 6,
+    "company": {
+      "id": 3,
+      "name": "Test company C"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/2026-09-30T23:59:59.999Z",
+    "publishedAt": "2026-09-30T23:59:59.999Z",
+    "sentiment": "NEUTRAL",
+    "discoveredAt": "2026-10-02T11:29:00.436Z"
+  },
+  {
+    "id": 7,
+    "company": {
+      "id": 3,
+      "name": "Test company C"
+    },
+    "title": "Isolated test fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/2026-10-01T00:00:00Z",
+    "publishedAt": "2026-10-01T00:00:00.000Z",
+    "sentiment": "NEGATIVE",
+    "discoveredAt": "2026-10-02T11:29:00.444Z"
+  },
+  {
+    "id": 8,
+    "company": {
+      "id": 5,
+      "name": "Test final supported year"
+    },
+    "title": "Isolated boundary fixture",
+    "description": null,
+    "source": "Test",
+    "url": "https://test.invalid/final-year",
+    "publishedAt": "9999-12-31T23:59:59.999Z",
+    "sentiment": "NEUTRAL",
+    "discoveredAt": "2026-10-02T11:29:00.483Z"
+  },
+  {
+    "id": 9,
+    "company": {
+      "id": 181,
+      "name": "BioCatch"
+    },
+    "title": "Visa beefs up cybersecurity offerings with $2.4 billion BioCatch deal",
+    "description": "Visa agreed to acquire BioCatch for $2.4 billion in cash, adding BioCatch's behavioral biometrics and fraud-detection technology to Visa's cyber and risk products.",
+    "source": "Reuters",
+    "url": "https://www.reuters.com/legal/transactional/visa-buy-fraud-intelligence-provider-biocatch-24-billion-2026-08-03/",
+    "publishedAt": "2026-08-03T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T13:37:23.711Z"
+  },
+  {
+    "id": 10,
+    "company": {
+      "id": 181,
+      "name": "BioCatch"
+    },
+    "title": "Visa to buy Israeli cyber firm for $2.4 billion to fight AI-driven scams",
+    "description": "The report covers Visa's planned $2.4 billion purchase of BioCatch and describes BioCatch's behavioral biometrics platform for detecting financial fraud and account takeovers.",
+    "source": "The Times of Israel",
+    "url": "https://www.timesofisrael.com/visa-to-buy-israeli-cyber-firm-for-2-4-billion-to-fight-ai-driven-scams/",
+    "publishedAt": "2026-08-03T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T13:37:24.172Z"
+  },
+  {
+    "id": 11,
+    "company": {
+      "id": 181,
+      "name": "BioCatch"
+    },
+    "title": "Visa buys Israeli fraud prevention co BioCatch for $2.4b",
+    "description": "Globes reports that Visa signed an agreement to acquire BioCatch for $2.4 billion, highlighting BioCatch's fraud-prevention technology, customer base and recent growth.",
+    "source": "Globes",
+    "url": "https://en.globes.co.il/en/article-visa-buys-israeli-fraud-prevention-co-biocatch-for-24b-1001551166",
+    "publishedAt": "2026-08-03T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T13:37:24.632Z"
+  },
+  {
+    "id": 12,
+    "company": {
+      "id": 181,
+      "name": "BioCatch"
+    },
+    "title": "Visa acquires behavioral biometrics pioneer BioCatch amid fraud prevention build-up",
+    "description": "Biometric Update reports on Visa's $2.4 billion acquisition of BioCatch and describes the company as a behavioral biometrics and fraud-detection specialist serving banks worldwide.",
+    "source": "Biometric Update",
+    "url": "https://www.biometricupdate.com/202608/visa-acquires-behavioral-biometrics-pioneer-biocatch-amid-fraud-prevention-build-up",
+    "publishedAt": "2026-08-03T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T13:37:25.039Z"
+  },
+  {
+    "id": 13,
+    "company": {
+      "id": 181,
+      "name": "BioCatch"
+    },
+    "title": "Visa buys Israel's BioCatch for $2.4b",
+    "description": "The Jerusalem Post reports that Visa is acquiring BioCatch for $2.4 billion and notes BioCatch's use of AI and behavioral signals to help financial institutions prevent fraud.",
+    "source": "The Jerusalem Post",
+    "url": "https://www.jpost.com/business-and-innovation/tech-and-start-ups/article-904572",
+    "publishedAt": "2026-08-04T00:00:00.000Z",
+    "sentiment": "POSITIVE",
+    "discoveredAt": "2026-10-02T13:37:25.444Z"
+  }
+]

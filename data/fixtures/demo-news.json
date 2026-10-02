@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "company": "BioCatch",
+    "title": "Visa beefs up cybersecurity offerings with $2.4 billion BioCatch deal",
+    "url": "https://www.reuters.com/legal/transactional/visa-buy-fraud-intelligence-provider-biocatch-24-billion-2026-08-03/",
+    "source": "Reuters",
+    "publishedAt": "2026-08-03",
+    "description": "Visa agreed to acquire BioCatch for $2.4 billion in cash, adding BioCatch's behavioral biometrics and fraud-detection technology to Visa's cyber and risk products."
+  },
+  {
+    "company": "BioCatch",
+    "title": "Visa to buy Israeli cyber firm for $2.4 billion to fight AI-driven scams",
+    "url": "https://www.timesofisrael.com/visa-to-buy-israeli-cyber-firm-for-2-4-billion-to-fight-ai-driven-scams/",
+    "source": "The Times of Israel",
+    "publishedAt": "2026-08-03",
+    "description": "The report covers Visa's planned $2.4 billion purchase of BioCatch and describes BioCatch's behavioral biometrics platform for detecting financial fraud and account takeovers."
+  },
+  {
+    "company": "BioCatch",
+    "title": "Visa buys Israeli fraud prevention co BioCatch for $2.4b",
+    "url": "https://en.globes.co.il/en/article-visa-buys-israeli-fraud-prevention-co-biocatch-for-24b-1001551166",
+    "source": "Globes",
+    "publishedAt": "2026-08-03",
+    "description": "Globes reports that Visa signed an agreement to acquire BioCatch for $2.4 billion, highlighting BioCatch's fraud-prevention technology, customer base and recent growth."
+  },
+  {
+    "company": "BioCatch",
+    "title": "Visa acquires behavioral biometrics pioneer BioCatch amid fraud prevention build-up",
+    "url": "https://www.biometricupdate.com/202608/visa-acquires-behavioral-biometrics-pioneer-biocatch-amid-fraud-prevention-build-up",
+    "source": "Biometric Update",
+    "publishedAt": "2026-08-03",
+    "description": "Biometric Update reports on Visa's $2.4 billion acquisition of BioCatch and describes the company as a behavioral biometrics and fraud-detection specialist serving banks worldwide."
+  },
+  {
+    "company": "BioCatch",
+    "title": "Visa buys Israel's BioCatch for $2.4b",
+    "url": "https://www.jpost.com/business-and-innovation/tech-and-start-ups/article-904572",
+    "source": "The Jerusalem Post",
+    "publishedAt": "2026-08-04",
+    "description": "The Jerusalem Post reports that Visa is acquiring BioCatch for $2.4 billion and notes BioCatch's use of AI and behavioral signals to help financial institutions prevent fraud."
+  }
+]

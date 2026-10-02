@@ -1,0 +1,3161 @@
+{
+  "quarter": "2026-Q3",
+  "companies": [
+    {
+      "id": 58,
+      "name": "3d Signals",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 69,
+      "name": "AEYE Health",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 176,
+      "name": "Abes Market",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 52,
+      "name": "Air EV",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 258,
+      "name": "Airobotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 101,
+      "name": "Alloy Therapeutics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 238,
+      "name": "Alpha Tau",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 151,
+      "name": "Amitree",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 72,
+      "name": "Anodot",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 37,
+      "name": "Anthropic",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 173,
+      "name": "Appdome",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 163,
+      "name": "Appforma",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 188,
+      "name": "Apploi",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 245,
+      "name": "Arbe Robotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 143,
+      "name": "Argus Cyber Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 51,
+      "name": "Arrow Global",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 196,
+      "name": "Astra",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 39,
+      "name": "Atlas Obscura",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 220,
+      "name": "Autobrains",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 27,
+      "name": "Ayar Labs",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 156,
+      "name": "BIScience",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 217,
+      "name": "Barcode Nanotech",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 260,
+      "name": "BeetleSat",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 64,
+      "name": "BetterSeeds",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 234,
+      "name": "Beyond Meat",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 194,
+      "name": "BillGuard",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 79,
+      "name": "Binah.ai",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 181,
+      "name": "BioCatch",
+      "lastMentionedAt": "2026-08-04T00:00:00.000Z",
+      "daysSinceLastMention": 59,
+      "mentions": {
+        "total": 5,
+        "positive": 5,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 87,
+      "name": "BioLumic",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 8,
+      "name": "Biolojic Design",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 38,
+      "name": "Bites",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 179,
+      "name": "Bizzabo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 134,
+      "name": "BlueCircle",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 119,
+      "name": "BlueGreen Water Technologies",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 200,
+      "name": "BlueNalu",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 86,
+      "name": "BlueTree Technologies",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 191,
+      "name": "Boatsetter",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 262,
+      "name": "BrainQ Technologies",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 193,
+      "name": "BriefCam",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 105,
+      "name": "BrightInsight",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 126,
+      "name": "C2A Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 228,
+      "name": "CB4",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 77,
+      "name": "CarDekho",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 44,
+      "name": "Carrar",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 227,
+      "name": "Casper",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 137,
+      "name": "Celeno",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 14,
+      "name": "Cerebras",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 190,
+      "name": "Cimagine",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 120,
+      "name": "Classiq",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 118,
+      "name": "Clinch",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 242,
+      "name": "Cognigo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 63,
+      "name": "Connected Energy",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 183,
+      "name": "Consumer Physics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 97,
+      "name": "Cordio Medical",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 160,
+      "name": "Corephotonics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 207,
+      "name": "CorrActions",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 186,
+      "name": "CropX",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 175,
+      "name": "Crosswise",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 125,
+      "name": "Cyabra",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 237,
+      "name": "CyberMDX",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 136,
+      "name": "CyberX",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 81,
+      "name": "Cycuity",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 55,
+      "name": "Cyfirma",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 129,
+      "name": "CytoReason",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 221,
+      "name": "DailyPay",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 110,
+      "name": "Dandelion Energy",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 26,
+      "name": "Databricks",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 123,
+      "name": "Dataloop",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 20,
+      "name": "DeepKeep",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 121,
+      "name": "Diagnostic Robotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 255,
+      "name": "DreaMed Diabetes",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 254,
+      "name": "Edgybees",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 43,
+      "name": "Edity Therapeutics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 216,
+      "name": "EduNav",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 80,
+      "name": "Eko Health",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 109,
+      "name": "Entangled Networks",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 198,
+      "name": "EquipmentShare",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 168,
+      "name": "Fireblade",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 153,
+      "name": "Firefly Neuroscience",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 47,
+      "name": "Flash Forest",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 90,
+      "name": "Flytrex",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 229,
+      "name": "Foretellix",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 169,
+      "name": "Freightos",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 219,
+      "name": "Frontier Car Group",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 115,
+      "name": "Future Family",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 66,
+      "name": "Genopore",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 18,
+      "name": "Glean",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 158,
+      "name": "Global Kinetics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 124,
+      "name": "Greenlight",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 36,
+      "name": "Groq",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 93,
+      "name": "Guild",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 113,
+      "name": "H2Pro",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 128,
+      "name": "HEQA Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 247,
+      "name": "Hailo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 16,
+      "name": "Harbinger Motors",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 11,
+      "name": "Harvey",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 235,
+      "name": "HoneyBook",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 199,
+      "name": "Hub Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 59,
+      "name": "IQM",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 85,
+      "name": "InZiv",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 226,
+      "name": "Incredo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 212,
+      "name": "Innovalve",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 251,
+      "name": "Innoviz",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 76,
+      "name": "InsideTracker",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 241,
+      "name": "Insightec",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 263,
+      "name": "Intuition Robotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 74,
+      "name": "IronVest",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 24,
+      "name": "Island",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 231,
+      "name": "ItsMine",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 161,
+      "name": "JUMP Bikes",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 224,
+      "name": "Juganu",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 114,
+      "name": "JumpCloud",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 48,
+      "name": "Kando",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 29,
+      "name": "Kardome",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 203,
+      "name": "Kemtai",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 138,
+      "name": "Kenna Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 60,
+      "name": "Kini",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 250,
+      "name": "Klook",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 31,
+      "name": "Kodiak Robotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 204,
+      "name": "Kryon Systems",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 21,
+      "name": "Lambda",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 46,
+      "name": "Lano",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 106,
+      "name": "Launchpad",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 246,
+      "name": "Lemonade",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 189,
+      "name": "Lifeward",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 57,
+      "name": "Lightico",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 61,
+      "name": "Liquid Instruments",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 223,
+      "name": "Locusview",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 56,
+      "name": "Ludeo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 178,
+      "name": "MST",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 256,
+      "name": "Magisto",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 7,
+      "name": "Maolac",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 127,
+      "name": "MasterClass",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 104,
+      "name": "MaterialsZone",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 244,
+      "name": "MeMed",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 201,
+      "name": "Medisafe",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 185,
+      "name": "Mentad",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 67,
+      "name": "Mermade Seafoods",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 132,
+      "name": "MigVax",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 142,
+      "name": "Momentis Surgical",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 99,
+      "name": "Moodify",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 10,
+      "name": "Morphisec",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 49,
+      "name": "NT-Tao",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 225,
+      "name": "Nanomedic",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 140,
+      "name": "Nanorep",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 135,
+      "name": "Near",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 50,
+      "name": "Neolithics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 206,
+      "name": "NetOp",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 197,
+      "name": "NeuReality",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 230,
+      "name": "Neura",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 180,
+      "name": "Neverware",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 164,
+      "name": "Nextpeer",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 149,
+      "name": "NooBaa",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 30,
+      "name": "Omnix Medical",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 9,
+      "name": "OncoHost",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 78,
+      "name": "One Zero Digital Bank Ltd.",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 42,
+      "name": "OneAI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 12,
+      "name": "OpenEvidence",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 88,
+      "name": "Orchard",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 117,
+      "name": "Ordergroove",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 83,
+      "name": "Oriient",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 65,
+      "name": "Oshi",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 243,
+      "name": "Ossio",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 122,
+      "name": "Overtime",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 165,
+      "name": "Parko",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 82,
+      "name": "Peak",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 112,
+      "name": "People.ai",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 211,
+      "name": "Perception Point",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 215,
+      "name": "PlaySight",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 100,
+      "name": "Polaris Quantum Biotech",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 187,
+      "name": "Powwow",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 96,
+      "name": "Privateer",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 68,
+      "name": "ProFuse",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 166,
+      "name": "PulmOne",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 54,
+      "name": "Quai.MD",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 91,
+      "name": "Quantum Machines",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 45,
+      "name": "Quidnet Energy",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 202,
+      "name": "Ravin AI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 236,
+      "name": "RealView Imaging",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 116,
+      "name": "Remilk",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 28,
+      "name": "RepAir Carbon",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 148,
+      "name": "Replay Technologies",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 252,
+      "name": "Rewire",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 218,
+      "name": "Ride Vision",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 131,
+      "name": "Ro",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 22,
+      "name": "SSI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 208,
+      "name": "SaNOtize",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 222,
+      "name": "Sayata",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 32,
+      "name": "Scale AI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 259,
+      "name": "Scopio Labs",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 41,
+      "name": "SeeTree",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 210,
+      "name": "SeeTrue",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 248,
+      "name": "Sense Education",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 107,
+      "name": "Sequentify",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 94,
+      "name": "Sfara",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 111,
+      "name": "Shield",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 167,
+      "name": "Shopial",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 182,
+      "name": "Sight Diagnostics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 214,
+      "name": "Signals Analytics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 261,
+      "name": "Silo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 34,
+      "name": "Siteaware",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 133,
+      "name": "Skillz",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 62,
+      "name": "Sotero",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 19,
+      "name": "SpaceX",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 71,
+      "name": "Spectrum Labs",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 33,
+      "name": "Spot AI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 184,
+      "name": "StackIQ",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 209,
+      "name": "Stellar Cyber",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 40,
+      "name": "Stoke Space",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 192,
+      "name": "Stringify",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 13,
+      "name": "Stripe",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 92,
+      "name": "Sufresca",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 177,
+      "name": "Surgical Theater",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 146,
+      "name": "Sweetch",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 154,
+      "name": "Syqe",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 84,
+      "name": "Tabnine",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 89,
+      "name": "Tailor Brands",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 213,
+      "name": "Tala",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 108,
+      "name": "Tamar Robotics",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 141,
+      "name": "Taranis",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 147,
+      "name": "TechSee",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 17,
+      "name": "TensorWave",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 1,
+      "name": "Test company A",
+      "lastMentionedAt": "2026-07-01T00:00:00.000Z",
+      "daysSinceLastMention": 93,
+      "mentions": {
+        "total": 1,
+        "positive": 1,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 2,
+      "name": "Test company B",
+      "lastMentionedAt": "2026-07-01T00:00:00.000Z",
+      "daysSinceLastMention": 93,
+      "mentions": {
+        "total": 1,
+        "positive": 1,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 3,
+      "name": "Test company C",
+      "lastMentionedAt": "2026-10-01T00:00:00.000Z",
+      "daysSinceLastMention": 1,
+      "mentions": {
+        "total": 2,
+        "positive": 1,
+        "neutral": 1,
+        "negative": 0
+      }
+    },
+    {
+      "id": 4,
+      "name": "Test company D",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 5,
+      "name": "Test final supported year",
+      "lastMentionedAt": "9999-12-31T23:59:59.999Z",
+      "daysSinceLastMention": 0,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 232,
+      "name": "Tevel",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 144,
+      "name": "The Bouqs",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 75,
+      "name": "The EVERY Company",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 170,
+      "name": "The Trendlines Group",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 239,
+      "name": "ThetaRay",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 15,
+      "name": "Together AI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 130,
+      "name": "Tovala",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 103,
+      "name": "Treedom",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 233,
+      "name": "Trusona",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 205,
+      "name": "TubiTV",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 162,
+      "name": "UPnRIDE",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 155,
+      "name": "Ubimo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 35,
+      "name": "Ukko",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 249,
+      "name": "Unispectral",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 53,
+      "name": "Ursa Major",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 240,
+      "name": "VAYAVISION",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 25,
+      "name": "Velotix",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 157,
+      "name": "Verse.ai",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 171,
+      "name": "Viewbix",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 257,
+      "name": "Virgin Hyperloop One",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 152,
+      "name": "Wave",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 139,
+      "name": "Wayup",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 70,
+      "name": "Workspot",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 73,
+      "name": "Xage Security",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 195,
+      "name": "Xsense",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 102,
+      "name": "Ynsect",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 253,
+      "name": "YuLife",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 159,
+      "name": "Zebra Medical Vision",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 95,
+      "name": "Zippin",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 145,
+      "name": "Zoomcar",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 6,
+      "name": "ZutaCore",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 172,
+      "name": "eVigilo",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 174,
+      "name": "enVerid",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 150,
+      "name": "mPrest",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 98,
+      "name": "wefox",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    },
+    {
+      "id": 23,
+      "name": "xAI",
+      "lastMentionedAt": null,
+      "daysSinceLastMention": null,
+      "mentions": {
+        "total": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      }
+    }
+  ]
+}
