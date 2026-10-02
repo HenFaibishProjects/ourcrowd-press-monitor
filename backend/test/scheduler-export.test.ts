@@ -73,7 +73,7 @@ test('invalid scheduling configuration fails clearly', () => {
 });
 
 test('export includes URLs/sentiments and unmentioned companies, stable for fixed DB/range/time', async () => {
-  const database = new DataSource(databaseOptions(':memory:')); await database.initialize();
+  const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true }); await database.initialize();
   const directory = await mkdtemp(join(tmpdir(), 'press-export-test-'));
   try {
     const [alpha, beta] = await database.getRepository(Company).save([{ name: 'Export Alpha' }, { name: 'Export Beta' }]);

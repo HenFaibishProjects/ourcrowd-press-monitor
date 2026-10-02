@@ -28,7 +28,7 @@ async function fixture(run: (context: {
   classifier: { classify: (input: { companyName: string }) => Promise<Sentiment> };
   alert: { sendNewMentions: (mentions: NewMentionAlert[]) => Promise<void> };
 }) => Promise<void>) {
-  const database = new DataSource(databaseOptions(':memory:')); await database.initialize();
+  const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true }); await database.initialize();
   try {
     await database.getRepository(Company).save([{ name: 'Test Alpha' }, { name: 'Test Beta' }]);
     const companies = new CompaniesService(new CompaniesRepository(database.getRepository(Company), database));

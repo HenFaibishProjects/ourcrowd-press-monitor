@@ -1,22 +1,18 @@
-import { mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
 import { DataSourceOptions } from 'typeorm';
 import { Company } from '../companies/company.entity';
 import { Mention } from '../mentions/mention.entity';
-import { InitialSchema1790856000000 } from './migrations/1790856000000-initial-schema';
+import { join } from 'node:path';
 
-// Resolve against the repository, independently of npm's workspace working directory.
-const projectRoot = resolve(__dirname, '../../..');
-
-export function databaseOptions(path = process.env['DATABASE_PATH'] ?? 'data/press-monitor.db'): DataSourceOptions {
-  if (!path.trim()) throw new Error('DATABASE_PATH must not be empty');
-  const database = path === ':memory:' ? path : resolve(projectRoot, path);
-  if (database !== ':memory:') mkdirSync(dirname(database), { recursive: true });
+export function databaseOptions(): DataSourceOptions {
   return {
-    type: 'better-sqlite3',
-    database,
+    type: 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5433', 10),
+    username: process.env.DB_USERNAME || 'ourcrowd',
+    password: process.env.DB_PASSWORD || 'ourcrowd',
+    database: process.env.DB_DATABASE || 'ourcrowd_press_monitor',
     entities: [Company, Mention],
-    migrations: [InitialSchema1790856000000],
+    migrations: [join(__dirname, 'migrations/*{.ts,.js}')],
     synchronize: false,
     migrationsRun: true,
     migrationsTransactionMode: 'all',

@@ -1,6 +1,6 @@
 # OurCrowd Press Monitor
 
-NestJS modular monolith with SQLite/TypeORM and a minimal Angular title shell. Current scope: persistence/read-only REST APIs, real company import, GDELT discovery/cache, sequential collection, local sentiment classification, console alerts, disabled-by-default daily scheduling and export commands. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
+NestJS modular monolith with PostgreSQL/TypeORM and a minimal Angular title shell. Current scope: persistence/read-only REST APIs, real company import, GDELT discovery/cache, sequential collection, local sentiment classification, console alerts, disabled-by-default daily scheduling and export commands. The real OurCrowd TXT and its generated company JSON are committed; no press mentions are included.
 
 Use Node 24.19 (`nvm use` if available). From the repository root:
 
@@ -23,24 +23,16 @@ Production serves Angular and REST from http://localhost:3000. Build first and p
 
 ## Database setup
 
-SQLite uses the better-sqlite3 driver, requiring no external database server. DATABASE_PATH defaults to `data/press-monitor.db`; repository-relative and absolute paths work. For example on macOS/Linux:
+PostgreSQL is required and can be run using the provided Docker Compose configuration. `.env` and `.env.example` include the connection details. Start the database from the repository root:
 
 ```bash
-DATABASE_PATH=/absolute/path/press-monitor.db npm run db
-```
-
-PowerShell:
-
-```powershell
-$env:DATABASE_PATH = "C:\data\press-monitor.db"
+docker compose up -d
 npm run db
 ```
 
-Initialization creates the parent directory/database and transactionally applies pending versioned migrations. Application startup does the same, so explicit initialization is optional. Repeating it does not reset data. TypeORM schema synchronization is always disabled. Database files are excluded from git; production needs a writable durable location. This migration creates companies, mentions and TypeORM migration history, with no data insertion.
+Initialization creates the database schema using pending versioned migrations. Application startup also applies migrations automatically, so explicit initialization is optional. Repeating it does not reset data. TypeORM schema synchronization is disabled. This migration creates tables for companies, mentions, and TypeORM migration history.
 
 Company fields: id, required non-blank name, nullable domain/sector, createdAt and updatedAt. Mention fields: id, companyId FK, title, nullable description, url, source, publishedAt, sentiment and discoveredAt. Sentiment is exactly POSITIVE/NEUTRAL/NEGATIVE. `UNIQUE(companyId, url)` prevents duplicates for one company while permitting the same article URL for different companies. There is no Article entity because the current scope does not need additional normalization.
-
-For a larger production system, PostgreSQL would likely be preferred, but SQLite keeps this assignment self-contained and easy to run.
 
 ## REST contracts
 
@@ -150,7 +142,11 @@ Configuration in `.env.example`:
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| DATABASE_PATH | data/press-monitor.db | Repository-relative or absolute SQLite file. |
+| DB_HOST | localhost | PostgreSQL host |
+| DB_PORT | 5433 | PostgreSQL port |
+| DB_USERNAME | ourcrowd | PostgreSQL username |
+| DB_PASSWORD | ourcrowd | PostgreSQL password |
+| DB_DATABASE | ourcrowd_press_monitor | PostgreSQL database name |
 | OLLAMA_BASE_URL | http://localhost:11434 | Local Ollama origin; localhost, 127.0.0.1 or [::1] only. |
 | OLLAMA_MODEL | gemma3:270m | Selected local model; cloud-tagged names rejected. |
 | OLLAMA_TIMEOUT_MS | 60000 | Request/body timeout, integer 1–300000 milliseconds. |

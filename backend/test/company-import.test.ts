@@ -22,7 +22,7 @@ function seedsJson(rows: Array<Record<string, unknown>>): string {
 
 async function withImporter(run: (service: CompanySeedService, database: DataSource, path: string) => Promise<void>): Promise<void> {
   const directory = await mkdtemp(join(tmpdir(), 'press-seed-test-'));
-  const database = new DataSource(databaseOptions(':memory:'));
+  const database = new DataSource({ ...databaseOptions(), dropSchema: true, synchronize: true });
   try {
     await database.initialize();
     const service = new CompanySeedService(new CompaniesRepository(database.getRepository(Company), database));
