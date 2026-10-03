@@ -79,6 +79,6 @@ test('file preparation is deterministic, leaves TXT bytes intact, and validates 
 });
 
 test('default paths refer only to the committed backend source files', () => {
-  assert.match(companySourcePath, /backend\/src\/data\/ourcrowd_companies\.txt$/);
-  assert.match(companyJsonPath, /backend\/src\/data\/companies\.json$/);
+  assert.match(companySourcePath, /[\\/]backend[\\/]src[\\/]data[\\/]ourcrowd_companies\.txt$/);
+  assert.match(companyJsonPath, /[\\/]backend[\\/]src[\\/]data[\\/]companies\.json$/);
 });

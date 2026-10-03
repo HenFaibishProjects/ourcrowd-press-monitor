@@ -40,18 +40,67 @@
     <div class="table-scroll">
       <table>
         <caption class="sr-only">Company coverage for {{ quarter() }}</caption>
-        <thead><tr><th scope="col">Company</th><th scope="col">Last mentioned</th><th scope="col">Days since mention</th><th scope="col" class="number">Total</th><th scope="col" class="number">Positive</th><th scope="col" class="number">Neutral</th><th scope="col" class="number">Negative</th><th scope="col">Status</th></tr></thead>
+        <thead>
+          <tr>
+            <th scope="col">Company</th>
+            <th scope="col">
+              <span class="has-tooltip tooltip-below tooltip-left"
+                    data-tooltip="Most recent known mention across all collected data, not only the selected quarter."
+                    tabindex="0">
+                Last mentioned
+              </span>
+            </th>
+            <th scope="col">Days since mention</th>
+            <th scope="col" class="number">Total</th>
+            <th scope="col" class="number">
+              <span class="has-tooltip tooltip-below"
+                    data-tooltip="Article context was classified as favorable toward the company."
+                    tabindex="0">
+                Positive
+              </span>
+            </th>
+            <th scope="col" class="number">
+              <span class="has-tooltip tooltip-below"
+                    data-tooltip="No clear positive or negative direction was detected."
+                    tabindex="0">
+                Neutral
+              </span>
+            </th>
+            <th scope="col" class="number">
+              <span class="has-tooltip tooltip-below"
+                    data-tooltip="Article context was classified as unfavorable toward the company."
+                    tabindex="0">
+                Negative
+              </span>
+            </th>
+            <th scope="col">
+              <span class="has-tooltip tooltip-below tooltip-left"
+                    data-tooltip="Recent: 0–30 days. Active: 31–90 days. Quiet: 91+ days. No mentions: no stored mention available."
+                    tabindex="0">
+                Status
+              </span>
+            </th>
+          </tr>
+        </thead>
         <tbody>
           @for (company of visibleCompanies(); track company.id) {
             <tr (click)="selectedCompany.set(company)">
-              <td><button class="company-button" (click)="selectedCompany.set(company); $event.stopPropagation()" [attr.aria-label]="'View mentions for ' + company.name">{{ company.name }} <span aria-hidden="true">↗</span></button></td>
+              <td><button class="company-button" (click)="selectedCompany.set(company); $event.stopPropagation()" [attr.aria-label]="'View mentions for ' + company.name">{{ company.name }} <span aria-hidden="true" class="ext-arrow">↗</span></button></td>
               <td>{{ readableDate(company.lastMentionedAt) }}</td>
               <td class="muted">{{ daysDisplay(company.daysSinceLastMention) }}</td>
               <td class="number total-count">{{ company.mentions.total }}</td>
               <td class="number"><span class="count positive">{{ company.mentions.positive }}</span></td>
               <td class="number"><span class="count neutral">{{ company.mentions.neutral }}</span></td>
               <td class="number"><span class="count negative">{{ company.mentions.negative }}</span></td>
-              <td><span class="status-badge" [class.recent]="coverageStatus(company.daysSinceLastMention) === 'Recent'" title="All-time last mention: Recent 0–30 days; Active 31–90 days; Quiet 91+ days; No mentions means never mentioned.">{{ coverageStatus(company.daysSinceLastMention) }}</span></td>
+              <td>
+                <span class="status-badge"
+                      [class.recent]="coverageStatus(company.daysSinceLastMention) === 'Recent'"
+                      [class.active]="coverageStatus(company.daysSinceLastMention) === 'Active'"
+                      [class.quiet]="coverageStatus(company.daysSinceLastMention) === 'Quiet'"
+                      [class.no-mentions]="coverageStatus(company.daysSinceLastMention) === 'No mentions'">
+                  {{ coverageStatus(company.daysSinceLastMention) }}
+                </span>
+              </td>
             </tr>
           } @empty {
             <tr><td colspan="8" class="empty-state">{{ companies().length === 0 ? 'No companies are tracked yet. Run company setup to get started.' : 'No companies match your search.' }}</td></tr>

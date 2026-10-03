@@ -1,0 +1,258 @@
+:host {
+  display: block;
+}
+
+.page-wrap {
+  max-width: 960px;
+  margin: auto;
+  padding: 42px 32px 64px;
+}
+
+/* ── Page header ───────────────────────────────────────────── */
+.page-header {
+  margin-bottom: 36px;
+}
+
+.page-header h1 {
+  margin: 8px 0;
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -.6px;
+  font-weight: 650;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ── Sections ──────────────────────────────────────────────── */
+.section {
+  margin-bottom: 28px;
+}
+
+.section.surface {
+  padding: 28px 32px;
+}
+
+h2 {
+  font-size: 17px;
+  font-weight: 650;
+  margin: 0 0 16px;
+}
+
+.section-intro {
+  color: var(--muted);
+  font-size: 13px;
+  margin: -8px 0 20px;
+  line-height: 1.6;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #3a4a5c;
+  margin: 0 0 16px;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+code {
+  background: #f0f3f7;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12.5px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #3a5272;
+}
+
+/* ── Stack grid ────────────────────────────────────────────── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.stack-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.stack-label {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #738198;
+}
+
+/* ── Architecture flow ─────────────────────────────────────── */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  min-width: 110px;
+  font-size: 13px;
+}
+
+.flow-step.primary {
+  background: #eef3fa;
+  border-color: #c8d9ed;
+}
+
+.flow-step strong {
+  font-weight: 650;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.flow-step small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.flow-icon {
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.flow-arrow {
+  color: #b0bcc9;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Decision cards ────────────────────────────────────────── */
+.decision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.decision-card {
+  padding: 22px 24px;
+}
+
+.decision-card h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.decision-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #4a5a6e;
+}
+
+/* ── Production list ───────────────────────────────────────── */
+.prod-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prod-list li {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #3a4a5c;
+  padding-left: 20px;
+  position: relative;
+}
+
+.prod-list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: #a0adb8;
+}
+
+.prod-list strong {
+  color: var(--text);
+}
+
+/* ── Quick start ───────────────────────────────────────────── */
+.code-block {
+  background: #f3f6f9;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 0 0 20px;
+  overflow-x: auto;
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  line-height: 1.75;
+  color: #2c3e50;
+}
+
+.readme-link {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.readme-link a {
+  color: #284f83;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.readme-link a:hover {
+  text-decoration: underline;
+}
+
+.ext-link-icon {
+  font-size: 11px;
+  margin-left: 3px;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrap {
+    padding: 28px 16px 48px;
+  }
+
+  .section.surface {
+    padding: 20px;
+  }
+
+  .flow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}

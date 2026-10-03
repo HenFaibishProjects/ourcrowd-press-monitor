@@ -42,6 +42,12 @@ for (const sentiment of Object.values(Sentiment)) {
   });
 }
 
+test('valid irrelevant + null output becomes the expected domain response', async () => {
+  const http = mock.method(globalThis, 'fetch', async () => output({ relevant: false, sentiment: null }));
+  assert.deepEqual(await classifier().classify(input), { relevant: false, sentiment: null });
+  assert.equal(http.mock.callCount(), 1);
+});
+
 test('malformed JSON, invalid values and extra fields fail without retries or neutral fallback', async () => {
   const values = ['not JSON', '{', '```json\n{"relevant":true,"sentiment":"POSITIVE"}\n```', { relevant: true, sentiment: 'positive' }, { sentiment: 'MIXED' }, { relevant: true, sentiment: 'NEUTRAL', explanation: 'extra' }, ['POSITIVE'], null, { relevant: false, sentiment: 'POSITIVE' }];
   for (const value of values) {

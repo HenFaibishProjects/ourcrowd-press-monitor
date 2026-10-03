@@ -181,3 +181,66 @@ test('shared collection skips publisher enrichment for supplied context and keep
   }
   assert.equal(http.mock.callCount(), 0);
 });
+
+test('collection skips duplicate candidates before expensive processing and does not persist irrelevant classifications', async () => {
+  const duplicateArticle = { ...fixtureArticle, url: 'https://unit-test.example/duplicate' };
+  const irrelevantArticle = { ...fixtureArticle, url: 'https://unit-test.example/irrelevant' };
+
+  await withFixture(
+    JSON.stringify([fixtureArticle, duplicateArticle, irrelevantArticle]),
+    async (newsProvider) => {
+      const company = { id: 1, name: fixtureArticle.company } as Company;
+      let enrichmentCalls = 0;
+      let classificationCalls = 0;
+      let persistenceCalls = 0;
+      let alertCalls = 0;
+
+      let isFirstClassify = true;
+
+      const collectionService = new CollectionService(
+        { findOne: async () => company } as unknown as CompaniesService,
+        {
+          readMetadata: async () => [],
+          select: async () => [company],
+          queryName: () => company.name,
+        } as unknown as CompanySearchService,
+        {
+          exists: async (_companyId: number, url: string) => url === duplicateArticle.url,
+          create: async (mention: object) => {
+            persistenceCalls++;
+            return { ...mention, id: 1 };
+          },
+        } as unknown as MentionsService,
+        newsProvider,
+        {
+          classify: async () => {
+            classificationCalls++;
+            if (isFirstClassify) {
+              isFirstClassify = false;
+              return { relevant: true, sentiment: Sentiment.NEUTRAL };
+            }
+            return { relevant: false, sentiment: null };
+          },
+        },
+        { sendNewMentions: async () => { alertCalls++; } },
+        {
+          fetchAndEnrich: async () => {
+            enrichmentCalls++;
+            return null;
+          },
+        } as unknown as ArticleEnricher,
+      );
+
+      const report = await collectionService.collect({ ...searchInput, cacheMode: 'live' });
+      
+      // fixtureArticle: enriched, classified(true), persisted
+      // duplicateArticle: skipped before enrichment/classification
+      // irrelevantArticle: enriched, classified(false), NOT persisted
+      assert.equal(enrichmentCalls, 0); // They have a description, so no enrichment needed!
+      assert.equal(classificationCalls, 2);
+      assert.equal(persistenceCalls, 1);
+      assert.equal(report.mentionsInserted, 1);
+      assert.equal(alertCalls, 1);
+    },
+  );
+});

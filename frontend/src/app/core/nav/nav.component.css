@@ -1,0 +1,87 @@
+:host {
+  display: block;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 0 32px;
+  height: 52px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.2px;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.nav-brand:hover {
+  color: #233e60;
+}
+
+.nav-brand-mark {
+  color: #3a6ba8;
+  font-size: 16px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.nav-links a {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.nav-links a:hover {
+  background: #f0f4f8;
+  color: var(--text);
+}
+
+.nav-links a.active {
+  background: #eef3fa;
+  color: #233e60;
+  font-weight: 600;
+}
+
+.nav-links a:focus-visible {
+  outline: 3px solid #7398c8;
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .top-nav {
+    padding: 0 16px;
+    gap: 16px;
+  }
+
+  .nav-brand span:not(.nav-brand-mark) {
+    /* hide text label on very small screens, keep mark */
+    display: none;
+  }
+
+  .nav-links a {
+    padding: 6px 8px;
+  }
+}

@@ -1,0 +1,456 @@
+<div class="page-wrap">
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <header class="page-header">
+    <p class="eyebrow">AI ASSISTANCE</p>
+    <h1>How AI tools were used</h1>
+    <p class="subtitle">Prompts, reasoning, and tradeoffs :not code generation.</p>
+  </header>
+
+  <!-- ── Framing note ─────────────────────────────────────────────── -->
+  <section class="framing-note surface" aria-labelledby="framing-heading">
+    <h2 id="framing-heading">Role of AI in this project</h2>
+    <p>
+      AI tools were used as <strong>engineering assistants</strong> throughout this project —
+      not to build the solution independently.
+      Every design decision, architecture choice, and trade-off was made by the engineer.
+      AI was consulted for focused review, structured analysis, and debugging support.
+    </p>
+    <p>
+      The pattern used consistently was: provide full context, state one narrow question, set explicit constraints,
+      and ask for analysis or review :not for complete implementation.
+      The prompts below are representative of that approach.
+    </p>
+    <div class="intent-pills" role="list" aria-label="Prompt intent categories">
+      <span class="pill" role="listitem">✓ Review</span>
+      <span class="pill" role="listitem">✓ Reasoning</span>
+      <span class="pill" role="listitem">✓ Tradeoff analysis</span>
+      <span class="pill" role="listitem">✓ Debugging support</span>
+      <span class="pill" role="listitem">✓ Targeted implementation help</span>
+      <span class="pill pill-no" role="listitem">✗ "Build the whole project for me"</span>
+    </div>
+    <p class="note-small">
+      These prompts are reconstructed representative examples that reflect the kind of assistance used.
+      The full collection is available on GitHub.
+    </p>
+  </section>
+
+  <!-- ── Groups ────────────────────────────────────────────────────── -->
+
+  <!-- Architecture -->
+  <section class="prompt-group" aria-labelledby="group-arch">
+    <h2 id="group-arch" class="group-heading">Architecture</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Architecture framing</span>
+        <span class="prompt-meta">Validate the overall shape before implementation</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Tradeoffs</div>
+        <pre class="prompt-text">I am building a take-home project that monitors press mentions for a fixed list of portfolio companies.
+
+The required stack is: Node.js backend, locally hosted Ollama, a small dashboard UI, persistent storage, and a scheduled daily collection flow.
+
+Please act as a senior backend reviewer.
+
+Do not design the whole project for me.
+
+Help me evaluate a simple architecture with these goals:
+- keep the solution easy to run locally
+- avoid unnecessary infrastructure
+- keep external integrations behind interfaces
+- make the collection flow testable
+- keep the design realistic enough for production discussion
+
+Compare a modular monolith against a microservice approach for this scope.
+
+For each option, call out: complexity, operational cost, testability, extensibility, and what would be reasonable for a take-home assignment.
+
+End with the tradeoffs I should be able to explain in an interview.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Choosing NestJS</span>
+        <span class="prompt-meta">Validate the framework choice</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Reasoning</div>
+        <pre class="prompt-text">I am considering NestJS for the backend.
+
+Please review this choice from the perspective of a senior engineer.
+
+Context: one application, several feature areas (companies, mentions, news discovery, classification, scheduling), REST API, PostgreSQL, one local Ollama integration, no need for microservices.
+
+Do not generate the application.
+
+Explain:
+- why NestJS is a reasonable fit
+- where it may be heavier than necessary
+- what structure I should keep simple
+- which abstractions are justified
+- which abstractions would be overengineering
+
+I want an answer I could later defend in a technical interview.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">PostgreSQL vs SQLite</span>
+        <span class="prompt-meta">Compare persistence options</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Tradeoff analysis</div>
+        <pre class="prompt-text">Help me evaluate PostgreSQL versus SQLite for this project.
+
+The data model is simple: companies, press mentions, company-to-mentions relationship, quarterly filtering, sentiment filtering, unique company + article URL.
+
+Please focus on engineering tradeoffs, not framework setup.
+
+I want to understand:
+- what PostgreSQL gives me here
+- whether it is excessive for a take-home
+- whether SQLite would be simpler
+- how migrations and constraints affect the decision
+- which choice gives a better balance between realism and simplicity
+
+Do not implement the database layer.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- Data / Collection -->
+  <section class="prompt-group" aria-labelledby="group-data">
+    <h2 id="group-data" class="group-heading">Data / Collection</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">NewsProvider abstraction</span>
+        <span class="prompt-meta">Keep discovery replaceable behind a clean interface</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Design</div>
+        <pre class="prompt-text">I want to isolate news discovery behind a small interface.
+
+Proposed contract:
+NewsProvider.search(&#123; companyName, queryName, from, to &#125;) → NewsArticle[]
+
+Please review this abstraction.
+
+I want: one live provider initially, the ability to replace the provider later, collection logic that does not know provider-specific details, clean handling of rate limits and partial failures.
+
+Please suggest only the minimum interface fields needed.
+
+Do not introduce a generic provider framework or unnecessary abstraction layers.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Evaluating GDELT</span>
+        <span class="prompt-meta">Risk assessment for the live news source</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Tradeoffs</div>
+        <pre class="prompt-text">I am considering GDELT DOC API as the live news source.
+
+Please evaluate it specifically for this use case: search by company name, previous-quarter coverage, public endpoint, no API key, local development, a few hundred tracked companies.
+
+I want a practical risk assessment covering: rate limiting, result caps, publication timestamp quality, false positives, missing article text, historical coverage, reliability for reviewer/demo use.
+
+Do not suggest replacing it immediately.
+
+First tell me what safeguards I should build around it.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Duplicate handling order</span>
+        <span class="prompt-meta">Review the deduplication pipeline ordering</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Debugging</div>
+        <pre class="prompt-text">Review the order of duplicate checks in this collection pipeline.
+
+Current idea:
+1. normalize the provider URL
+2. remove duplicates within the current provider response
+3. check whether company + URL already exists in PostgreSQL
+4. only then fetch article content
+5. only then run local Ollama
+6. persist
+7. rely on database UNIQUE(companyId, url) as the final race-condition guard
+
+Please tell me: whether this ordering is correct, what race conditions remain, what URL normalization is safe, what URL normalization could accidentally merge different articles.
+
+Do not add a separate canonical-URL service unless necessary.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Deterministic demo path</span>
+        <span class="prompt-meta">Keep the reviewer experience reproducible</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Design · Review</div>
+        <pre class="prompt-text">The live provider works, but the public endpoint can rate-limit or become temporarily unavailable.
+
+I want a deterministic reviewer path without bypassing the real application pipeline.
+
+Proposed approach:
+FileNewsProvider → same CollectionService → same Ollama classifier → same PostgreSQL persistence → same dashboard/API
+
+The file should contain a small set of real, verified articles.
+
+Please review whether this is a reasonable reviewer/demo strategy.
+
+I want to avoid: inserting fake rows directly into PostgreSQL, frontend mocks, pretending the data was fetched live when it was not.
+
+Help me define what should be documented clearly.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- LLM -->
+  <section class="prompt-group" aria-labelledby="group-llm">
+    <h2 id="group-llm" class="group-heading">LLM</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Ollama model selection</span>
+        <span class="prompt-meta">Choose a local model suitable for the narrow task</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Tradeoff analysis</div>
+        <pre class="prompt-text">The assignment requires locally hosted Ollama.
+
+The task is narrow: decide whether an article is meaningfully about a company, and classify sentiment as positive, neutral, or negative.
+
+I want a model that is easy for a reviewer to run on a normal development machine.
+
+Please compare a very small model such as gemma3:270m with larger local models.
+
+Focus on: expected classification quality, latency, memory usage, reproducibility, reviewer setup cost.
+
+Do not optimize for general-purpose generation.
+
+I need a defensible default, not the "best" model in absolute terms.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Structured-output validation</span>
+        <span class="prompt-meta">Treat model output as untrusted input</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Debugging</div>
+        <pre class="prompt-text">I am parsing JSON returned by a local LLM.
+
+Please review the validation rules I should enforce.
+
+Expected shape:
+&#123; "relevant": true, "sentiment": "POSITIVE" &#125;
+or:
+&#123; "relevant": false, "sentiment": null &#125;
+
+I want strict behavior: reject arrays, reject extra fields, reject lowercase or unsupported sentiment values, reject prose/code fences, reject inconsistent relevant/sentiment combinations.
+
+Explain whether strict validation is worth it here and what error behavior is appropriate.
+
+Do not write the parser.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- Backend -->
+  <section class="prompt-group" aria-labelledby="group-backend">
+    <h2 id="group-backend" class="group-heading">Backend</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Collection failure policy</span>
+        <span class="prompt-meta">When to skip, continue, or abort a run</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Reasoning</div>
+        <pre class="prompt-text">Help me define failure behavior for a sequential collection run.
+
+Examples:
+- one company news-provider request fails
+- one article is malformed
+- one article cannot be enriched
+- one LLM output is malformed
+- Ollama is unavailable
+- Ollama times out repeatedly
+- persistence lookup fails
+- one insert hits a duplicate race
+- alert delivery fails after persistence
+
+For each case, tell me whether the run should: skip the article, skip the company, continue, or abort.
+
+I want predictable behavior that is easy to explain and debug.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Daily scheduler review</span>
+        <span class="prompt-meta">Add the required scheduled job without overbuilding</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Tradeoffs</div>
+        <pre class="prompt-text">The assignment asks for a daily process that checks for new mentions and sends an alert.
+
+I plan to use the NestJS scheduler in the same application.
+
+The scheduler will: be disabled by default, run on a configurable cron, use a rolling lookback, call the same CollectionService used by manual runs, avoid overlapping runs within the same process.
+
+Please review whether this is enough for the project.
+
+Also explain what I would need in production if multiple replicas were running.
+
+Do not add distributed locking or a queue to the take-home unless clearly justified.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Alert boundary</span>
+        <span class="prompt-meta">Keep alert delivery replaceable</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Design · Review</div>
+        <pre class="prompt-text">The assignment only requires a visible alert when new mentions are found.
+
+I am thinking of a simple AlertService interface with a console implementation.
+
+Please review this decision.
+
+I want the design to make it obvious how email, Slack, Teams, or webhooks could be added later, but I do not want to implement them now.
+
+Explain: what the interface should own, whether alert failure should roll back persisted mentions, what should be logged.
+
+Keep it minimal.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- Frontend -->
+  <section class="prompt-group" aria-labelledby="group-frontend">
+    <h2 id="group-frontend" class="group-heading">Frontend</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Dashboard UX review</span>
+        <span class="prompt-meta">Design a reviewer-friendly dashboard without overbuilding</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · UX</div>
+        <pre class="prompt-text">I need one Angular dashboard page for a technical take-home.
+
+The backend already exposes the data.
+
+Please help me review a simple UX: quarter selector, summary cards, company search, company table, sentiment counts, last-mentioned date, status based on recency, company detail drawer with article list.
+
+Do not build the UI for me.
+
+Please tell me: which information should be immediately visible, what belongs in the detail drawer, what should happen for zero mentions, what loading/error states matter, what would make the UI look overbuilt.
+
+The target is a clean internal SaaS/admin dashboard.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Quarter/date handling</span>
+        <span class="prompt-meta">Avoid timezone bugs at the API boundary</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Debugging</div>
+        <pre class="prompt-text">Review my quarter-to-date-range logic.
+
+For a selected quarter such as 2026-Q3, the mentions API should receive:
+from=2026-07-01
+to=2026-09-30
+
+The backend treats date-only `to` as inclusive for the entire day.
+
+Please identify: timezone mistakes I could make in Angular, whether I should use UTC when calculating quarter boundaries, whether ISO timestamps are necessary here.
+
+Keep the implementation simple and predictable.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- Quality -->
+  <section class="prompt-group" aria-labelledby="group-quality">
+    <h2 id="group-quality" class="group-heading">Quality</h2>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Testing strategy</span>
+        <span class="prompt-meta">Keep tests useful and safe :never reset the dev database</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Reasoning</div>
+        <pre class="prompt-text">Review the testing strategy for this project.
+
+I want unit tests around: date parsing, company preparation, news mapping, sentiment parsing, file-based news provider.
+
+I previously had database-backed tests that could destructively reset the local development database.
+
+I do not want that risk.
+
+Please suggest a safe, minimal test strategy for the take-home.
+
+Important: default npm test must never drop or reset the development database, do not create a complex test-infrastructure project, it is acceptable to exclude destructive DB integration tests from the default suite.
+
+Focus on safety and useful coverage.</pre>
+      </div>
+    </details>
+
+    <details class="prompt-card surface">
+      <summary>
+        <span class="prompt-title">Final submission review</span>
+        <span class="prompt-meta">Catch inconsistencies before submission</span>
+      </summary>
+      <div class="prompt-body">
+        <div class="intent-tag">Review · Audit</div>
+        <pre class="prompt-text">Review the repository as a take-home submission.
+
+Do not implement new features.
+
+Look only for: stale documentation, setup instructions that do not match the code, committed test data, fake URLs, missing generated output, missing environment examples, commands that no longer work, contradictions between README and runtime behavior, dead placeholder frontend content, accidental secrets, destructive test configuration.
+
+Return findings grouped as: must fix before submission, nice to clean up, safe to leave as-is.
+
+Do not score the project.</pre>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ── View full prompt collection ─────────────────────────────── -->
+  <div class="full-collection-link">
+    <a href="https://github.com/HenFaibishProjects/ourcrowd-press-monitor/blob/main/AI_ASSISTANCE_PROMPTS.md"
+      target="_blank" rel="noopener noreferrer"
+      aria-label="View the full prompt collection on GitHub (opens in new tab)">
+      View full prompt collection (30 prompts)
+      <span aria-hidden="true" class="ext-link-icon">↗</span>
+      <span class="sr-only">(opens in new tab)</span>
+    </a>
+    <p>Includes the reusable prompt pattern used throughout the project.</p>
+  </div>
+
+</div>

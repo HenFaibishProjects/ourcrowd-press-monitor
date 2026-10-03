@@ -151,10 +151,16 @@ th:first-child, td:first-child {
 
 tbody tr {
   cursor: pointer;
+  transition: background 0.1s ease;
 }
 
 tbody tr:hover {
-  background: #f7f9fc;
+  background: #f0f5fc;
+}
+
+tbody tr:focus-within {
+  outline: 2px solid #7398c8;
+  outline-offset: -2px;
 }
 
 .company-button {
@@ -164,15 +170,31 @@ tbody tr:hover {
   font-weight: 600;
   text-align: left;
   color: #233e60;
+  transition: color 0.1s ease;
 }
 
-.company-button span {
+.company-button:hover {
+  color: #1a3258;
+}
+
+.ext-arrow {
   opacity: 0;
-  margin-left: 6px;
+  margin-left: 5px;
+  font-size: 12px;
+  color: #5a7aaa;
+  transition: opacity 0.1s ease;
 }
 
-tr:hover .company-button span, .company-button:focus-visible span {
+tr:hover .ext-arrow,
+.company-button:focus-visible .ext-arrow {
   opacity: 1;
+}
+
+/* tooltip header cells */
+th span.has-tooltip {
+  cursor: help;
+  border-bottom: 1px dashed #c0cad5;
+  display: inline-block;
 }
 
 .number {
@@ -202,11 +224,27 @@ tr:hover .company-button span, .company-button:focus-visible span {
   font-size: 11px;
   padding: 5px 9px;
   border-radius: 5px;
+  white-space: nowrap;
 }
 
 .status-badge.recent {
   background: #e9f5ee;
   color: #24704d;
+}
+
+.status-badge.active {
+  background: #edf3fb;
+  color: #2f5a8f;
+}
+
+.status-badge.quiet {
+  background: #f5f0e8;
+  color: #7a5c2e;
+}
+
+.status-badge.no-mentions {
+  background: #f5f5f5;
+  color: #8a98aa;
 }
 
 .table-note {

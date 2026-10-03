@@ -21,7 +21,7 @@
           <h4>{{ mention.title }}</h4>
           <p class="article-meta">{{ mention.source }} · {{ readableDate(mention.publishedAt) }}</p>
           @if (mention.description) { <p class="description">{{ mention.description }}</p> }
-          @if (articleUrl(mention.url); as url) { <a [href]="url" target="_blank" rel="noopener noreferrer">Open article <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a> }
+          @if (articleUrl(mention.url); as url) { <a [href]="url" target="_blank" rel="noopener noreferrer">Open article <span aria-hidden="true" class="ext-arrow">↗</span><span class="sr-only"> (opens in a new tab)</span></a> }
         </article>
       } @empty {
         <p class="panel-state">No press mentions were found for this company in this quarter.</p>

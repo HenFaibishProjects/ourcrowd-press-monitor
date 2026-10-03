@@ -1,0 +1,245 @@
+<div class="page-wrap">
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <header class="page-header">
+    <p class="eyebrow">ENGINEERING NOTES</p>
+    <h1>Project Overview</h1>
+    <p class="subtitle">A concise technical summary for reviewers.</p>
+  </header>
+
+  <!-- ── Project overview ─────────────────────────────────────────── -->
+  <section class="section surface" aria-labelledby="overview-heading">
+    <h2 id="overview-heading">What this project does</h2>
+    <p>
+      <strong>OurCrowd Press Monitor</strong> tracks press mentions for a curated list of OurCrowd portfolio companies.
+      A scheduled collection run queries a live news source, filters articles by relevance using a local language model,
+      classifies sentiment, and persists results to a relational database.
+      A read-only Angular dashboard exposes the aggregated data by quarter.
+    </p>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <span class="stack-label">Backend</span>
+        <span>Node.js · NestJS</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-label">Frontend</span>
+        <span>Angular (standalone components)</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-label">Database</span>
+        <span>PostgreSQL</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-label">LLM</span>
+        <span>Ollama (local, gemma3:270m)</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-label">Live provider</span>
+        <span>GDELT DOC API</span>
+      </div>
+      <div class="stack-item">
+        <span class="stack-label">Demo provider</span>
+        <span>FileNewsProvider (deterministic)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Architecture flow ─────────────────────────────────────────── -->
+  <section class="section surface" aria-labelledby="arch-heading">
+    <h2 id="arch-heading">Architecture</h2>
+    <p class="section-intro">
+      A simple linear collection pipeline inside a single NestJS application.
+    </p>
+    <div class="flow" role="img" aria-label="Collection pipeline flow diagram">
+      <div class="flow-step primary">
+        <span class="flow-icon" aria-hidden="true">🏢</span>
+        <strong>Company list</strong>
+        <small>JSON source of truth</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step">
+        <span class="flow-icon" aria-hidden="true">🔍</span>
+        <strong>NewsProvider</strong>
+        <small>GDELT or FileNewsProvider</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step">
+        <span class="flow-icon" aria-hidden="true">🔗</span>
+        <strong>URL normalisation</strong>
+        <small>Deduplication</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step">
+        <span class="flow-icon" aria-hidden="true">📄</span>
+        <strong>Enrichment</strong>
+        <small>Optional article context</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step primary">
+        <span class="flow-icon" aria-hidden="true">🤖</span>
+        <strong>Ollama</strong>
+        <small>Relevance + sentiment</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step">
+        <span class="flow-icon" aria-hidden="true">🗄️</span>
+        <strong>PostgreSQL</strong>
+        <small>Persistent store</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step">
+        <span class="flow-icon" aria-hidden="true">⚡</span>
+        <strong>REST API</strong>
+        <small>NestJS controllers</small>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-step primary">
+        <span class="flow-icon" aria-hidden="true">📊</span>
+        <strong>Angular dashboard</strong>
+        <small>+ Alert console output</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Decisions ─────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="decisions-heading">
+    <h2 id="decisions-heading">Main decisions</h2>
+    <div class="decision-grid">
+
+      <article class="decision-card surface">
+        <h3>Why NestJS</h3>
+        <p>
+          NestJS provides a structured, module-based layout that maps naturally to the feature areas of this project
+          (companies, mentions, news, scheduling, alerts).
+          Its built-in DI container keeps services composable without manual wiring.
+          The overhead is justified because the project is large enough that unstructured Express would become harder to
+          reason about.
+        </p>
+      </article>
+
+      <article class="decision-card surface">
+        <h3>Why PostgreSQL</h3>
+        <p>
+          PostgreSQL gives real foreign key enforcement, a <code>UNIQUE(companyId, url)</code> constraint as a
+          race-condition guard,
+          and a query planner that handles reasonable filtering without workarounds.
+          SQLite was considered but ruled out because type-safe constraints and migration tooling are simpler with
+          PostgreSQL at this scope.
+        </p>
+      </article>
+
+      <article class="decision-card surface">
+        <h3>Why Ollama</h3>
+        <p>
+          The assignment specifically required a locally hosted LLM.
+          Ollama eliminates API keys, network latency to a cloud provider, and per-call cost.
+          The task is narrow (relevance + sentiment) so a small, fast model (<code>gemma3:270m</code>) is defensible.
+          A reviewer can reproduce the exact run on a standard development machine.
+        </p>
+      </article>
+
+      <article class="decision-card surface">
+        <h3>Why GDELT</h3>
+        <p>
+          GDELT DOC API is public, free, requires no API key, and covers global English-language news.
+          It has rate limits and result caps, so the collection pipeline wraps it with retry logic and honors
+          <code>Retry-After</code>.
+          For a take-home, the tradeoff of occasional rate-limiting is acceptable given the zero-friction setup.
+        </p>
+      </article>
+
+      <article class="decision-card surface">
+        <h3>Why FileNewsProvider exists</h3>
+        <p>
+          GDELT is a live public endpoint that can be temporarily unavailable or rate-limited.
+          <code>FileNewsProvider</code> lets a reviewer run the full collection pipeline deterministically
+          using a committed, verified article fixture :without inserting fake rows directly or bypassing any real logic.
+          The same CollectionService, Ollama classifier, and PostgreSQL layer are used in both paths.
+        </p>
+      </article>
+
+      <article class="decision-card surface">
+        <h3>Why a modular monolith</h3>
+        <p>
+          Splitting into microservices at this scope would add coordination overhead (service discovery, network
+          contracts,
+          distributed transactions) with no benefit.
+          A modular monolith preserves all the seams needed for future extraction while remaining simple to run locally
+          with a single
+          <code>npm run dev</code>. It is also easier for a reviewer to trace end-to-end behavior.
+        </p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Production considerations ─────────────────────────────────── -->
+  <section class="section surface" aria-labelledby="production-heading">
+    <h2 id="production-heading">If I were taking this further</h2>
+    <p class="section-intro">
+      The following were intentionally not included in this take-home.
+      Each would be justified by a concrete scaling or reliability problem, not added upfront.
+    </p>
+    <ul class="prod-list">
+      <li>
+        <strong>Queue / PubSub</strong>: decouple collection from API serving; enable dead-letter handling and retry
+        visibility.
+      </li>
+      <li>
+        <strong>Worker-based processing</strong>: move Ollama calls and article enrichment out of the main process to
+        avoid blocking.
+      </li>
+      <li>
+        <strong>Bounded concurrency</strong>: process multiple companies in parallel with a configurable concurrency
+        limit, rather than strictly sequentially.
+      </li>
+      <li>
+        <strong>Distributed scheduling</strong>: use an external scheduler (e.g. Cloud Scheduler, pg-boss) so multiple
+        replicas don't trigger duplicate runs.
+      </li>
+      <li>
+        <strong>Stronger observability</strong>: structured JSON logs, metrics (e.g. Prometheus), distributed tracing
+        (e.g. OpenTelemetry).
+      </li>
+      <li>
+        <strong>Managed PostgreSQL</strong>: with connection pooling (PgBouncer), automated backups, and point-in-time
+        recovery.
+      </li>
+      <li>
+        <strong>Better article extraction</strong>: a proper headless-browser fallback or a managed extraction service
+        for paywalled or JS-rendered pages.
+      </li>
+      <li>
+        <strong>Labeled evaluation dataset</strong>: a human-labeled set of (article, company, expected-sentiment)
+        triples to measure and iterate on model quality.
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Reviewer quick start ───────────────────────────────────────── -->
+  <section class="section surface" aria-labelledby="quickstart-heading">
+    <h2 id="quickstart-heading">Reviewer quick start</h2>
+    <p class="section-intro">Run these commands from the repository root. Docker must be running.</p>
+    <pre class="code-block"><code>npm install
+docker compose up -d
+npm run db
+npm run companies:setup
+ollama pull gemma3:270m
+
+# Deterministic demo run (FileNewsProvider):
+npm run collect -- --companies=BioCatch --quarter=2026-Q3
+
+# Start both servers in development mode:
+npm run dev</code></pre>
+    <p class="readme-link">
+      For full setup instructions, environment variables, and architecture detail, see the
+      <a href="https://github.com/HenFaibishProjects/ourcrowd-press-monitor#readme" target="_blank"
+        rel="noopener noreferrer" aria-label="View full README on GitHub (opens in new tab)">
+        full README on GitHub
+        <span aria-hidden="true" class="ext-link-icon">↗</span>
+        <span class="sr-only">(opens in new tab)</span>
+      </a>.
+    </p>
+  </section>
+
+</div>
