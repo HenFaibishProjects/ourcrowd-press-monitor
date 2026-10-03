@@ -12,7 +12,7 @@
     <h2 id="overview-heading">What this project does</h2>
     <p>
       <strong>OurCrowd Press Monitor</strong> tracks press mentions for a curated list of OurCrowd portfolio companies.
-      A scheduled collection run queries a live news source, filters articles by relevance using a local language model,
+      Manual and scheduled collection use the selected news provider, filter articles by relevance using a local model,
       classifies sentiment, and persists results to a relational database.
       A read-only Angular dashboard exposes the aggregated data by quarter.
     </p>
@@ -54,7 +54,7 @@
       <div class="flow-step primary">
         <span class="flow-icon" aria-hidden="true">🏢</span>
         <strong>Company list</strong>
-        <small>JSON source of truth</small>
+        <small>Supplied TXT + generated JSON</small>
       </div>
       <span class="flow-arrow" aria-hidden="true">→</span>
       <div class="flow-step">
@@ -109,64 +109,42 @@
       <article class="decision-card surface">
         <h3>Why NestJS</h3>
         <p>
-          NestJS provides a structured, module-based layout that maps naturally to the feature areas of this project
-          (companies, mentions, news, scheduling, alerts).
-          Its built-in DI container keeps services composable without manual wiring.
-          The overhead is justified because the project is large enough that unstructured Express would become harder to
-          reason about.
+          NestJS organizes companies, mentions, news, scheduling, and alerts into feature modules. Dependency injection keeps their boundaries clear inside one application.
         </p>
       </article>
 
       <article class="decision-card surface">
         <h3>Why PostgreSQL</h3>
         <p>
-          PostgreSQL gives real foreign key enforcement, a <code>UNIQUE(companyId, url)</code> constraint as a
-          race-condition guard,
-          and a query planner that handles reasonable filtering without workarounds.
-          SQLite was considered but ruled out because type-safe constraints and migration tooling are simpler with
-          PostgreSQL at this scope.
+          PostgreSQL enforces relationships and <code>UNIQUE(companyId, url)</code>, including duplicate insert races. Migrations define the schema, and Docker Compose provides the local database.
         </p>
       </article>
 
       <article class="decision-card surface">
         <h3>Why Ollama</h3>
         <p>
-          The assignment specifically required a locally hosted LLM.
-          Ollama eliminates API keys, network latency to a cloud provider, and per-call cost.
-          The task is narrow (relevance + sentiment) so a small, fast model (<code>gemma3:270m</code>) is defensible.
-          A reviewer can reproduce the exact run on a standard development machine.
+          The assignment requires local inference. <code>gemma3:270m</code> keeps it lightweight for reviewer machines. The model checks relevance and company-specific sentiment; its quality still needs evaluation.
         </p>
       </article>
 
       <article class="decision-card surface">
         <h3>Why GDELT</h3>
         <p>
-          GDELT DOC API is public, free, requires no API key, and covers global English-language news.
-          It has rate limits and result caps, so the collection pipeline wraps it with retry logic and honors
-          <code>Retry-After</code>.
-          For a take-home, the tradeoff of occasional rate-limiting is acceptable given the zero-friction setup.
+          GDELT provides public news discovery without an API key. Real testing encountered rate limits and temporary failures. Requests use bounded retries and honor <code>Retry-After</code>.
         </p>
       </article>
 
       <article class="decision-card surface">
         <h3>Why FileNewsProvider exists</h3>
         <p>
-          GDELT is a live public endpoint that can be temporarily unavailable or rate-limited.
-          <code>FileNewsProvider</code> lets a reviewer run the full collection pipeline deterministically
-          using a committed, verified article fixture :without inserting fake rows directly or bypassing any real logic.
-          The same CollectionService, Ollama classifier, and PostgreSQL layer are used in both paths.
+          Verified fixture articles make discovery predictable for local review. They pass through the same CollectionService, local Ollama, and PostgreSQL persistence as live results. Supplied descriptions avoid publisher-page requests.
         </p>
       </article>
 
       <article class="decision-card surface">
         <h3>Why a modular monolith</h3>
         <p>
-          Splitting into microservices at this scope would add coordination overhead (service discovery, network
-          contracts,
-          distributed transactions) with no benefit.
-          A modular monolith preserves all the seams needed for future extraction while remaining simple to run locally
-          with a single
-          <code>npm run dev</code>. It is also easier for a reviewer to trace end-to-end behavior.
+          One NestJS application is straightforward to run and trace. Feature modules keep responsibilities separate without adding deployment and network coordination between services.
         </p>
       </article>
 
@@ -186,8 +164,7 @@
         visibility.
       </li>
       <li>
-        <strong>Worker-based processing</strong>: move Ollama calls and article enrichment out of the main process to
-        avoid blocking.
+        <strong>Worker-based processing</strong>: isolate inference and enrichment workloads from API serving.
       </li>
       <li>
         <strong>Bounded concurrency</strong>: process multiple companies in parallel with a configurable concurrency

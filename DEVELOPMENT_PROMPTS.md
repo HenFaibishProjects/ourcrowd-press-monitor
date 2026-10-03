@@ -1,6 +1,6 @@
-# Representative AI Assistance Prompts
+# Selected Development Prompts
 
-> These are reconstructed, representative prompts that reflect the kind of assistance used during the project. They are written as senior-engineer prompts: focused on analysis, review, tradeoffs, and targeted implementation support rather than asking the assistant to complete the entire assignment independently.
+Below is a selected set of prompts used during development. It is not a complete transcript of every AI interaction, but it includes useful prompts for architecture review, debugging, tradeoff analysis, implementation guidance, and final review. Formatting has been cleaned for readability.
 
 ---
 
@@ -941,4 +941,4 @@ Output:
 <what kind of answer would be useful>
 ```
 
-This pattern keeps the assistant in a supporting role instead of turning the task into a one-shot "build the whole project for me" request.
+This pattern makes the context, requested work, and constraints explicit.

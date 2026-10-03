@@ -117,15 +117,15 @@ The manual daily:run CLI loads the same daily service without registering cron t
 
 ConsoleAlertService implements AlertService. One run-level alert lists count, company, title, source, timestamp, sentiment and URL for newly persisted mentions only. Delivery failures do not roll back storage. Another channel can implement the contract later without adding SMTP/Slack/webhooks now.
 
-DataExportService reads all mentions through MentionsService and requested-quarter status through DashboardService. It writes ordered, pretty data/output/mentions.json and company-status.json, including never-mentioned companies. Defaults to the previous completed UTC quarter; explicit/current quarter is supported. Values remain derived, not persisted. For a fixed database, quarter and evaluation time output is deterministic; elapsed days change over time. The export derives elapsed days at its evaluation time. No successful output dataset is fabricated; reviewers' output is exported/committed after real collection succeeds.
+DataExportService reads all mentions through MentionsService and requested-quarter status through DashboardService. It writes ordered, pretty data/output/mentions.json and company-status.json, including never-mentioned companies. Defaults to the previous completed UTC quarter; explicit/current quarter is supported. Values remain derived, not persisted. For a fixed database, quarter and evaluation time output is deterministic; elapsed days change over time. The export derives elapsed days at its evaluation time. The clean committed 2026-Q3 export was generated from PostgreSQL by the existing export command: five BioCatch mentions and status for all 258 companies, with no stale test data.
 
-## Outstanding integration decisions
+## Verified state and remaining evaluation
 
-| Boundary | Remaining work |
+| Boundary | Status / remaining work |
 | --- | --- |
 | GDELT / NewsProvider | Public endpoint tested; assess coverage/caps and availability for broader live collection. |
 | SentimentClassifier / local Ollama | Local BioCatch pipeline verified; model-quality/attribution evaluation remains. |
-| Storage | Regenerate reviewer exports from the cleaned development database; no schema change needed. |
+| Storage | Clean exports committed: five BioCatch mentions, 258 company statuses; BioCatch counts are total=5, positive=5, neutral=0, negative=0. Dashboard API verified; no schema change needed. |
 | Scheduler | Enable only after manual verification; choose operating timezone/lookback and ensure one process. |
 | AlertService | Console now; another delivery channel only if later required. |
 
@@ -173,13 +173,13 @@ POST /api/generate sends a company-focused system prompt, JSON-encoded company/t
 
 Standard Nest exceptions represent input/configuration/connection/timeout/HTTP/output failures; CLI errors are concise and nonzero. No retries, including malformed responses. There is no schema change for technical failures. Unit tests mock fetch, never require Ollama, and do not prove model quality. A compact model is a reasonable initial choice for this constrained three-class task, but attribution/negation/mixed sentiment need later evaluation against real mentions and manual spot checks. The local BioCatch run selected five articles, persisted five POSITIVE mentions, and returned dashboard total=5/positive=5. This is end-to-end verification, not a model-quality benchmark.
 
-## Deliberately deferred and manual next phase
+## Current scope and future work
 
 The file-provider BioCatch pipeline and local Ollama have been run successfully. The Angular dashboard uses the read APIs. RSS ingestion, hosted AI, SMTP/Slack delivery, authentication, queues, Redis, CQRS, and microservices remain out of scope. Publisher enrichment is used only when article context is missing.
 
-Manual next phase: company setup → news:dev (SpaceX/BioCatch/ZutaCore) → sentiment:test locally → collect:dev → inspect read APIs/PostgreSQL → collect:all → data:export. Enable daily scheduling only after verifying the workflow. All 258 real companies remain in one companies table; development limits scope, not the dataset.
+The local BioCatch demo pipeline, dashboard API, and clean exports have been verified. The Angular dashboard is implemented. Broader live collection and scheduled execution remain separate operational checks; enable daily scheduling only when intentionally running it. All 258 real companies remain in one companies table; development limits scope, not the dataset.
 
-Assumptions: single-process take-home, UTC date/quarter boundaries, no concurrent import/manual/scheduled processes, finite public discovery results and title-only inference when excerpts are absent. Real runtime/quality validation remains necessary; passing boundary tests does not prove coverage or model quality.
+Assumptions: single-process take-home, UTC date/quarter boundaries, no concurrent import/manual/scheduled processes, finite public discovery results and title-only inference when excerpts are absent. Broader live coverage and model-quality evaluation remain necessary; the five-article run and boundary tests are not quality benchmarks.
 
 ## References
 

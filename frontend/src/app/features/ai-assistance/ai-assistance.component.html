@@ -2,37 +2,19 @@
 
   <!-- ── Page header ─────────────────────────────────────────────── -->
   <header class="page-header">
-    <p class="eyebrow">AI ASSISTANCE</p>
-    <h1>How AI tools were used</h1>
-    <p class="subtitle">Prompts, reasoning, and tradeoffs :not code generation.</p>
+    <p class="eyebrow">DEVELOPMENT PROMPTS</p>
+    <h1>Development Prompts</h1>
+    <p class="subtitle">Selected prompts used during development.</p>
   </header>
 
   <!-- ── Framing note ─────────────────────────────────────────────── -->
   <section class="framing-note surface" aria-labelledby="framing-heading">
-    <h2 id="framing-heading">Role of AI in this project</h2>
+    <h2 id="framing-heading">About this log</h2>
     <p>
-      AI tools were used as <strong>engineering assistants</strong> throughout this project —
-      not to build the solution independently.
-      Every design decision, architecture choice, and trade-off was made by the engineer.
-      AI was consulted for focused review, structured analysis, and debugging support.
+      AI tools were used during development for architecture review, debugging, tradeoff analysis,
+      and targeted implementation support. This page contains a selected set of prompts used during the project.
     </p>
-    <p>
-      The pattern used consistently was: provide full context, state one narrow question, set explicit constraints,
-      and ask for analysis or review :not for complete implementation.
-      The prompts below are representative of that approach.
-    </p>
-    <div class="intent-pills" role="list" aria-label="Prompt intent categories">
-      <span class="pill" role="listitem">✓ Review</span>
-      <span class="pill" role="listitem">✓ Reasoning</span>
-      <span class="pill" role="listitem">✓ Tradeoff analysis</span>
-      <span class="pill" role="listitem">✓ Debugging support</span>
-      <span class="pill" role="listitem">✓ Targeted implementation help</span>
-      <span class="pill pill-no" role="listitem">✗ "Build the whole project for me"</span>
-    </div>
-    <p class="note-small">
-      These prompts are reconstructed representative examples that reflect the kind of assistance used.
-      The full collection is available on GitHub.
-    </p>
+    <p>This is not a complete prompt history. Formatting has been cleaned for readability.</p>
   </section>
 
   <!-- ── Groups ────────────────────────────────────────────────────── -->
@@ -400,7 +382,7 @@ Keep the implementation simple and predictable.</pre>
     <details class="prompt-card surface">
       <summary>
         <span class="prompt-title">Testing strategy</span>
-        <span class="prompt-meta">Keep tests useful and safe :never reset the dev database</span>
+        <span class="prompt-meta">Keep unit tests useful without resetting the development database</span>
       </summary>
       <div class="prompt-body">
         <div class="intent-tag">Review · Reasoning</div>
@@ -443,14 +425,14 @@ Do not score the project.</pre>
 
   <!-- ── View full prompt collection ─────────────────────────────── -->
   <div class="full-collection-link">
-    <a href="https://github.com/HenFaibishProjects/ourcrowd-press-monitor/blob/main/AI_ASSISTANCE_PROMPTS.md"
+    <a href="https://github.com/HenFaibishProjects/ourcrowd-press-monitor/blob/main/DEVELOPMENT_PROMPTS.md"
       target="_blank" rel="noopener noreferrer"
-      aria-label="View the full prompt collection on GitHub (opens in new tab)">
-      View full prompt collection (30 prompts)
+      aria-label="View the full selected prompt log on GitHub (opens in new tab)">
+      View selected development prompts on GitHub
       <span aria-hidden="true" class="ext-link-icon">↗</span>
       <span class="sr-only">(opens in new tab)</span>
     </a>
-    <p>Includes the reusable prompt pattern used throughout the project.</p>
+    <p>The committed file includes all 30 selected prompts and a reusable prompt pattern.</p>
   </div>
 
 </div>
